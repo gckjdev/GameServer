@@ -1,0 +1,1 @@
+nohup java -jar -Dsolr.optimize=1 -Dupload.local=/Library/WebServer/Documents/upload/ -Dupload.remote=http://localhost/upload/ -Dupload.server.context=/upload -Dupload.resourcebase=./upload/ -Dweb.server.context=/ -Dweb.server.war=GroupBuy_Web_UI-1.0-SNAPSHOT.war GroupBuy_API_Server-1.0-SNAPSHOT.jar > ./api_server.log &
