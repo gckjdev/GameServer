@@ -8,6 +8,78 @@ public final class GameProtos {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  public enum ResultCodeType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    SUCCESS(0, 0),
+    ERROR_CREATE_GAME(1, 10001),
+    ERROR_SYSTEM_HANDLER_NOT_FOUND(2, 90001),
+    ;
+    
+    public static final int SUCCESS_VALUE = 0;
+    public static final int ERROR_CREATE_GAME_VALUE = 10001;
+    public static final int ERROR_SYSTEM_HANDLER_NOT_FOUND_VALUE = 90001;
+    
+    
+    public final int getNumber() { return value; }
+    
+    public static ResultCodeType valueOf(int value) {
+      switch (value) {
+        case 0: return SUCCESS;
+        case 10001: return ERROR_CREATE_GAME;
+        case 90001: return ERROR_SYSTEM_HANDLER_NOT_FOUND;
+        default: return null;
+      }
+    }
+    
+    public static com.google.protobuf.Internal.EnumLiteMap<ResultCodeType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<ResultCodeType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ResultCodeType>() {
+            public ResultCodeType findValueByNumber(int number) {
+              return ResultCodeType.valueOf(number);
+            }
+          };
+    
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return com.orange.network.game.protocol.GameProtos.getDescriptor().getEnumTypes().get(0);
+    }
+    
+    private static final ResultCodeType[] VALUES = {
+      SUCCESS, ERROR_CREATE_GAME, ERROR_SYSTEM_HANDLER_NOT_FOUND, 
+    };
+    
+    public static ResultCodeType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+    
+    private final int index;
+    private final int value;
+    
+    private ResultCodeType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+    
+    // @@protoc_insertion_point(enum_scope:game.ResultCodeType)
+  }
+  
   public interface NewGameRequestOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
@@ -4625,9 +4697,9 @@ public final class GameProtos {
     boolean hasId();
     int getId();
     
-    // required .game.GameResponse.ResultCodeType resultCode = 2 [default = SUCCESS];
+    // required .game.ResultCodeType resultCode = 2 [default = SUCCESS];
     boolean hasResultCode();
-    com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType getResultCode();
+    com.orange.network.game.protocol.GameProtos.ResultCodeType getResultCode();
     
     // optional string resultMessage = 3;
     boolean hasResultMessage();
@@ -4676,72 +4748,6 @@ public final class GameProtos {
       return com.orange.network.game.protocol.GameProtos.internal_static_game_GameResponse_fieldAccessorTable;
     }
     
-    public enum ResultCodeType
-        implements com.google.protobuf.ProtocolMessageEnum {
-      SUCCESS(0, 0),
-      ;
-      
-      public static final int SUCCESS_VALUE = 0;
-      
-      
-      public final int getNumber() { return value; }
-      
-      public static ResultCodeType valueOf(int value) {
-        switch (value) {
-          case 0: return SUCCESS;
-          default: return null;
-        }
-      }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<ResultCodeType>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<ResultCodeType>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<ResultCodeType>() {
-              public ResultCodeType findValueByNumber(int number) {
-                return ResultCodeType.valueOf(number);
-              }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.orange.network.game.protocol.GameProtos.GameResponse.getDescriptor().getEnumTypes().get(0);
-      }
-      
-      private static final ResultCodeType[] VALUES = {
-        SUCCESS, 
-      };
-      
-      public static ResultCodeType valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-      
-      private final int index;
-      private final int value;
-      
-      private ResultCodeType(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-      
-      // @@protoc_insertion_point(enum_scope:game.GameResponse.ResultCodeType)
-    }
-    
     private int bitField0_;
     // required int32 id = 1;
     public static final int ID_FIELD_NUMBER = 1;
@@ -4753,13 +4759,13 @@ public final class GameProtos {
       return id_;
     }
     
-    // required .game.GameResponse.ResultCodeType resultCode = 2 [default = SUCCESS];
+    // required .game.ResultCodeType resultCode = 2 [default = SUCCESS];
     public static final int RESULTCODE_FIELD_NUMBER = 2;
-    private com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType resultCode_;
+    private com.orange.network.game.protocol.GameProtos.ResultCodeType resultCode_;
     public boolean hasResultCode() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType getResultCode() {
+    public com.orange.network.game.protocol.GameProtos.ResultCodeType getResultCode() {
       return resultCode_;
     }
     
@@ -4836,7 +4842,7 @@ public final class GameProtos {
     
     private void initFields() {
       id_ = 0;
-      resultCode_ = com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType.SUCCESS;
+      resultCode_ = com.orange.network.game.protocol.GameProtos.ResultCodeType.SUCCESS;
       resultMessage_ = "";
       newGameResp_ = com.orange.network.game.protocol.GameProtos.NewGameResponse.getDefaultInstance();
       searchGameResp_ = com.orange.network.game.protocol.GameProtos.SearchGameResponse.getDefaultInstance();
@@ -5060,7 +5066,7 @@ public final class GameProtos {
         super.clear();
         id_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
-        resultCode_ = com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType.SUCCESS;
+        resultCode_ = com.orange.network.game.protocol.GameProtos.ResultCodeType.SUCCESS;
         bitField0_ = (bitField0_ & ~0x00000002);
         resultMessage_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -5254,7 +5260,7 @@ public final class GameProtos {
             }
             case 16: {
               int rawValue = input.readEnum();
-              com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType value = com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType.valueOf(rawValue);
+              com.orange.network.game.protocol.GameProtos.ResultCodeType value = com.orange.network.game.protocol.GameProtos.ResultCodeType.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
@@ -5322,15 +5328,15 @@ public final class GameProtos {
         return this;
       }
       
-      // required .game.GameResponse.ResultCodeType resultCode = 2 [default = SUCCESS];
-      private com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType resultCode_ = com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType.SUCCESS;
+      // required .game.ResultCodeType resultCode = 2 [default = SUCCESS];
+      private com.orange.network.game.protocol.GameProtos.ResultCodeType resultCode_ = com.orange.network.game.protocol.GameProtos.ResultCodeType.SUCCESS;
       public boolean hasResultCode() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType getResultCode() {
+      public com.orange.network.game.protocol.GameProtos.ResultCodeType getResultCode() {
         return resultCode_;
       }
-      public Builder setResultCode(com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType value) {
+      public Builder setResultCode(com.orange.network.game.protocol.GameProtos.ResultCodeType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -5341,7 +5347,7 @@ public final class GameProtos {
       }
       public Builder clearResultCode() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        resultCode_ = com.orange.network.game.protocol.GameProtos.GameResponse.ResultCodeType.SUCCESS;
+        resultCode_ = com.orange.network.game.protocol.GameProtos.ResultCodeType.SUCCESS;
         onChanged();
         return this;
       }
@@ -5734,15 +5740,17 @@ public final class GameProtos {
       "\003(\t\"+\n\017NewGameResponse\022\030\n\004game\030\001 \002(\0132\n.g" +
       "ame.Game\".\n\022SearchGameResponse\022\030\n\004game\030\001" +
       " \003(\0132\n.game.Game\",\n\020JoinGameResponse\022\030\n\004" +
-      "game\030\001 \002(\0132\n.game.Game\"\234\002\n\014GameResponse\022" +
-      "\n\n\002id\030\001 \002(\005\022>\n\nresultCode\030\002 \002(\0162!.game.G" +
-      "ameResponse.ResultCodeType:\007SUCCESS\022\025\n\rr",
-      "esultMessage\030\003 \001(\t\022*\n\013newGameResp\030\n \001(\0132" +
-      "\025.game.NewGameResponse\0220\n\016searchGameResp" +
-      "\030\013 \001(\0132\030.game.SearchGameResponse\022,\n\014join" +
-      "GameResp\030\014 \001(\0132\026.game.JoinGameResponse\"\035" +
-      "\n\016ResultCodeType\022\013\n\007SUCCESS\020\000B.\n com.ora" +
-      "nge.network.game.protocolB\nGameProtos"
+      "game\030\001 \002(\0132\n.game.Game\"\360\001\n\014GameResponse\022" +
+      "\n\n\002id\030\001 \002(\005\0221\n\nresultCode\030\002 \002(\0162\024.game.R" +
+      "esultCodeType:\007SUCCESS\022\025\n\rresultMessage\030",
+      "\003 \001(\t\022*\n\013newGameResp\030\n \001(\0132\025.game.NewGam" +
+      "eResponse\0220\n\016searchGameResp\030\013 \001(\0132\030.game" +
+      ".SearchGameResponse\022,\n\014joinGameResp\030\014 \001(" +
+      "\0132\026.game.JoinGameResponse*[\n\016ResultCodeT" +
+      "ype\022\013\n\007SUCCESS\020\000\022\026\n\021ERROR_CREATE_GAME\020\221N" +
+      "\022$\n\036ERROR_SYSTEM_HANDLER_NOT_FOUND\020\221\277\005B." +
+      "\n com.orange.network.game.protocolB\nGame" +
+      "Protos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
