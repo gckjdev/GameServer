@@ -26,8 +26,8 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	private static final Logger logger = Logger.getLogger(GameServerHandler.class
 			.getName()); 
 	
-	private static final GameService gameService = new GameService();
-	private static final GameManager gameManager = new GameManager();
+	private GameService gameService = GameService.getInstance();
+	private GameManager gameManager = GameManager.getInstance();
 
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e)
@@ -45,7 +45,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		
 		AbstractRequestHandler handler = null;
 		if (request.getCommand() == GameProtos.GameRequest.CommandType.NEW_GAME){
-			handler = new NewGameRequestHandler(gameManager, e);
+			handler = new NewGameRequestHandler(e);
 		}				
 		
 		if (handler == null){	

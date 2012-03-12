@@ -14,13 +14,14 @@ public class GameManager {
 	ConcurrentMap<String, GameSession> gameCollection = new ConcurrentHashMap<String, GameSession>();
 	GameStateMachine gameStateMachine;
 	
-	public GameManager(){
-		this.gameStateMachine = (GameStateMachine)GameStateMachineBuilder.
-									getInstance().buildStateMachine(); 
-					
-		this.gameStateMachine.setGameManager(this);
-	}
-
+	// thread-safe singleton implementation
+    private static GameManager manager = new GameManager();     
+    private GameManager(){		
+	} 	    
+    public static GameManager getInstance() { 
+    	return manager; 
+    } 
+	
 	public GameSession createNewGameSession(String gameName, String userId) {
 		String gameId = UUID.randomUUID().toString();		
 		GameSession session = new GameSession(gameId, gameName, userId);

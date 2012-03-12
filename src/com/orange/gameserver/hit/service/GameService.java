@@ -13,7 +13,15 @@ import com.orange.network.game.protocol.GameProtos.NewGameRequest;
 
 public class GameService {
 	
-	GameManager gameManager = new GameManager();
+	GameManager gameManager = GameManager.getInstance();
+	
+	// thread-safe singleton implementation
+    private static GameService defaultService = new GameService();     
+    private GameService(){		
+	} 	    
+    public static GameService getInstance() { 
+    	return defaultService; 
+    } 
 	
 	public void handleNewGameRequest(NewGameRequest request){
 

@@ -9,8 +9,8 @@ import com.orange.network.game.protocol.GameProtos.GameRequest;
 
 public class NewGameRequestHandler extends AbstractRequestHandler {
 
-	public NewGameRequestHandler(GameManager gamemanager, MessageEvent messageEvent) {
-		super(gamemanager, messageEvent);
+	public NewGameRequestHandler(MessageEvent messageEvent) {
+		super(messageEvent);
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class NewGameRequestHandler extends AbstractRequestHandler {
 		}
 		
 		// start new game session state machine handling		
-		
+//		newGameSession.handleMessage();
 		
 		// send back new game response
 		GameProtos.NewGameResponse newGameResponse = GameProtos.NewGameResponse.newBuilder()

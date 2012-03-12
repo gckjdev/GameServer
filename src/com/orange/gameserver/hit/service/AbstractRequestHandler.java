@@ -13,13 +13,12 @@ public abstract class AbstractRequestHandler {
 	
 	protected static final Logger logger = Logger.getLogger(AbstractRequestHandler.class.getName());
 	
-	GameManager gameManager;	// use for game session management
+	GameManager gameManager = GameManager.getInstance();	// use for game session management
 	GameStateMachine gameStateMachine;
 	MessageEvent messageEvent;	// use to get channel and send back response
 	GameRequest gameRequest;
 	
-	public AbstractRequestHandler(GameManager gameManager, MessageEvent messageEvent) {
-		this.gameManager = gameManager;
+	public AbstractRequestHandler(MessageEvent messageEvent) {
 		this.messageEvent = messageEvent;		
 		this.gameRequest = (GameRequest)messageEvent.getMessage();
 		this.gameStateMachine = gameManager.getGameStateMachine();
