@@ -18,13 +18,17 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
     public static GameStateMachineBuilder getInstance() {         	
     	return builder; 
     } 
-	
+    	
     @Override
 	public StateMachine buildStateMachine() {
 		StateMachine sm = new StateMachine();
 		
-		sm.addState(new GameStartState(GameStateKey.CREATE));
-//			addTransition(GameEventKey.EVENT_GAME_CREATE, MyStateKey.STATE_GAME_WAIT);
+		sm.addState(GameStartState.defaultState).
+			addTransition(GameEventKey.EVENT_USER_JOIN_GAME, GameStateKey.WAITING);
+
+		sm.addState(new GameWaitingState(GameStateKey.WAITING)).
+			addTransition(GameEventKey.EVENT_USER_JOIN_GAME, GameStateKey.WAITING);
+		
 //			
 //		sm.addState(new MyState(MyStateKey.STATE_GAME_WAIT)).
 //			addTransition(MyEventKey.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
@@ -34,7 +38,7 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 //			addTransition(MyEventKey.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).
 //			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
 //
-//		sm.addState(new State(MyStateKey.STATE_GAME_FINISH));
+		sm.addState(GameFinishState.defaultState);
 		
 		sm.setStartAndFinalState(GameStateKey.CREATE, GameStateKey.FINISH);
 		

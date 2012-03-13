@@ -13,7 +13,6 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.orange.gameserver.hit.manager.GameManager;
 import com.orange.gameserver.hit.service.AbstractRequestHandler;
-import com.orange.gameserver.hit.service.GameService;
 import com.orange.gameserver.hit.service.JoinGameRequestHandler;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 

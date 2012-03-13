@@ -1,5 +1,7 @@
 package com.orange.gameserver.hit.statemachine.game;
 
+import org.jboss.netty.channel.Channel;
+
 import com.orange.common.statemachine.Event;
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
@@ -8,16 +10,34 @@ public class GameEvent extends Event {
 
 	public GameEvent(Object eventKey) {
 		super(eventKey);
-		// TODO Auto-generated constructor stub
 	}
 
-	GameSession  targetSession;
-	GameMessage message;
-	public GameSession getTargetSession() {
-		return targetSession;
+	public GameEvent(GameEventKey key, int sessionId,
+			GameMessage message, Channel c) {
+		
+		super(key);		
+		this.targetSessionId = sessionId;
+		this.message = message;
+		this.channel = c;
 	}
-	public void setTargetSession(GameSession targetSession) {
-		this.targetSession = targetSession;
+
+	int  targetSessionId;
+	GameMessage message;
+	Channel channel;
+	
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Channel channel) {
+		this.channel = channel;
+	}
+
+	public int getTargetSession() {
+		return targetSessionId;
+	}
+	public void setTargetSession(int id) {
+		this.targetSessionId = id;
 	}
 	public GameMessage getMessage() {
 		return message;

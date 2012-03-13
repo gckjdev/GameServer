@@ -2,10 +2,14 @@ package com.orange.gameserver.hit.service;
 
 import java.util.List;
 
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.manager.GameManager;
+import com.orange.gameserver.hit.server.GameService;
+import com.orange.gameserver.hit.statemachine.game.GameEvent;
+import com.orange.gameserver.hit.statemachine.game.GameEventKey;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameCommandType;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
@@ -26,6 +30,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		
 		this.log("user id = " + userId); 
 		
+		/*
 		// match a game for user to join			
 		GameSession gameSession = gameService.matchGameForUser(userId, gameId);
 		if (gameSession == null){
@@ -37,9 +42,30 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 			sendErrorResponse(GameMessageProtos.GameResultCode.ERROR_JOIN_GAME, request);
 			return;
 		}
+		*/
 		
-		// TODO need detail implementation here
+		int gameSessionId = gameService.matchGameForUser(userId, gameId);
+		if (gameSessionId == -1){
+			gameSessionId = gameService.createGame(userId, nickName);
+		}
 		
+		GameEvent gameEvent = new GameEvent(GameEventKey.EVENT_USER_JOIN_GAME, 
+				gameSessionId, request, messageEvent.getChannel());
+
+		gameService.dispatchEvent(gameEvent);
+		
+		
+	}
+
+	public static void handleJoinGameRequest(GameEvent gameEvent,
+			GameSession gameSession) {
+
+		GameMessage request = gameEvent.getMessage();
+				
+		String userId = request.getJoinGameRequest().getUserId();
+		String nickName = request.getJoinGameRequest().getNickName();
+		
+		boolean result = gameSession.addUser(userId, nickName);
 		
 		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();
 		
@@ -64,8 +90,10 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 					.setJoinGameResponse(joinGameResponse)
 					.build();
 
-		sendResponse(response);				
+		HandlerUtils.sendResponse(gameEvent, response);
 	}
+
+	
 
 	
 

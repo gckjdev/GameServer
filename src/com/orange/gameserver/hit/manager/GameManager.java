@@ -11,6 +11,8 @@ import com.orange.gameserver.hit.statemachine.GameStateMachineBuilder;
 
 public class GameManager {
 	
+	public static int NO_SESSION_MATCH_FOR_USER = -1; 
+	
 	// a map to store game session
 	ConcurrentMap<Integer, GameSession> gameCollection = new ConcurrentHashMap<Integer, GameSession>();
 	AtomicInteger roomNumber = new AtomicInteger(0);
@@ -34,6 +36,24 @@ public class GameManager {
 		DrawGameSession session = new DrawGameSession(sessionId, roomName, userId);
 		gameCollection.put(Integer.valueOf(sessionId), session);				
 		return session;
+	}
+	
+	public int allocNewGameSessionId() {
+		return sessionIdIndex.incrementAndGet();
+	}
+	
+	public GameSession findGameSessionById(int id) {
+		Integer key = Integer.valueOf(id);
+		if (!gameCollection.containsKey(key))
+			return null;
+		
+		return gameCollection.get(key);		
+	}
+	
+	public int matchGameForUser(String userId) {
+		
+		
+		return NO_SESSION_MATCH_FOR_USER;
 	}
 	
 

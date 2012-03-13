@@ -17,6 +17,9 @@ public class HitGameServer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		GameService.getInstance().createWorkerThreads(20);
+		
 		ServerBootstrap bootstrap = new ServerBootstrap(
 				new NioServerSocketChannelFactory(
 					Executors.newCachedThreadPool(),

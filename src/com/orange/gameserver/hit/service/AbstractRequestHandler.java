@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.hit.manager.GameManager;
+import com.orange.gameserver.hit.server.GameService;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameResultCode;

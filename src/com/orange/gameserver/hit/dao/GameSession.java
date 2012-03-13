@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.orange.common.statemachine.State;
+import com.orange.gameserver.hit.statemachine.game.GameStartState;
+import com.orange.gameserver.hit.statemachine.game.GameStateKey;
 import com.orange.network.game.protocol.model.GameBasicProtos;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
@@ -12,27 +14,32 @@ import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 public class GameSession {
 
-	long   sessionId;
+	private static final int MAX_USER_PER_GAME_SESSION = 7;
+	
+	int   sessionId;
 	String name;
 	String createBy;
 	String host;
 	Date   createDate;
 	State  currentState;
+	int preBookCounter = 0;
 	List<UserAtGame> userList = new ArrayList<UserAtGame>();	
 
-	public GameSession(long sessionId, String gameName, String userId) {
+	public GameSession(int sessionId, String gameName, String userId) {
 		this.sessionId = sessionId;
 		this.name = gameName;
 		this.createBy = userId;
 		this.host = userId;
-		this.createDate = new Date();		
+		this.createDate = new Date();	
+		
+		currentState = GameStartState.defaultState;
 	}
 
-	public long getSessionId() {
+	public int getSessionId() {
 		return sessionId;
 	}
 
-	public void setSessionId(long id) {
+	public void setSessionId(int id) {
 		this.sessionId = id;
 	}
 
@@ -101,6 +108,27 @@ public class GameSession {
 			return;
 		
 		userList.add(userAtGame);
+	}
+
+	public boolean addUser(String userId, String nickName) {
+		for (UserAtGame user : userList){
+			if (user.userId.equals(userId)){
+				// exist, don't need to add
+				return true;
+			}
+		}
+		
+		if (isUserFull()){
+			return false;
+		}
+		
+		UserAtGame userAtGame = new UserAtGame(userId, nickName);
+		addUser(userAtGame);		
+		return true;
+	}
+
+	private boolean isUserFull() {
+		return userList.size() >= MAX_USER_PER_GAME_SESSION ? true : false;
 	}
 
 
