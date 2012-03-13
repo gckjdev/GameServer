@@ -500,9 +500,9 @@ public final class GameBasicProtos {
     boolean hasGameId();
     String getGameId();
     
-    // required int32 sessionId = 2;
+    // required int64 sessionId = 2;
     boolean hasSessionId();
-    int getSessionId();
+    long getSessionId();
     
     // required string name = 3;
     boolean hasName();
@@ -591,13 +591,13 @@ public final class GameBasicProtos {
       }
     }
     
-    // required int32 sessionId = 2;
+    // required int64 sessionId = 2;
     public static final int SESSIONID_FIELD_NUMBER = 2;
-    private int sessionId_;
+    private long sessionId_;
     public boolean hasSessionId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public int getSessionId() {
+    public long getSessionId() {
       return sessionId_;
     }
     
@@ -730,7 +730,7 @@ public final class GameBasicProtos {
     
     private void initFields() {
       gameId_ = "";
-      sessionId_ = 0;
+      sessionId_ = 0L;
       name_ = "";
       createBy_ = "";
       createTime_ = 0;
@@ -779,7 +779,7 @@ public final class GameBasicProtos {
         output.writeBytes(1, getGameIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, sessionId_);
+        output.writeInt64(2, sessionId_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getNameBytes());
@@ -811,7 +811,7 @@ public final class GameBasicProtos {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, sessionId_);
+          .computeInt64Size(2, sessionId_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -960,7 +960,7 @@ public final class GameBasicProtos {
         super.clear();
         gameId_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        sessionId_ = 0;
+        sessionId_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -1171,7 +1171,7 @@ public final class GameBasicProtos {
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              sessionId_ = input.readInt32();
+              sessionId_ = input.readInt64();
               break;
             }
             case 26: {
@@ -1242,15 +1242,15 @@ public final class GameBasicProtos {
         onChanged();
       }
       
-      // required int32 sessionId = 2;
-      private int sessionId_ ;
+      // required int64 sessionId = 2;
+      private long sessionId_ ;
       public boolean hasSessionId() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public int getSessionId() {
+      public long getSessionId() {
         return sessionId_;
       }
-      public Builder setSessionId(int value) {
+      public Builder setSessionId(long value) {
         bitField0_ |= 0x00000002;
         sessionId_ = value;
         onChanged();
@@ -1258,7 +1258,7 @@ public final class GameBasicProtos {
       }
       public Builder clearSessionId() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        sessionId_ = 0;
+        sessionId_ = 0L;
         onChanged();
         return this;
       }
@@ -1611,7 +1611,7 @@ public final class GameBasicProtos {
       "\n\017GameBasic.proto\022\004game\".\n\nPBGameUser\022\016\n" +
       "\006userId\030\001 \002(\t\022\020\n\010nickName\030\002 \002(\t\"\225\001\n\rPBGa" +
       "meSession\022\016\n\006gameId\030\001 \002(\t\022\021\n\tsessionId\030\002" +
-      " \002(\005\022\014\n\004name\030\003 \002(\t\022\020\n\010createBy\030\004 \002(\t\022\022\n\n" +
+      " \002(\003\022\014\n\004name\030\003 \002(\t\022\020\n\010createBy\030\004 \002(\t\022\022\n\n" +
       "createTime\030\005 \002(\005\022\014\n\004host\030\006 \001(\t\022\037\n\005users\030" +
       "\007 \003(\0132\020.game.PBGameUserB9\n&com.orange.ne" +
       "twork.game.protocol.modelB\017GameBasicProt" +

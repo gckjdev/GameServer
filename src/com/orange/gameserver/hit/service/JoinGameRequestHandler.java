@@ -1,5 +1,7 @@
 package com.orange.gameserver.hit.service;
 
+import java.util.List;
+
 import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.hit.dao.GameSession;
@@ -19,30 +21,39 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 	public void handleRequest(GameMessage request) {
 		
 		String userId = request.getJoinGameRequest().getUserId();
-		String gameName = request.getJoinGameRequest().getGameId();
+		String gameId = request.getJoinGameRequest().getGameId();
+		String nickName = request.getJoinGameRequest().getNickName();
 		
 		this.log("user id = " + userId); 
 		
-		// create new game
-		GameSession newGameSession = gameManager.createNewGameSession(gameName, userId);						
-		if (newGameSession == null){
+		// match a game for user to join			
+		GameSession gameSession = gameService.matchGameForUser(userId, gameId);
+		if (gameSession == null){
+			// if cannot match a game for user, then try to create a new one
+			gameSession = gameService.createGame(userId, nickName);
+		}
+		
+		if (gameSession == null){
 			sendErrorResponse(GameMessageProtos.GameResultCode.ERROR_JOIN_GAME, request);
 			return;
 		}
 		
-		// start new game session state machine handling		
-//		newGameSession.handleMessage();
-		
 		// send back new game response
+		
 		// TODO need detail implementation here
-		GameBasicProtos.PBGameSession gameSessionData = GameBasicProtos.PBGameSession.newBuilder()
-										.setCreateBy("test user")
-										.setCreateTime((int)(System.currentTimeMillis()/1000))
-										.setGameId("test game id")
-										.setHost("host")
-										.setName("test user name")
-										.setSessionId(1234)
+		
+		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();
+		
+		GameBasicProtos.PBGameSession gameSessionData = GameBasicProtos.PBGameSession.newBuilder()		
+										.setCreateBy(gameSession.getCreateBy())
+										.setCreateTime((int)gameSession.getCreateDate().getTime()/1000)
+										.setGameId("DrawGame")
+										.setHost(gameSession.getHost())
+										.setName(gameSession.getName())
+										.setSessionId(gameSession.getSessionId())
+										.addAllUsers(pbGameUserList)
 										.build();
+
 		GameMessageProtos.JoinGameResponse joinGameResponse = GameMessageProtos.JoinGameResponse.newBuilder()
 										.setGameSession(gameSessionData)
 										.build();

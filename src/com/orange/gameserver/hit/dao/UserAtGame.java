@@ -3,11 +3,14 @@ package com.orange.gameserver.hit.dao;
 public class UserAtGame {
 
 	String userId;
-	GameSession gameSession;	
+	String nickName;
+	
+	GameSession gameSession;
+	
 	UserAtGameState state = UserAtGameState.CREATE;
 	
-	public UserAtGame(String userId, GameSession gameSession) {
+	public UserAtGame(String userId, String nickName) {
 		this.userId = userId;
-		this.gameSession = gameSession;
+		this.nickName = nickName;
 	}	
 }

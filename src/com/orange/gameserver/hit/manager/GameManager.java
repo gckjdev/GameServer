@@ -3,7 +3,9 @@ package com.orange.gameserver.hit.manager;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import com.orange.gameserver.hit.dao.DrawGameSession;
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.statemachine.GameStateMachine;
 import com.orange.gameserver.hit.statemachine.GameStateMachineBuilder;
@@ -11,8 +13,10 @@ import com.orange.gameserver.hit.statemachine.GameStateMachineBuilder;
 public class GameManager {
 	
 	// a map to store game session
-	ConcurrentMap<String, GameSession> gameCollection = new ConcurrentHashMap<String, GameSession>();
+	ConcurrentMap<Integer, GameSession> gameCollection = new ConcurrentHashMap<Integer, GameSession>();
 	GameStateMachine gameStateMachine;
+	AtomicInteger roomNumber = new AtomicInteger(0);
+	AtomicInteger sessionIdIndex = new AtomicInteger(0);
 	
 	// thread-safe singleton implementation
     private static GameManager manager = new GameManager();     
@@ -23,14 +27,19 @@ public class GameManager {
     } 
 	
 	public GameSession createNewGameSession(String gameName, String userId) {
-		String gameId = UUID.randomUUID().toString();		
-		GameSession session = new GameSession(gameId, gameName, userId);
-		gameCollection.put(gameId, session);		
-		return session;
+		return null;
 	}
 
 	public GameStateMachine getGameStateMachine() {
 		return this.gameStateMachine;
+	}
+
+	public DrawGameSession createNewDrawGameSession(String userId) {
+		int sessionId = sessionIdIndex.incrementAndGet();	
+		String roomName = roomNumber.incrementAndGet() + "";
+		DrawGameSession session = new DrawGameSession(sessionId, roomName, userId);
+		gameCollection.put(Integer.valueOf(sessionId), session);				
+		return session;
 	}
 	
 

@@ -17,6 +17,7 @@ public abstract class AbstractRequestHandler {
 	GameStateMachine gameStateMachine;
 	MessageEvent messageEvent;	// use to get channel and send back response
 	GameMessage gameMessage;
+	GameService gameService = GameService.getInstance();
 	
 	public AbstractRequestHandler(MessageEvent messageEvent) {
 		this.messageEvent = messageEvent;		

@@ -160,6 +160,10 @@ public final class GameMessageProtos {
     // optional int32 autoNew = 3 [default = 0];
     boolean hasAutoNew();
     int getAutoNew();
+    
+    // required string nickName = 4;
+    boolean hasNickName();
+    String getNickName();
   }
   public static final class JoinGameRequest extends
       com.google.protobuf.GeneratedMessage
@@ -264,10 +268,43 @@ public final class GameMessageProtos {
       return autoNew_;
     }
     
+    // required string nickName = 4;
+    public static final int NICKNAME_FIELD_NUMBER = 4;
+    private java.lang.Object nickName_;
+    public boolean hasNickName() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public String getNickName() {
+      java.lang.Object ref = nickName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          nickName_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getNickNameBytes() {
+      java.lang.Object ref = nickName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        nickName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
       userId_ = "";
       gameId_ = "";
       autoNew_ = 0;
+      nickName_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -279,6 +316,10 @@ public final class GameMessageProtos {
         return false;
       }
       if (!hasGameId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasNickName()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -297,6 +338,9 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(3, autoNew_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getNickNameBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -318,6 +362,10 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, autoNew_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getNickNameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -449,6 +497,8 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000002);
         autoNew_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
+        nickName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       
@@ -499,6 +549,10 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000004;
         }
         result.autoNew_ = autoNew_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.nickName_ = nickName_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -524,6 +578,9 @@ public final class GameMessageProtos {
         if (other.hasAutoNew()) {
           setAutoNew(other.getAutoNew());
         }
+        if (other.hasNickName()) {
+          setNickName(other.getNickName());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -534,6 +591,10 @@ public final class GameMessageProtos {
           return false;
         }
         if (!hasGameId()) {
+          
+          return false;
+        }
+        if (!hasNickName()) {
           
           return false;
         }
@@ -576,6 +637,11 @@ public final class GameMessageProtos {
             case 24: {
               bitField0_ |= 0x00000004;
               autoNew_ = input.readInt32();
+              break;
+            }
+            case 34: {
+              bitField0_ |= 0x00000008;
+              nickName_ = input.readBytes();
               break;
             }
           }
@@ -675,6 +741,42 @@ public final class GameMessageProtos {
         autoNew_ = 0;
         onChanged();
         return this;
+      }
+      
+      // required string nickName = 4;
+      private java.lang.Object nickName_ = "";
+      public boolean hasNickName() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public String getNickName() {
+        java.lang.Object ref = nickName_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          nickName_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setNickName(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        nickName_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearNickName() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        nickName_ = getDefaultInstance().getNickName();
+        onChanged();
+        return this;
+      }
+      void setNickName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000008;
+        nickName_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:game.JoinGameRequest)
@@ -1949,20 +2051,20 @@ public final class GameMessageProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\021GameMessage.proto\022\004game\032\017GameBasic.pro" +
-      "to\"E\n\017JoinGameRequest\022\016\n\006userId\030\001 \002(\t\022\016\n" +
-      "\006gameId\030\002 \002(\t\022\022\n\007autoNew\030\003 \001(\005:\0010\"<\n\020Joi" +
-      "nGameResponse\022(\n\013gameSession\030\001 \002(\0132\023.gam" +
-      "e.PBGameSession\"\324\001\n\013GameMessage\022&\n\007comma" +
-      "nd\030\001 \002(\0162\025.game.GameCommandType\022\021\n\tmessa" +
-      "geId\030\002 \002(\005\022(\n\nresultCode\030\003 \001(\0162\024.game.Ga" +
-      "meResultCode\022.\n\017joinGameRequest\030\013 \001(\0132\025." +
-      "game.JoinGameRequest\0220\n\020joinGameResponse" +
-      "\030\014 \001(\0132\026.game.JoinGameResponse*@\n\017GameCo",
-      "mmandType\022\025\n\021JOIN_GAME_REQUEST\020\001\022\026\n\022JOIN" +
-      "_GAME_RESPONSE\020\002*2\n\016GameResultCode\022\013\n\007SU" +
-      "CCESS\020\000\022\023\n\017ERROR_JOIN_GAME\020\001B=\n(com.oran" +
-      "ge.network.game.protocol.messageB\021GameMe" +
-      "ssageProtos"
+      "to\"W\n\017JoinGameRequest\022\016\n\006userId\030\001 \002(\t\022\016\n" +
+      "\006gameId\030\002 \002(\t\022\022\n\007autoNew\030\003 \001(\005:\0010\022\020\n\010nic" +
+      "kName\030\004 \002(\t\"<\n\020JoinGameResponse\022(\n\013gameS" +
+      "ession\030\001 \002(\0132\023.game.PBGameSession\"\324\001\n\013Ga" +
+      "meMessage\022&\n\007command\030\001 \002(\0162\025.game.GameCo" +
+      "mmandType\022\021\n\tmessageId\030\002 \002(\005\022(\n\nresultCo" +
+      "de\030\003 \001(\0162\024.game.GameResultCode\022.\n\017joinGa" +
+      "meRequest\030\013 \001(\0132\025.game.JoinGameRequest\0220" +
+      "\n\020joinGameResponse\030\014 \001(\0132\026.game.JoinGame",
+      "Response*@\n\017GameCommandType\022\025\n\021JOIN_GAME" +
+      "_REQUEST\020\001\022\026\n\022JOIN_GAME_RESPONSE\020\002*2\n\016Ga" +
+      "meResultCode\022\013\n\007SUCCESS\020\000\022\023\n\017ERROR_JOIN_" +
+      "GAME\020\001B=\n(com.orange.network.game.protoc" +
+      "ol.messageB\021GameMessageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1974,7 +2076,7 @@ public final class GameMessageProtos {
           internal_static_game_JoinGameRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_JoinGameRequest_descriptor,
-              new java.lang.String[] { "UserId", "GameId", "AutoNew", },
+              new java.lang.String[] { "UserId", "GameId", "AutoNew", "NickName", },
               com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.class,
               com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.Builder.class);
           internal_static_game_JoinGameResponse_descriptor =
