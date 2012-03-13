@@ -7,14 +7,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.orange.gameserver.hit.dao.DrawGameSession;
 import com.orange.gameserver.hit.dao.GameSession;
-import com.orange.gameserver.hit.statemachine.GameStateMachine;
 import com.orange.gameserver.hit.statemachine.GameStateMachineBuilder;
 
 public class GameManager {
 	
 	// a map to store game session
 	ConcurrentMap<Integer, GameSession> gameCollection = new ConcurrentHashMap<Integer, GameSession>();
-	GameStateMachine gameStateMachine;
 	AtomicInteger roomNumber = new AtomicInteger(0);
 	AtomicInteger sessionIdIndex = new AtomicInteger(0);
 	
@@ -28,10 +26,6 @@ public class GameManager {
 	
 	public GameSession createNewGameSession(String gameName, String userId) {
 		return null;
-	}
-
-	public GameStateMachine getGameStateMachine() {
-		return this.gameStateMachine;
 	}
 
 	public DrawGameSession createNewDrawGameSession(String userId) {

@@ -38,9 +38,8 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 			return;
 		}
 		
-		// send back new game response
-		
 		// TODO need detail implementation here
+		
 		
 		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();
 		

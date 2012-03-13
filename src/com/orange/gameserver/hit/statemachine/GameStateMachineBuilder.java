@@ -11,10 +11,11 @@ import com.orange.gameserver.hit.statemachine.game.*;
 public class GameStateMachineBuilder extends StateMachineBuilder {
 
 	// thread-safe singleton implementation
-    private static GameStateMachineBuilder builder = new GameStateMachineBuilder(); 
+    private static GameStateMachineBuilder builder = new GameStateMachineBuilder();
+    private static StateMachine stateMachine = builder.buildStateMachine();
     private GameStateMachineBuilder(){		
 	} 	
-    public static GameStateMachineBuilder getInstance() { 
+    public static GameStateMachineBuilder getInstance() {         	
     	return builder; 
     } 
 	
