@@ -14,11 +14,8 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import com.orange.gameserver.hit.manager.GameManager;
 import com.orange.gameserver.hit.service.AbstractRequestHandler;
 import com.orange.gameserver.hit.service.GameService;
-import com.orange.gameserver.hit.service.NewGameRequestHandler;
-import com.orange.network.game.protocol.GameProtos;
-import com.orange.network.game.protocol.GameProtos.GameRequest;
-import com.orange.network.game.protocol.GameProtos.GameResponse;
-import com.orange.network.game.protocol.GameProtos.NewGameRequest;
+import com.orange.gameserver.hit.service.JoinGameRequestHandler;
+import com.orange.network.game.protocol.message.GameMessageProtos;
 
 
 
@@ -41,30 +38,30 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
 				
-		GameProtos.GameRequest request = (GameProtos.GameRequest)e.getMessage();
+		GameMessageProtos.GameMessage message = (GameMessageProtos.GameMessage)e.getMessage();
 		
 		AbstractRequestHandler handler = null;
-		if (request.getCommand() == GameProtos.GameRequest.CommandType.NEW_GAME){
-			handler = new NewGameRequestHandler(e);
+		if (message.getCommand() == GameMessageProtos.GameCommandType.JOIN_GAME_REQUEST){
+			handler = new JoinGameRequestHandler(e);
 		}				
 		
 		if (handler == null){	
-			sendErrorResponse(e, request, GameProtos.ResultCodeType.ERROR_SYSTEM_HANDLER_NOT_FOUND);
+//			sendErrorResponse(e, request, GameProtos.ResultCodeType.ERROR_SYSTEM_HANDLER_NOT_FOUND);
 			return;
 		}
 		
-		handler.handleRequest(request);			
+		handler.handleRequest(message);			
 	}
 	
-	public void sendErrorResponse(MessageEvent messageEvent, GameRequest request, GameProtos.ResultCodeType resultCode){
-		GameProtos.GameResponse response = GameProtos.GameResponse.newBuilder().
-			setId(request.getId()).
-			setResultCode(resultCode).						
-			build();
-
-		logger.info(String.format("[%08X] [SEND] %s", response.getId(), response.toString()));
-		messageEvent.getChannel().write(response);
-	}
+//	public void sendErrorResponse(MessageEvent messageEvent, GameRequest request, GameProtos.ResultCodeType resultCode){
+//		GameProtos.GameResponse response = GameProtos.GameResponse.newBuilder().
+//			setId(request.getId()).
+//			setResultCode(resultCode).						
+//			build();
+//
+//		logger.info(String.format("[%08X] [SEND] %s", response.getId(), response.toString()));
+//		messageEvent.getChannel().write(response);
+//	}
 	
 	@Override
 	public void exceptionCaught( ChannelHandlerContext ctx, ExceptionEvent e) {

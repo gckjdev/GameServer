@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.orange.network.game.protocol.GameProtos;
-import com.orange.network.game.protocol.GameProtos.Game;
+
 
 public class GameSession {
 
@@ -25,17 +24,6 @@ public class GameSession {
 		this.createDate = new Date();		
 	}
 
-	public Game toGame() {
-		GameProtos.Game newGame = GameProtos.Game.newBuilder()
-			.setCreateBy(createBy)
-			.setCreateTime((int)(createDate.getTime()/1000))
-			.setGameId(gameId)
-			.setName(name)
-			.setHost(host)
-			.addUsers(host)
-			.build();		
 
-		return newGame;
-	}
 	
 }

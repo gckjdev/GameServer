@@ -8,9 +8,6 @@ import java.util.concurrent.ConcurrentMap;
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.manager.GameManager;
 
-import com.orange.network.game.protocol.GameProtos;
-import com.orange.network.game.protocol.GameProtos.NewGameRequest;
-
 public class GameService {
 	
 	GameManager gameManager = GameManager.getInstance();
@@ -23,7 +20,7 @@ public class GameService {
     	return defaultService; 
     } 
 	
-	public void handleNewGameRequest(NewGameRequest request){
-
-	}
+//	public void handleNewGameRequest(NewGameRequest request){
+//
+//	}
 }

@@ -5,9 +5,9 @@ import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.hit.manager.GameManager;
 import com.orange.gameserver.hit.statemachine.GameStateMachine;
-import com.orange.network.game.protocol.GameProtos;
-import com.orange.network.game.protocol.GameProtos.GameRequest;
-import com.orange.network.game.protocol.GameProtos.GameResponse;
+import com.orange.network.game.protocol.message.GameMessageProtos;
+import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
+import com.orange.network.game.protocol.message.GameMessageProtos.GameResultCode;
 
 public abstract class AbstractRequestHandler {
 	
@@ -16,38 +16,38 @@ public abstract class AbstractRequestHandler {
 	GameManager gameManager = GameManager.getInstance();	// use for game session management
 	GameStateMachine gameStateMachine;
 	MessageEvent messageEvent;	// use to get channel and send back response
-	GameRequest gameRequest;
+	GameMessage gameMessage;
 	
 	public AbstractRequestHandler(MessageEvent messageEvent) {
 		this.messageEvent = messageEvent;		
-		this.gameRequest = (GameRequest)messageEvent.getMessage();
+		this.gameMessage = (GameMessage)messageEvent.getMessage();
 		this.gameStateMachine = gameManager.getGameStateMachine();
 	}
 
-	public abstract void handleRequest(GameRequest request);
+	public abstract void handleRequest(GameMessage message);
 	
-	public void sendResponse(GameResponse response){
+	public void sendResponse(GameMessage response){
 		if (messageEvent == null)
 			return;
 
-		logger.info(String.format("[%08X] [SEND] %s", response.getId(), response.toString()));
+		logger.info(String.format("[%08X] [SEND] %s", response.getMessageId(), response.toString()));
 		messageEvent.getChannel().write(response);
 	}
 	
-	public void sendErrorResponse(GameProtos.ResultCodeType resultCode, GameRequest request){
-		GameProtos.GameResponse response = GameProtos.GameResponse.newBuilder().
-			setId(request.getId()).
+	public void sendErrorResponse(GameResultCode resultCode, GameMessage request){
+		GameMessage response = GameMessageProtos.GameMessage.newBuilder().
+			setMessageId(request.getMessageId()).
 			setResultCode(resultCode).						
 			build();
 
 		sendResponse(response);
 	}
 	
-	public void printRequest(GameRequest request){
-		logger.info(String.format("[%08X] [RECV] %s", request.getId(), request.toString()));	
+	public void printRequest(GameMessage request){
+		logger.info(String.format("[%08X] [RECV] %s", request.getMessageId(), request.toString()));	
 	}
 	
 	public void log(String message){
-		logger.info(String.format("[%08X] %s", gameRequest.getId(), message));
+		logger.info(String.format("[%08X] %s", gameMessage.getMessageId(), message));
 	}
 }
