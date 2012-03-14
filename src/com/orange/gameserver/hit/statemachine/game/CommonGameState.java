@@ -30,6 +30,10 @@ public class CommonGameState extends State {
 			case JOIN_GAME_REQUEST:
 				JoinGameRequestHandler.handleJoinGameRequest(gameEvent, session);
 				break;
+				
+			case START_GAME_REQUEST:
+				GameSessionRequestHandler.handleStartGameRequest(gameEvent, session);
+				break;
 			
 			default:
 				// handle event by sub class

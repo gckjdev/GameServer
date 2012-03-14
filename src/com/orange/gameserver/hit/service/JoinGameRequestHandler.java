@@ -78,8 +78,8 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 
 		HandlerUtils.sendResponse(gameEvent, response);
 		
-		// TODO send notification to all other users in the session
-		
+		// send notification to all other users in the session
+		GameNotification.broadcastUserJoinNotification(gameSession, userId, gameEvent);
 		
 		return true;
 	}

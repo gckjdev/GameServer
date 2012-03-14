@@ -1840,9 +1840,9 @@ public final class GameMessageProtos {
   public interface GeneralNotificationOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // optional string host = 3;
-    boolean hasHost();
-    String getHost();
+    // optional string sessionHost = 3;
+    boolean hasSessionHost();
+    String getSessionHost();
     
     // optional int32 sessionStatus = 4;
     boolean hasSessionStatus();
@@ -1855,6 +1855,10 @@ public final class GameMessageProtos {
     // optional string nextPlayUserId = 6;
     boolean hasNextPlayUserId();
     String getNextPlayUserId();
+    
+    // optional string newUserId = 7;
+    boolean hasNewUserId();
+    String getNewUserId();
   }
   public static final class GeneralNotification extends
       com.google.protobuf.GeneratedMessage
@@ -1885,14 +1889,14 @@ public final class GameMessageProtos {
     }
     
     private int bitField0_;
-    // optional string host = 3;
-    public static final int HOST_FIELD_NUMBER = 3;
-    private java.lang.Object host_;
-    public boolean hasHost() {
+    // optional string sessionHost = 3;
+    public static final int SESSIONHOST_FIELD_NUMBER = 3;
+    private java.lang.Object sessionHost_;
+    public boolean hasSessionHost() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getHost() {
-      java.lang.Object ref = host_;
+    public String getSessionHost() {
+      java.lang.Object ref = sessionHost_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
@@ -1900,17 +1904,17 @@ public final class GameMessageProtos {
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          host_ = s;
+          sessionHost_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getHostBytes() {
-      java.lang.Object ref = host_;
+    private com.google.protobuf.ByteString getSessionHostBytes() {
+      java.lang.Object ref = sessionHost_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        host_ = b;
+        sessionHost_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1991,11 +1995,44 @@ public final class GameMessageProtos {
       }
     }
     
+    // optional string newUserId = 7;
+    public static final int NEWUSERID_FIELD_NUMBER = 7;
+    private java.lang.Object newUserId_;
+    public boolean hasNewUserId() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public String getNewUserId() {
+      java.lang.Object ref = newUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          newUserId_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getNewUserIdBytes() {
+      java.lang.Object ref = newUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        newUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
-      host_ = "";
+      sessionHost_ = "";
       sessionStatus_ = 0;
       currentPlayUserId_ = "";
       nextPlayUserId_ = "";
+      newUserId_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2010,7 +2047,7 @@ public final class GameMessageProtos {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(3, getHostBytes());
+        output.writeBytes(3, getSessionHostBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(4, sessionStatus_);
@@ -2020,6 +2057,9 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBytes(6, getNextPlayUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(7, getNewUserIdBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -2032,7 +2072,7 @@ public final class GameMessageProtos {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getHostBytes());
+          .computeBytesSize(3, getSessionHostBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -2045,6 +2085,10 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, getNextPlayUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(7, getNewUserIdBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2170,7 +2214,7 @@ public final class GameMessageProtos {
       
       public Builder clear() {
         super.clear();
-        host_ = "";
+        sessionHost_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         sessionStatus_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -2178,6 +2222,8 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000004);
         nextPlayUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        newUserId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -2219,7 +2265,7 @@ public final class GameMessageProtos {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.host_ = host_;
+        result.sessionHost_ = sessionHost_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
@@ -2232,6 +2278,10 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000008;
         }
         result.nextPlayUserId_ = nextPlayUserId_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.newUserId_ = newUserId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2248,8 +2298,8 @@ public final class GameMessageProtos {
       
       public Builder mergeFrom(com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification other) {
         if (other == com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.getDefaultInstance()) return this;
-        if (other.hasHost()) {
-          setHost(other.getHost());
+        if (other.hasSessionHost()) {
+          setSessionHost(other.getSessionHost());
         }
         if (other.hasSessionStatus()) {
           setSessionStatus(other.getSessionStatus());
@@ -2259,6 +2309,9 @@ public final class GameMessageProtos {
         }
         if (other.hasNextPlayUserId()) {
           setNextPlayUserId(other.getNextPlayUserId());
+        }
+        if (other.hasNewUserId()) {
+          setNewUserId(other.getNewUserId());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2293,7 +2346,7 @@ public final class GameMessageProtos {
             }
             case 26: {
               bitField0_ |= 0x00000001;
-              host_ = input.readBytes();
+              sessionHost_ = input.readBytes();
               break;
             }
             case 32: {
@@ -2311,45 +2364,50 @@ public final class GameMessageProtos {
               nextPlayUserId_ = input.readBytes();
               break;
             }
+            case 58: {
+              bitField0_ |= 0x00000010;
+              newUserId_ = input.readBytes();
+              break;
+            }
           }
         }
       }
       
       private int bitField0_;
       
-      // optional string host = 3;
-      private java.lang.Object host_ = "";
-      public boolean hasHost() {
+      // optional string sessionHost = 3;
+      private java.lang.Object sessionHost_ = "";
+      public boolean hasSessionHost() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getHost() {
-        java.lang.Object ref = host_;
+      public String getSessionHost() {
+        java.lang.Object ref = sessionHost_;
         if (!(ref instanceof String)) {
           String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          host_ = s;
+          sessionHost_ = s;
           return s;
         } else {
           return (String) ref;
         }
       }
-      public Builder setHost(String value) {
+      public Builder setSessionHost(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-        host_ = value;
+        sessionHost_ = value;
         onChanged();
         return this;
       }
-      public Builder clearHost() {
+      public Builder clearSessionHost() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        host_ = getDefaultInstance().getHost();
+        sessionHost_ = getDefaultInstance().getSessionHost();
         onChanged();
         return this;
       }
-      void setHost(com.google.protobuf.ByteString value) {
+      void setSessionHost(com.google.protobuf.ByteString value) {
         bitField0_ |= 0x00000001;
-        host_ = value;
+        sessionHost_ = value;
         onChanged();
       }
       
@@ -2443,6 +2501,42 @@ public final class GameMessageProtos {
       void setNextPlayUserId(com.google.protobuf.ByteString value) {
         bitField0_ |= 0x00000008;
         nextPlayUserId_ = value;
+        onChanged();
+      }
+      
+      // optional string newUserId = 7;
+      private java.lang.Object newUserId_ = "";
+      public boolean hasNewUserId() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public String getNewUserId() {
+        java.lang.Object ref = newUserId_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          newUserId_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setNewUserId(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        newUserId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearNewUserId() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        newUserId_ = getDefaultInstance().getNewUserId();
+        onChanged();
+        return this;
+      }
+      void setNewUserId(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000010;
+        newUserId_ = value;
         onChanged();
       }
       
@@ -3879,22 +3973,22 @@ public final class GameMessageProtos {
       "GameResponse\022(\n\013gameSession\030\001 \002(\0132\023.game" +
       ".PBGameSession\"\022\n\020StartGameRequest\"F\n\021St" +
       "artGameResponse\022\031\n\021currentPlayUserId\030\005 \001" +
-      "(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"m\n\023GeneralNot" +
-      "ification\022\014\n\004host\030\003 \001(\t\022\025\n\rsessionStatus" +
-      "\030\004 \001(\005\022\031\n\021currentPlayUserId\030\005 \001(\t\022\026\n\016nex",
-      "tPlayUserId\030\006 \001(\t\"\232\003\n\013GameMessage\022&\n\007com" +
-      "mand\030\001 \002(\0162\025.game.GameCommandType\022\021\n\tmes" +
-      "sageId\030\002 \002(\005\0221\n\nresultCode\030\003 \001(\0162\024.game." +
-      "GameResultCode:\007SUCCESS\022\016\n\006userId\030\004 \001(\t\022" +
-      "\024\n\tsessionId\030\005 \001(\003:\0010\022.\n\017joinGameRequest" +
-      "\030\013 \001(\0132\025.game.JoinGameRequest\0220\n\020joinGam" +
-      "eResponse\030\014 \001(\0132\026.game.JoinGameResponse\022" +
-      "0\n\020startGameRequest\030\r \001(\0132\026.game.StartGa" +
-      "meRequest\0222\n\021startGameResponse\030\016 \001(\0132\027.g" +
-      "ame.StartGameResponse\022/\n\014notification\0303 ",
-      "\001(\0132\031.game.GeneralNotificationB=\n(com.or" +
-      "ange.network.game.protocol.messageB\021Game" +
-      "MessageProtos"
+      "(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"\207\001\n\023GeneralNo" +
+      "tification\022\023\n\013sessionHost\030\003 \001(\t\022\025\n\rsessi" +
+      "onStatus\030\004 \001(\005\022\031\n\021currentPlayUserId\030\005 \001(",
+      "\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021\n\tnewUserId\030\007" +
+      " \001(\t\"\232\003\n\013GameMessage\022&\n\007command\030\001 \002(\0162\025." +
+      "game.GameCommandType\022\021\n\tmessageId\030\002 \002(\005\022" +
+      "1\n\nresultCode\030\003 \001(\0162\024.game.GameResultCod" +
+      "e:\007SUCCESS\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030" +
+      "\005 \001(\003:\0010\022.\n\017joinGameRequest\030\013 \001(\0132\025.game" +
+      ".JoinGameRequest\0220\n\020joinGameResponse\030\014 \001" +
+      "(\0132\026.game.JoinGameResponse\0220\n\020startGameR" +
+      "equest\030\r \001(\0132\026.game.StartGameRequest\0222\n\021" +
+      "startGameResponse\030\016 \001(\0132\027.game.StartGame",
+      "Response\022/\n\014notification\0303 \001(\0132\031.game.Ge" +
+      "neralNotificationB=\n(com.orange.network." +
+      "game.protocol.messageB\021GameMessageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3938,7 +4032,7 @@ public final class GameMessageProtos {
           internal_static_game_GeneralNotification_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GeneralNotification_descriptor,
-              new java.lang.String[] { "Host", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", },
+              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", },
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder.class);
           internal_static_game_GameMessage_descriptor =

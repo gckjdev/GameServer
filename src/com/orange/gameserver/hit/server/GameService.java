@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
@@ -28,6 +29,8 @@ public class GameService {
 	
 	ConcurrentHashMap<Integer, GameWorkerThread> workerThreads = new ConcurrentHashMap<Integer, GameWorkerThread>();
 	int numberOfWorkerThread = 20;
+	
+	AtomicInteger messageIdIndex = new AtomicInteger(0);
 	
 	GameManager gameManager = GameManager.getInstance();
 	UserAtGameManager userManager = UserAtGameManager.getInstance();
@@ -139,5 +142,8 @@ public class GameService {
 	public void sendResponse(Channel channel, GameMessage response) {
 		// TODO Auto-generated method stub
 		
+	}
+	public int generateMessageId() {
+		return messageIdIndex.incrementAndGet();
 	}
 }

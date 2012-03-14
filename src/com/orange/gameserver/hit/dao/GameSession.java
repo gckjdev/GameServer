@@ -27,7 +27,9 @@ public class GameSession {
 	String host;
 	Date   createDate;
 	State  currentState;
-	int preBookCounter = 0;
+	UserAtGame currentPlayUser = null;
+	UserAtGame nextPlayUser = null;
+	
 	List<UserAtGame> userList = new ArrayList<UserAtGame>();	
 
 	public GameSession(int sessionId, String gameName, String userId) {
@@ -154,6 +156,65 @@ public class GameSession {
 		}
 		
 		return false;
+	}
+
+	public String getCurrentPlayUserId() {
+		return (currentPlayUser == null) ? "" : currentPlayUser.userId;
+	}
+
+	public String getNextPlayUserId() {
+		return (nextPlayUser == null) ? "" : nextPlayUser.userId;
+	}
+
+	public void chooseNewPlayUser() {
+		
+		// set current play user
+		if (currentPlayUser == null){
+			if (userList.size() == 0){
+				logger.warn("<chooseNewPlayUser> but no user?");
+				return;
+			}
+			else{
+				// use the first user
+				currentPlayUser = userList.get(0);
+			}
+		}
+		else{
+			int index = userList.indexOf(currentPlayUser);
+			if (index != -1){
+				if (index == userList.size()-1){
+					// last user in the list, go to the first user
+					currentPlayUser = userList.get(0);
+				}
+				else{
+					// use next user as current player
+					currentPlayUser = userList.get(index+1);
+				}
+			}
+		}
+		
+		logger.info("<chooseNewPlayUser> current play user = "+this.getCurrentPlayUserId());
+		
+		// set next play user
+		if (userList.size() < 2){
+			nextPlayUser = null;
+			return;
+		}
+		
+		// set next play user, it's the next one of current user
+		int index = userList.indexOf(currentPlayUser);
+		if (index != -1){
+			if (index == userList.size()-1){
+				// last user in the list, go to the first user
+				nextPlayUser = userList.get(0);
+			}
+			else{
+				// use next user as current player
+				nextPlayUser = userList.get(index+1);
+			}
+		}
+		
+		logger.info("<chooseNewPlayUser> next play user = "+this.getNextPlayUserId());
 	}
 
 

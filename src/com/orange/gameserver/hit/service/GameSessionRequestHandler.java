@@ -32,4 +32,12 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		return GameResultCode.SUCCESS;
 	}
 
+	public static void handleStartGameRequest(GameEvent gameEvent,
+			GameSession session) {
+		
+		// set current play user id and next play user id
+		session.chooseNewPlayUser();		
+		GameNotification.broadcastGameStartNotification(session, gameEvent);
+	}
+
 }

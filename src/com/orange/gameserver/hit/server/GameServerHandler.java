@@ -11,6 +11,7 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
+import com.orange.gameserver.hit.manager.ChannelUserManager;
 import com.orange.gameserver.hit.manager.GameManager;
 import com.orange.gameserver.hit.service.AbstractRequestHandler;
 import com.orange.gameserver.hit.service.GameSessionRequestHandler;
@@ -79,6 +80,25 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		e.getChannel().close();
 	}
 			
+	@Override
+	public void channelDisconnected(ChannelHandlerContext ctx,
+            ChannelStateEvent e){
+		logger.info("GameServerHandler channel disconnected");				
+		ChannelUserManager.getInstance().addChannel(e.getChannel());
+	}
+	
+	@Override
+	public void channelConnected(ChannelHandlerContext ctx,
+            ChannelStateEvent e){
+		logger.info("GameServerHandler channel connected");		
+		
+		// find all users related to the channel and post a message to game session that this user is quit
+//		List<String> userList = 
+		
+		// remove channel
+		ChannelUserManager.getInstance().removeChannel(e.getChannel());
+	}
+	
 //	private static String toString(Continent c) {
 //		return "" + c.name().charAt(0) + c.name().toLowerCase().substring(1);
 //	}
