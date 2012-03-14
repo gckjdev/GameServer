@@ -496,7 +496,7 @@ public final class GameBasicProtos {
   public interface PBGameSessionOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // required string gameId = 1;
+    // optional string gameId = 1;
     boolean hasGameId();
     String getGameId();
     
@@ -508,11 +508,11 @@ public final class GameBasicProtos {
     boolean hasName();
     String getName();
     
-    // required string createBy = 4;
+    // optional string createBy = 4;
     boolean hasCreateBy();
     String getCreateBy();
     
-    // required int32 createTime = 5;
+    // optional int32 createTime = 5;
     boolean hasCreateTime();
     int getCreateTime();
     
@@ -520,7 +520,19 @@ public final class GameBasicProtos {
     boolean hasHost();
     String getHost();
     
-    // repeated .game.PBGameUser users = 7;
+    // optional int32 status = 7;
+    boolean hasStatus();
+    int getStatus();
+    
+    // optional string currentPlayUserId = 8;
+    boolean hasCurrentPlayUserId();
+    String getCurrentPlayUserId();
+    
+    // optional string nextPlayUserId = 9;
+    boolean hasNextPlayUserId();
+    String getNextPlayUserId();
+    
+    // repeated .game.PBGameUser users = 50;
     java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser> 
         getUsersList();
     com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser getUsers(int index);
@@ -559,7 +571,7 @@ public final class GameBasicProtos {
     }
     
     private int bitField0_;
-    // required string gameId = 1;
+    // optional string gameId = 1;
     public static final int GAMEID_FIELD_NUMBER = 1;
     private java.lang.Object gameId_;
     public boolean hasGameId() {
@@ -633,7 +645,7 @@ public final class GameBasicProtos {
       }
     }
     
-    // required string createBy = 4;
+    // optional string createBy = 4;
     public static final int CREATEBY_FIELD_NUMBER = 4;
     private java.lang.Object createBy_;
     public boolean hasCreateBy() {
@@ -665,7 +677,7 @@ public final class GameBasicProtos {
       }
     }
     
-    // required int32 createTime = 5;
+    // optional int32 createTime = 5;
     public static final int CREATETIME_FIELD_NUMBER = 5;
     private int createTime_;
     public boolean hasCreateTime() {
@@ -707,8 +719,82 @@ public final class GameBasicProtos {
       }
     }
     
-    // repeated .game.PBGameUser users = 7;
-    public static final int USERS_FIELD_NUMBER = 7;
+    // optional int32 status = 7;
+    public static final int STATUS_FIELD_NUMBER = 7;
+    private int status_;
+    public boolean hasStatus() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    public int getStatus() {
+      return status_;
+    }
+    
+    // optional string currentPlayUserId = 8;
+    public static final int CURRENTPLAYUSERID_FIELD_NUMBER = 8;
+    private java.lang.Object currentPlayUserId_;
+    public boolean hasCurrentPlayUserId() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    public String getCurrentPlayUserId() {
+      java.lang.Object ref = currentPlayUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          currentPlayUserId_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getCurrentPlayUserIdBytes() {
+      java.lang.Object ref = currentPlayUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        currentPlayUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional string nextPlayUserId = 9;
+    public static final int NEXTPLAYUSERID_FIELD_NUMBER = 9;
+    private java.lang.Object nextPlayUserId_;
+    public boolean hasNextPlayUserId() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    public String getNextPlayUserId() {
+      java.lang.Object ref = nextPlayUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          nextPlayUserId_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getNextPlayUserIdBytes() {
+      java.lang.Object ref = nextPlayUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        nextPlayUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // repeated .game.PBGameUser users = 50;
+    public static final int USERS_FIELD_NUMBER = 50;
     private java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser> users_;
     public java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser> getUsersList() {
       return users_;
@@ -735,6 +821,9 @@ public final class GameBasicProtos {
       createBy_ = "";
       createTime_ = 0;
       host_ = "";
+      status_ = 0;
+      currentPlayUserId_ = "";
+      nextPlayUserId_ = "";
       users_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -742,23 +831,11 @@ public final class GameBasicProtos {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
       
-      if (!hasGameId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasSessionId()) {
         memoizedIsInitialized = 0;
         return false;
       }
       if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasCreateBy()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasCreateTime()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -793,8 +870,17 @@ public final class GameBasicProtos {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeBytes(6, getHostBytes());
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(7, status_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(8, getCurrentPlayUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBytes(9, getNextPlayUserIdBytes());
+      }
       for (int i = 0; i < users_.size(); i++) {
-        output.writeMessage(7, users_.get(i));
+        output.writeMessage(50, users_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -829,9 +915,21 @@ public final class GameBasicProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, getHostBytes());
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, status_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, getCurrentPlayUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(9, getNextPlayUserIdBytes());
+      }
       for (int i = 0; i < users_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, users_.get(i));
+          .computeMessageSize(50, users_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -970,9 +1068,15 @@ public final class GameBasicProtos {
         bitField0_ = (bitField0_ & ~0x00000010);
         host_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
+        status_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        currentPlayUserId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000080);
+        nextPlayUserId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000100);
         if (usersBuilder_ == null) {
           users_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000040);
+          bitField0_ = (bitField0_ & ~0x00000200);
         } else {
           usersBuilder_.clear();
         }
@@ -1038,10 +1142,22 @@ public final class GameBasicProtos {
           to_bitField0_ |= 0x00000020;
         }
         result.host_ = host_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.status_ = status_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.currentPlayUserId_ = currentPlayUserId_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.nextPlayUserId_ = nextPlayUserId_;
         if (usersBuilder_ == null) {
-          if (((bitField0_ & 0x00000040) == 0x00000040)) {
+          if (((bitField0_ & 0x00000200) == 0x00000200)) {
             users_ = java.util.Collections.unmodifiableList(users_);
-            bitField0_ = (bitField0_ & ~0x00000040);
+            bitField0_ = (bitField0_ & ~0x00000200);
           }
           result.users_ = users_;
         } else {
@@ -1081,11 +1197,20 @@ public final class GameBasicProtos {
         if (other.hasHost()) {
           setHost(other.getHost());
         }
+        if (other.hasStatus()) {
+          setStatus(other.getStatus());
+        }
+        if (other.hasCurrentPlayUserId()) {
+          setCurrentPlayUserId(other.getCurrentPlayUserId());
+        }
+        if (other.hasNextPlayUserId()) {
+          setNextPlayUserId(other.getNextPlayUserId());
+        }
         if (usersBuilder_ == null) {
           if (!other.users_.isEmpty()) {
             if (users_.isEmpty()) {
               users_ = other.users_;
-              bitField0_ = (bitField0_ & ~0x00000040);
+              bitField0_ = (bitField0_ & ~0x00000200);
             } else {
               ensureUsersIsMutable();
               users_.addAll(other.users_);
@@ -1098,7 +1223,7 @@ public final class GameBasicProtos {
               usersBuilder_.dispose();
               usersBuilder_ = null;
               users_ = other.users_;
-              bitField0_ = (bitField0_ & ~0x00000040);
+              bitField0_ = (bitField0_ & ~0x00000200);
               usersBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getUsersFieldBuilder() : null;
@@ -1112,23 +1237,11 @@ public final class GameBasicProtos {
       }
       
       public final boolean isInitialized() {
-        if (!hasGameId()) {
-          
-          return false;
-        }
         if (!hasSessionId()) {
           
           return false;
         }
         if (!hasName()) {
-          
-          return false;
-        }
-        if (!hasCreateBy()) {
-          
-          return false;
-        }
-        if (!hasCreateTime()) {
           
           return false;
         }
@@ -1194,7 +1307,22 @@ public final class GameBasicProtos {
               host_ = input.readBytes();
               break;
             }
-            case 58: {
+            case 56: {
+              bitField0_ |= 0x00000040;
+              status_ = input.readInt32();
+              break;
+            }
+            case 66: {
+              bitField0_ |= 0x00000080;
+              currentPlayUserId_ = input.readBytes();
+              break;
+            }
+            case 74: {
+              bitField0_ |= 0x00000100;
+              nextPlayUserId_ = input.readBytes();
+              break;
+            }
+            case 402: {
               com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser.Builder subBuilder = com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addUsers(subBuilder.buildPartial());
@@ -1206,7 +1334,7 @@ public final class GameBasicProtos {
       
       private int bitField0_;
       
-      // required string gameId = 1;
+      // optional string gameId = 1;
       private java.lang.Object gameId_ = "";
       public boolean hasGameId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
@@ -1299,7 +1427,7 @@ public final class GameBasicProtos {
         onChanged();
       }
       
-      // required string createBy = 4;
+      // optional string createBy = 4;
       private java.lang.Object createBy_ = "";
       public boolean hasCreateBy() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
@@ -1335,7 +1463,7 @@ public final class GameBasicProtos {
         onChanged();
       }
       
-      // required int32 createTime = 5;
+      // optional int32 createTime = 5;
       private int createTime_ ;
       public boolean hasCreateTime() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
@@ -1392,13 +1520,106 @@ public final class GameBasicProtos {
         onChanged();
       }
       
-      // repeated .game.PBGameUser users = 7;
+      // optional int32 status = 7;
+      private int status_ ;
+      public boolean hasStatus() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      public int getStatus() {
+        return status_;
+      }
+      public Builder setStatus(int value) {
+        bitField0_ |= 0x00000040;
+        status_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearStatus() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        status_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional string currentPlayUserId = 8;
+      private java.lang.Object currentPlayUserId_ = "";
+      public boolean hasCurrentPlayUserId() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      public String getCurrentPlayUserId() {
+        java.lang.Object ref = currentPlayUserId_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          currentPlayUserId_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setCurrentPlayUserId(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        currentPlayUserId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearCurrentPlayUserId() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        currentPlayUserId_ = getDefaultInstance().getCurrentPlayUserId();
+        onChanged();
+        return this;
+      }
+      void setCurrentPlayUserId(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000080;
+        currentPlayUserId_ = value;
+        onChanged();
+      }
+      
+      // optional string nextPlayUserId = 9;
+      private java.lang.Object nextPlayUserId_ = "";
+      public boolean hasNextPlayUserId() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      public String getNextPlayUserId() {
+        java.lang.Object ref = nextPlayUserId_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          nextPlayUserId_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setNextPlayUserId(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        nextPlayUserId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearNextPlayUserId() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        nextPlayUserId_ = getDefaultInstance().getNextPlayUserId();
+        onChanged();
+        return this;
+      }
+      void setNextPlayUserId(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000100;
+        nextPlayUserId_ = value;
+        onChanged();
+      }
+      
+      // repeated .game.PBGameUser users = 50;
       private java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser> users_ =
         java.util.Collections.emptyList();
       private void ensureUsersIsMutable() {
-        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
           users_ = new java.util.ArrayList<com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser>(users_);
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000200;
          }
       }
       
@@ -1514,7 +1735,7 @@ public final class GameBasicProtos {
       public Builder clearUsers() {
         if (usersBuilder_ == null) {
           users_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000040);
+          bitField0_ = (bitField0_ & ~0x00000200);
           onChanged();
         } else {
           usersBuilder_.clear();
@@ -1570,7 +1791,7 @@ public final class GameBasicProtos {
           usersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser, com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser.Builder, com.orange.network.game.protocol.model.GameBasicProtos.PBGameUserOrBuilder>(
                   users_,
-                  ((bitField0_ & 0x00000040) == 0x00000040),
+                  ((bitField0_ & 0x00000200) == 0x00000200),
                   getParentForChildren(),
                   isClean());
           users_ = null;
@@ -1609,13 +1830,14 @@ public final class GameBasicProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\017GameBasic.proto\022\004game\".\n\nPBGameUser\022\016\n" +
-      "\006userId\030\001 \002(\t\022\020\n\010nickName\030\002 \002(\t\"\225\001\n\rPBGa" +
-      "meSession\022\016\n\006gameId\030\001 \002(\t\022\021\n\tsessionId\030\002" +
-      " \002(\003\022\014\n\004name\030\003 \002(\t\022\020\n\010createBy\030\004 \002(\t\022\022\n\n" +
-      "createTime\030\005 \002(\005\022\014\n\004host\030\006 \001(\t\022\037\n\005users\030" +
-      "\007 \003(\0132\020.game.PBGameUserB9\n&com.orange.ne" +
-      "twork.game.protocol.modelB\017GameBasicProt" +
-      "os"
+      "\006userId\030\001 \002(\t\022\020\n\010nickName\030\002 \002(\t\"\330\001\n\rPBGa" +
+      "meSession\022\016\n\006gameId\030\001 \001(\t\022\021\n\tsessionId\030\002" +
+      " \002(\003\022\014\n\004name\030\003 \002(\t\022\020\n\010createBy\030\004 \001(\t\022\022\n\n" +
+      "createTime\030\005 \001(\005\022\014\n\004host\030\006 \001(\t\022\016\n\006status" +
+      "\030\007 \001(\005\022\031\n\021currentPlayUserId\030\010 \001(\t\022\026\n\016nex" +
+      "tPlayUserId\030\t \001(\t\022\037\n\005users\0302 \003(\0132\020.game." +
+      "PBGameUserB9\n&com.orange.network.game.pr" +
+      "otocol.modelB\017GameBasicProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1635,7 +1857,7 @@ public final class GameBasicProtos {
           internal_static_game_PBGameSession_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_PBGameSession_descriptor,
-              new java.lang.String[] { "GameId", "SessionId", "Name", "CreateBy", "CreateTime", "Host", "Users", },
+              new java.lang.String[] { "GameId", "SessionId", "Name", "CreateBy", "CreateTime", "Host", "Status", "CurrentPlayUserId", "NextPlayUserId", "Users", },
               com.orange.network.game.protocol.model.GameBasicProtos.PBGameSession.class,
               com.orange.network.game.protocol.model.GameBasicProtos.PBGameSession.Builder.class);
           return null;

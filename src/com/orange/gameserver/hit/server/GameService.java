@@ -49,14 +49,13 @@ public class GameService {
 	}
     
   	public int matchGameForUser(String userId, String gameId) {
-  		// TODO
-		return -1;
+		return gameManager.matchGameForUser(userId);
 	}
 
   	
-	public int createGame(String userId, String nickName) {		
+	public int createGame(String userId, String nickName, Channel channel) {		
 		GameSession gameSession =  gameManager.createNewDrawGameSession(userId);		
-		UserAtGame userAtGame = userManager.userLogin(userId, nickName);		
+		UserAtGame userAtGame = userManager.userLogin(userId, nickName, channel);		
 		gameSession.addUser(userAtGame);
 		return gameSession.getSessionId();
 	}

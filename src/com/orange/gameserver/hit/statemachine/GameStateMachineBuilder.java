@@ -3,10 +3,8 @@ package com.orange.gameserver.hit.statemachine;
 import com.orange.common.statemachine.State;
 import com.orange.common.statemachine.StateMachine;
 import com.orange.common.statemachine.StateMachineBuilder;
-import com.orange.network.game.protocol.message.GameMessageProtos;
-
-
 import com.orange.gameserver.hit.statemachine.game.*;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 
 public class GameStateMachineBuilder extends StateMachineBuilder {
 
@@ -24,10 +22,10 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 		StateMachine sm = new StateMachine();
 		
 		sm.addState(GameStartState.defaultState).
-			addTransition(GameEventKey.EVENT_USER_JOIN_GAME, GameStateKey.WAITING);
+			addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING);
 
 		sm.addState(new GameWaitingState(GameStateKey.WAITING)).
-			addTransition(GameEventKey.EVENT_USER_JOIN_GAME, GameStateKey.WAITING);
+			addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING);
 		
 //			
 //		sm.addState(new MyState(MyStateKey.STATE_GAME_WAIT)).

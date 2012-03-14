@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jboss.netty.channel.Channel;
+
 import com.orange.common.statemachine.State;
 import com.orange.gameserver.hit.statemachine.game.GameStartState;
 import com.orange.gameserver.hit.statemachine.game.GameStateKey;
@@ -110,7 +112,7 @@ public class GameSession {
 		userList.add(userAtGame);
 	}
 
-	public boolean addUser(String userId, String nickName) {
+	public boolean addUser(String userId, String nickName, Channel channel) {
 		for (UserAtGame user : userList){
 			if (user.userId.equals(userId)){
 				// exist, don't need to add
@@ -122,7 +124,7 @@ public class GameSession {
 			return false;
 		}
 		
-		UserAtGame userAtGame = new UserAtGame(userId, nickName);
+		UserAtGame userAtGame = new UserAtGame(userId, nickName, channel);
 		addUser(userAtGame);		
 		return true;
 	}

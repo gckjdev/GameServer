@@ -4,7 +4,7 @@ import com.orange.common.statemachine.Event;
 import com.orange.common.statemachine.State;
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.service.JoinGameRequestHandler;
-import com.orange.network.game.protocol.message.GameMessageProtos.GameCommandType;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 
 public class GameStartState extends State {
 

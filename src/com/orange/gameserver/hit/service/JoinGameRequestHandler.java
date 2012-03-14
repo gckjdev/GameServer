@@ -11,7 +11,8 @@ import com.orange.gameserver.hit.server.GameService;
 import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.gameserver.hit.statemachine.game.GameEventKey;
 import com.orange.network.game.protocol.message.GameMessageProtos;
-import com.orange.network.game.protocol.message.GameMessageProtos.GameCommandType;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.model.GameBasicProtos;
 
@@ -28,33 +29,18 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String gameId = request.getJoinGameRequest().getGameId();
 		String nickName = request.getJoinGameRequest().getNickName();
 		
-		this.log("user id = " + userId); 
-		
-		/*
-		// match a game for user to join			
-		GameSession gameSession = gameService.matchGameForUser(userId, gameId);
-		if (gameSession == null){
-			// if cannot match a game for user, then try to create a new one
-			gameSession = gameService.createGame(userId, nickName);
-		}
-		
-		if (gameSession == null){
-			sendErrorResponse(GameMessageProtos.GameResultCode.ERROR_JOIN_GAME, request);
-			return;
-		}
-		*/
-		
 		int gameSessionId = gameService.matchGameForUser(userId, gameId);
 		if (gameSessionId == -1){
-			gameSessionId = gameService.createGame(userId, nickName);
+			gameSessionId = gameService.createGame(userId, nickName, messageEvent.getChannel());
 		}
 		
-		GameEvent gameEvent = new GameEvent(GameEventKey.EVENT_USER_JOIN_GAME, 
-				gameSessionId, request, messageEvent.getChannel());
-
-		gameService.dispatchEvent(gameEvent);
+		GameEvent gameEvent = new GameEvent(
+				GameCommandType.JOIN_GAME_REQUEST, 
+				gameSessionId, 
+				request, 
+				messageEvent.getChannel());
 		
-		
+		gameService.dispatchEvent(gameEvent);				
 	}
 
 	public static void handleJoinGameRequest(GameEvent gameEvent,
@@ -65,7 +51,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String userId = request.getJoinGameRequest().getUserId();
 		String nickName = request.getJoinGameRequest().getNickName();
 		
-		boolean result = gameSession.addUser(userId, nickName);
+		boolean result = gameSession.addUser(userId, nickName, gameEvent.getChannel());
 		
 		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();
 		
@@ -86,11 +72,14 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
 					.setCommand(GameCommandType.JOIN_GAME_RESPONSE)
 					.setMessageId(request.getMessageId())
-					.setResultCode(GameMessageProtos.GameResultCode.SUCCESS)
+					.setResultCode(GameResultCode.SUCCESS)
 					.setJoinGameResponse(joinGameResponse)
 					.build();
 
 		HandlerUtils.sendResponse(gameEvent, response);
+		
+		// TODO send notification to all other users in the session
+		
 	}
 
 	

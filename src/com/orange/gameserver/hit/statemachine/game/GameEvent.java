@@ -12,7 +12,7 @@ public class GameEvent extends Event {
 		super(eventKey);
 	}
 
-	public GameEvent(GameEventKey key, int sessionId,
+	public GameEvent(Object key, int sessionId,
 			GameMessage message, Channel c) {
 		
 		super(key);		

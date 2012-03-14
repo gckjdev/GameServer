@@ -3,6 +3,8 @@ package com.orange.gameserver.hit.manager;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.jboss.netty.channel.Channel;
+
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.dao.UserAtGame;
 
@@ -26,8 +28,8 @@ public class UserAtGameManager {
 		return null;
 	} 
 
-	public UserAtGame userLogin(String userId, String nickName){
-		UserAtGame user = new UserAtGame(userId, nickName);
+	public UserAtGame userLogin(String userId, String nickName, Channel channel){
+		UserAtGame user = new UserAtGame(userId, nickName, channel);
 		userMap.put(userId, user);
 		return user;
 	}

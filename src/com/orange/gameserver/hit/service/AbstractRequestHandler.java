@@ -5,9 +5,11 @@ import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.hit.manager.GameManager;
 import com.orange.gameserver.hit.server.GameService;
+import com.orange.gameserver.hit.statemachine.game.GameEvent;
+import com.orange.gameserver.hit.statemachine.game.GameEventKey;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
-import com.orange.network.game.protocol.message.GameMessageProtos.GameResultCode;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 
 public abstract class AbstractRequestHandler {
 	
@@ -34,12 +36,14 @@ public abstract class AbstractRequestHandler {
 	}
 	
 	public void sendErrorResponse(GameResultCode resultCode, GameMessage request){
-		GameMessage response = GameMessageProtos.GameMessage.newBuilder().
-			setMessageId(request.getMessageId()).
-			setResultCode(resultCode).						
-			build();
-
-		sendResponse(response);
+		GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
+			.setCommand(HandlerUtils.getResponseCommandByRequest(request.getCommand()))
+			.setMessageId(request.getMessageId())
+			.setResultCode(resultCode)
+			.build();
+	
+		logger.info(String.format("[%08X] [SEND] %s", response.getSessionId(), response.toString()));
+		messageEvent.getChannel().write(response);
 	}
 	
 	public void printRequest(GameMessage request){
@@ -49,4 +53,13 @@ public abstract class AbstractRequestHandler {
 	public void log(String message){
 		logger.info(String.format("[%08X] %s", gameMessage.getMessageId(), message));
 	}
+	
+	public GameEvent toGameEvent(GameMessage gameMessage){
+		return new GameEvent(
+				gameMessage.getCommand(), 
+				(int)gameMessage.getSessionId(), 
+				gameMessage, 
+				messageEvent.getChannel());
+	}
+
 }
