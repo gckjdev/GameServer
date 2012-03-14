@@ -6,7 +6,7 @@ import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.service.JoinGameRequestHandler;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 
-public class GameStartState extends State {
+public class GameStartState extends CommonGameState {
 
 	public final static GameStartState defaultState = new GameStartState(GameStateKey.CREATE);
 	
@@ -16,14 +16,6 @@ public class GameStartState extends State {
 	}
 
 	@Override
-	public void enterAction(Event event, Object context) {
-		GameEvent gameEvent = (GameEvent)event;
-		GameSession session = (GameSession)context;
-		
-		if (gameEvent.getMessage().getCommand() == GameCommandType.JOIN_GAME_REQUEST){
-			JoinGameRequestHandler.handleJoinGameRequest(gameEvent, session);
-		}
-		
-		
+	public void handleEvent(GameEvent event, GameSession session){
 	}
 }

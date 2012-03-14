@@ -43,7 +43,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		gameService.dispatchEvent(gameEvent);				
 	}
 
-	public static void handleJoinGameRequest(GameEvent gameEvent,
+	public static boolean handleJoinGameRequest(GameEvent gameEvent,
 			GameSession gameSession) {
 
 		GameMessage request = gameEvent.getMessage();
@@ -80,6 +80,8 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		
 		// TODO send notification to all other users in the session
 		
+		
+		return true;
 	}
 
 	

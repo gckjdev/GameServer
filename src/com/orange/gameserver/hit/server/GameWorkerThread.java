@@ -41,7 +41,10 @@ public class GameWorkerThread extends Thread {
 					continue;
 				}
 				
-				// TODO session handling here								
+				if (session.getCurrentState().validateEvent(event, session) != 0){
+					continue;
+				}
+				
 				 com.orange.common.statemachine.State nextState = 
 					 stateMachine.nextState(session.getCurrentState(), event, session);
 				 
@@ -52,8 +55,8 @@ public class GameWorkerThread extends Thread {
 				 
 				 session.setCurrentState(nextState);
 
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				logger.error("catch exception while handle event, exception = "+e.toString(), e);
 			}					
 		}
 		

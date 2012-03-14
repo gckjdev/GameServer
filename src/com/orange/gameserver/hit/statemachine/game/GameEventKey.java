@@ -1,5 +1,6 @@
 package com.orange.gameserver.hit.statemachine.game;
 
+// useless now, keep it before it dies...
 public enum GameEventKey {
 
 	EVENT_USER_JOIN_GAME (11); 

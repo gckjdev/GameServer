@@ -6,22 +6,13 @@ import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.service.JoinGameRequestHandler;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 
-public class GameWaitingState extends State {
+public class GameWaitingState extends CommonGameState {
 
 	public GameWaitingState(Object stateId) {
 		super(stateId);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void enterAction(Event event, Object context) {
-		GameEvent gameEvent = (GameEvent)event;
-		GameSession session = (GameSession)context;
-		
-		if (gameEvent.getMessage().getCommand() == GameCommandType.JOIN_GAME_REQUEST){
-			JoinGameRequestHandler.handleJoinGameRequest(gameEvent, session);
-		}
-		
-		
+	public void handleEvent(GameEvent event, GameSession session){
 	}
 }

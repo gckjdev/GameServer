@@ -24,18 +24,13 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 		sm.addState(GameStartState.defaultState).
 			addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING);
 
-		sm.addState(new GameWaitingState(GameStateKey.WAITING)).
-			addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING);
+		sm.addState(new GameWaitingState(GameStateKey.WAITING))
+			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING)
+			.addTransition(GameCommandType.START_GAME_REQUEST, GameStateKey.PLAYING);
 		
-//			
-//		sm.addState(new MyState(MyStateKey.STATE_GAME_WAIT)).
-//			addTransition(MyEventKey.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
-//			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
-//		
-//		sm.addState(new MyState(MyStateKey.STATE_GAME_ONGOING)).
-//			addTransition(MyEventKey.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).
-//			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
-//
+		sm.addState(new GamePlayingState(GameStateKey.PLAYING));
+//			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING)
+
 		sm.addState(GameFinishState.defaultState);
 		
 		sm.setStartAndFinalState(GameStateKey.CREATE, GameStateKey.FINISH);

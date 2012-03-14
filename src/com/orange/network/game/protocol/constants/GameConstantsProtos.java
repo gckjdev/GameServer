@@ -105,11 +105,15 @@ public final class GameConstantsProtos {
       implements com.google.protobuf.ProtocolMessageEnum {
     SUCCESS(0, 0),
     ERROR_JOIN_GAME(1, 1),
-    ERROR_SYSTEM_HANDLER_NOT_FOUND(2, 910),
+    ERROR_USERID_NULL(2, 100),
+    ERROR_USER_CANNOT_START_GAME(3, 101),
+    ERROR_SYSTEM_HANDLER_NOT_FOUND(4, 910),
     ;
     
     public static final int SUCCESS_VALUE = 0;
     public static final int ERROR_JOIN_GAME_VALUE = 1;
+    public static final int ERROR_USERID_NULL_VALUE = 100;
+    public static final int ERROR_USER_CANNOT_START_GAME_VALUE = 101;
     public static final int ERROR_SYSTEM_HANDLER_NOT_FOUND_VALUE = 910;
     
     
@@ -119,6 +123,8 @@ public final class GameConstantsProtos {
       switch (value) {
         case 0: return SUCCESS;
         case 1: return ERROR_JOIN_GAME;
+        case 100: return ERROR_USERID_NULL;
+        case 101: return ERROR_USER_CANNOT_START_GAME;
         case 910: return ERROR_SYSTEM_HANDLER_NOT_FOUND;
         default: return null;
       }
@@ -150,7 +156,7 @@ public final class GameConstantsProtos {
     }
     
     private static final GameResultCode[] VALUES = {
-      SUCCESS, ERROR_JOIN_GAME, ERROR_SYSTEM_HANDLER_NOT_FOUND, 
+      SUCCESS, ERROR_JOIN_GAME, ERROR_USERID_NULL, ERROR_USER_CANNOT_START_GAME, ERROR_SYSTEM_HANDLER_NOT_FOUND, 
     };
     
     public static GameResultCode valueOf(
@@ -191,11 +197,12 @@ public final class GameConstantsProtos {
       "TION_REQUEST\0205\022%\n!HOST_CHANGE_NOTIFICATI" +
       "ON_RESPONSE\0206\022#\n\037GAME_START_NOTIFICATION" +
       "_REQUEST\0207\022$\n GAME_START_NOTIFICATION_RE" +
-      "SPONSE\0208*W\n\016GameResultCode\022\013\n\007SUCCESS\020\000\022",
-      "\023\n\017ERROR_JOIN_GAME\020\001\022#\n\036ERROR_SYSTEM_HAN" +
-      "DLER_NOT_FOUND\020\216\007BA\n*com.orange.network." +
-      "game.protocol.constantsB\023GameConstantsPr" +
-      "otos"
+      "SPONSE\0208*\220\001\n\016GameResultCode\022\013\n\007SUCCESS\020\000",
+      "\022\023\n\017ERROR_JOIN_GAME\020\001\022\025\n\021ERROR_USERID_NU" +
+      "LL\020d\022 \n\034ERROR_USER_CANNOT_START_GAME\020e\022#" +
+      "\n\036ERROR_SYSTEM_HANDLER_NOT_FOUND\020\216\007BA\n*c" +
+      "om.orange.network.game.protocol.constant" +
+      "sB\023GameConstantsProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

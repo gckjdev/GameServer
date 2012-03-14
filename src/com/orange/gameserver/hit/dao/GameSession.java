@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 
 import com.orange.common.statemachine.State;
@@ -16,6 +17,8 @@ import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 public class GameSession {
 
+	protected static final Logger logger = Logger.getLogger("GameSession");
+	
 	public static final int MAX_USER_PER_GAME_SESSION = 7;
 	
 	int   sessionId;
@@ -115,7 +118,7 @@ public class GameSession {
 	public void addUser(UserAtGame userAtGame) {
 		if (userAtGame == null)
 			return;
-		
+		logger.info("add user " + userAtGame.userId);
 		userList.add(userAtGame);
 	}
 
@@ -138,6 +141,19 @@ public class GameSession {
 
 	private boolean isUserFull() {
 		return userList.size() >= MAX_USER_PER_GAME_SESSION ? true : false;
+	}	
+	
+	public boolean canUserStartGame(String userId) {
+//		if (!userId.equals(host))
+//			return false;
+		
+		logger.info("<canUserStartGame> userId = "+userId);
+		for (UserAtGame user : userList){
+			if (user.userId.equals(userId))
+				return true;
+		}
+		
+		return false;
 	}
 
 
