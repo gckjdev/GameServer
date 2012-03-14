@@ -14,7 +14,7 @@ import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 public class GameSession {
 
-	private static final int MAX_USER_PER_GAME_SESSION = 7;
+	public static final int MAX_USER_PER_GAME_SESSION = 7;
 	
 	int   sessionId;
 	String name;
@@ -87,6 +87,13 @@ public class GameSession {
 		return userList;
 	}
 
+	public int getUserCount() {
+		if (this.userList != null) {
+			return this.userList.size();
+		}
+		return 0;
+	}
+	
 	public void setUserList(List<UserAtGame> userList) {
 		this.userList = userList;
 	}

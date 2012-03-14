@@ -1,17 +1,18 @@
 package com.orange.gameserver.hit.manager;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.orange.gameserver.hit.dao.DrawGameSession;
 import com.orange.gameserver.hit.dao.GameSession;
-import com.orange.gameserver.hit.statemachine.GameStateMachineBuilder;
+
 
 public class GameManager {
 	
 	public static int NO_SESSION_MATCH_FOR_USER = -1; 
+	
+
 	
 	// a map to store game session
 	ConcurrentMap<Integer, GameSession> gameCollection = new ConcurrentHashMap<Integer, GameSession>();
@@ -55,6 +56,5 @@ public class GameManager {
 		
 		return NO_SESSION_MATCH_FOR_USER;
 	}
-	
 
 }
