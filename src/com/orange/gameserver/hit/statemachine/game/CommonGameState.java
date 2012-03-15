@@ -34,6 +34,10 @@ public class CommonGameState extends State {
 			case START_GAME_REQUEST:
 				GameSessionRequestHandler.handleStartGameRequest(gameEvent, session);
 				break;
+				
+			case SEND_DRAW_DATA_REQUEST:
+				GameSessionRequestHandler.handleSendDrawDataRequest(gameEvent, session);
+				break;
 			
 			default:
 				// handle event by sub class

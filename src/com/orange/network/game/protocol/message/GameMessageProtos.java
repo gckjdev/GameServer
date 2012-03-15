@@ -1837,6 +1837,785 @@ public final class GameMessageProtos {
     // @@protoc_insertion_point(class_scope:game.StartGameResponse)
   }
   
+  public interface SendDrawDataRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // repeated int32 points = 1;
+    java.util.List<java.lang.Integer> getPointsList();
+    int getPointsCount();
+    int getPoints(int index);
+    
+    // optional float width = 22;
+    boolean hasWidth();
+    float getWidth();
+    
+    // optional int32 color = 23;
+    boolean hasColor();
+    int getColor();
+  }
+  public static final class SendDrawDataRequest extends
+      com.google.protobuf.GeneratedMessage
+      implements SendDrawDataRequestOrBuilder {
+    // Use SendDrawDataRequest.newBuilder() to construct.
+    private SendDrawDataRequest(Builder builder) {
+      super(builder);
+    }
+    private SendDrawDataRequest(boolean noInit) {}
+    
+    private static final SendDrawDataRequest defaultInstance;
+    public static SendDrawDataRequest getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public SendDrawDataRequest getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orange.network.game.protocol.message.GameMessageProtos.internal_static_game_SendDrawDataRequest_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orange.network.game.protocol.message.GameMessageProtos.internal_static_game_SendDrawDataRequest_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // repeated int32 points = 1;
+    public static final int POINTS_FIELD_NUMBER = 1;
+    private java.util.List<java.lang.Integer> points_;
+    public java.util.List<java.lang.Integer>
+        getPointsList() {
+      return points_;
+    }
+    public int getPointsCount() {
+      return points_.size();
+    }
+    public int getPoints(int index) {
+      return points_.get(index);
+    }
+    
+    // optional float width = 22;
+    public static final int WIDTH_FIELD_NUMBER = 22;
+    private float width_;
+    public boolean hasWidth() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public float getWidth() {
+      return width_;
+    }
+    
+    // optional int32 color = 23;
+    public static final int COLOR_FIELD_NUMBER = 23;
+    private int color_;
+    public boolean hasColor() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getColor() {
+      return color_;
+    }
+    
+    private void initFields() {
+      points_ = java.util.Collections.emptyList();;
+      width_ = 0F;
+      color_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < points_.size(); i++) {
+        output.writeInt32(1, points_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeFloat(22, width_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(23, color_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      {
+        int dataSize = 0;
+        for (int i = 0; i < points_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(points_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getPointsList().size();
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(22, width_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(23, color_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orange.network.game.protocol.message.GameMessageProtos.internal_static_game_SendDrawDataRequest_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orange.network.game.protocol.message.GameMessageProtos.internal_static_game_SendDrawDataRequest_fieldAccessorTable;
+      }
+      
+      // Construct using com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        points_ = java.util.Collections.emptyList();;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        width_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        color_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDescriptor();
+      }
+      
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest getDefaultInstanceForType() {
+        return com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance();
+      }
+      
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest build() {
+        com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest buildPartial() {
+        com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest result = new com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          points_ = java.util.Collections.unmodifiableList(points_);
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.points_ = points_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.width_ = width_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.color_ = color_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest) {
+          return mergeFrom((com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest other) {
+        if (other == com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance()) return this;
+        if (!other.points_.isEmpty()) {
+          if (points_.isEmpty()) {
+            points_ = other.points_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensurePointsIsMutable();
+            points_.addAll(other.points_);
+          }
+          onChanged();
+        }
+        if (other.hasWidth()) {
+          setWidth(other.getWidth());
+        }
+        if (other.hasColor()) {
+          setColor(other.getColor());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              ensurePointsIsMutable();
+              points_.add(input.readInt32());
+              break;
+            }
+            case 10: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              while (input.getBytesUntilLimit() > 0) {
+                addPoints(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 181: {
+              bitField0_ |= 0x00000002;
+              width_ = input.readFloat();
+              break;
+            }
+            case 184: {
+              bitField0_ |= 0x00000004;
+              color_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // repeated int32 points = 1;
+      private java.util.List<java.lang.Integer> points_ = java.util.Collections.emptyList();;
+      private void ensurePointsIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          points_ = new java.util.ArrayList<java.lang.Integer>(points_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      public java.util.List<java.lang.Integer>
+          getPointsList() {
+        return java.util.Collections.unmodifiableList(points_);
+      }
+      public int getPointsCount() {
+        return points_.size();
+      }
+      public int getPoints(int index) {
+        return points_.get(index);
+      }
+      public Builder setPoints(
+          int index, int value) {
+        ensurePointsIsMutable();
+        points_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addPoints(int value) {
+        ensurePointsIsMutable();
+        points_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllPoints(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensurePointsIsMutable();
+        super.addAll(values, points_);
+        onChanged();
+        return this;
+      }
+      public Builder clearPoints() {
+        points_ = java.util.Collections.emptyList();;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      
+      // optional float width = 22;
+      private float width_ ;
+      public boolean hasWidth() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public float getWidth() {
+        return width_;
+      }
+      public Builder setWidth(float value) {
+        bitField0_ |= 0x00000002;
+        width_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearWidth() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        width_ = 0F;
+        onChanged();
+        return this;
+      }
+      
+      // optional int32 color = 23;
+      private int color_ ;
+      public boolean hasColor() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public int getColor() {
+        return color_;
+      }
+      public Builder setColor(int value) {
+        bitField0_ |= 0x00000004;
+        color_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearColor() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        color_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:game.SendDrawDataRequest)
+    }
+    
+    static {
+      defaultInstance = new SendDrawDataRequest(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:game.SendDrawDataRequest)
+  }
+  
+  public interface SendDrawDataResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+  }
+  public static final class SendDrawDataResponse extends
+      com.google.protobuf.GeneratedMessage
+      implements SendDrawDataResponseOrBuilder {
+    // Use SendDrawDataResponse.newBuilder() to construct.
+    private SendDrawDataResponse(Builder builder) {
+      super(builder);
+    }
+    private SendDrawDataResponse(boolean noInit) {}
+    
+    private static final SendDrawDataResponse defaultInstance;
+    public static SendDrawDataResponse getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public SendDrawDataResponse getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orange.network.game.protocol.message.GameMessageProtos.internal_static_game_SendDrawDataResponse_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orange.network.game.protocol.message.GameMessageProtos.internal_static_game_SendDrawDataResponse_fieldAccessorTable;
+    }
+    
+    private void initFields() {
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orange.network.game.protocol.message.GameMessageProtos.internal_static_game_SendDrawDataResponse_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orange.network.game.protocol.message.GameMessageProtos.internal_static_game_SendDrawDataResponse_fieldAccessorTable;
+      }
+      
+      // Construct using com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDescriptor();
+      }
+      
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse getDefaultInstanceForType() {
+        return com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance();
+      }
+      
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse build() {
+        com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse buildPartial() {
+        com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse result = new com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse(this);
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse) {
+          return mergeFrom((com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse other) {
+        if (other == com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+          }
+        }
+      }
+      
+      
+      // @@protoc_insertion_point(builder_scope:game.SendDrawDataResponse)
+    }
+    
+    static {
+      defaultInstance = new SendDrawDataResponse(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:game.SendDrawDataResponse)
+  }
+  
   public interface GeneralNotificationOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
@@ -1859,6 +2638,19 @@ public final class GameMessageProtos {
     // optional string newUserId = 7;
     boolean hasNewUserId();
     String getNewUserId();
+    
+    // repeated int32 points = 21;
+    java.util.List<java.lang.Integer> getPointsList();
+    int getPointsCount();
+    int getPoints(int index);
+    
+    // optional float width = 22;
+    boolean hasWidth();
+    float getWidth();
+    
+    // optional int32 color = 23;
+    boolean hasColor();
+    int getColor();
   }
   public static final class GeneralNotification extends
       com.google.protobuf.GeneratedMessage
@@ -2027,12 +2819,49 @@ public final class GameMessageProtos {
       }
     }
     
+    // repeated int32 points = 21;
+    public static final int POINTS_FIELD_NUMBER = 21;
+    private java.util.List<java.lang.Integer> points_;
+    public java.util.List<java.lang.Integer>
+        getPointsList() {
+      return points_;
+    }
+    public int getPointsCount() {
+      return points_.size();
+    }
+    public int getPoints(int index) {
+      return points_.get(index);
+    }
+    
+    // optional float width = 22;
+    public static final int WIDTH_FIELD_NUMBER = 22;
+    private float width_;
+    public boolean hasWidth() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public float getWidth() {
+      return width_;
+    }
+    
+    // optional int32 color = 23;
+    public static final int COLOR_FIELD_NUMBER = 23;
+    private int color_;
+    public boolean hasColor() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    public int getColor() {
+      return color_;
+    }
+    
     private void initFields() {
       sessionHost_ = "";
       sessionStatus_ = 0;
       currentPlayUserId_ = "";
       nextPlayUserId_ = "";
       newUserId_ = "";
+      points_ = java.util.Collections.emptyList();;
+      width_ = 0F;
+      color_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2060,6 +2889,15 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(7, getNewUserIdBytes());
+      }
+      for (int i = 0; i < points_.size(); i++) {
+        output.writeInt32(21, points_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeFloat(22, width_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(23, color_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2089,6 +2927,23 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(7, getNewUserIdBytes());
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < points_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(points_.get(i));
+        }
+        size += dataSize;
+        size += 2 * getPointsList().size();
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(22, width_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(23, color_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2224,6 +3079,12 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000008);
         newUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
+        points_ = java.util.Collections.emptyList();;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        width_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        color_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
       
@@ -2282,6 +3143,19 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000010;
         }
         result.newUserId_ = newUserId_;
+        if (((bitField0_ & 0x00000020) == 0x00000020)) {
+          points_ = java.util.Collections.unmodifiableList(points_);
+          bitField0_ = (bitField0_ & ~0x00000020);
+        }
+        result.points_ = points_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.width_ = width_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.color_ = color_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2312,6 +3186,22 @@ public final class GameMessageProtos {
         }
         if (other.hasNewUserId()) {
           setNewUserId(other.getNewUserId());
+        }
+        if (!other.points_.isEmpty()) {
+          if (points_.isEmpty()) {
+            points_ = other.points_;
+            bitField0_ = (bitField0_ & ~0x00000020);
+          } else {
+            ensurePointsIsMutable();
+            points_.addAll(other.points_);
+          }
+          onChanged();
+        }
+        if (other.hasWidth()) {
+          setWidth(other.getWidth());
+        }
+        if (other.hasColor()) {
+          setColor(other.getColor());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2367,6 +3257,30 @@ public final class GameMessageProtos {
             case 58: {
               bitField0_ |= 0x00000010;
               newUserId_ = input.readBytes();
+              break;
+            }
+            case 168: {
+              ensurePointsIsMutable();
+              points_.add(input.readInt32());
+              break;
+            }
+            case 170: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              while (input.getBytesUntilLimit() > 0) {
+                addPoints(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 181: {
+              bitField0_ |= 0x00000040;
+              width_ = input.readFloat();
+              break;
+            }
+            case 184: {
+              bitField0_ |= 0x00000080;
+              color_ = input.readInt32();
               break;
             }
           }
@@ -2540,6 +3454,93 @@ public final class GameMessageProtos {
         onChanged();
       }
       
+      // repeated int32 points = 21;
+      private java.util.List<java.lang.Integer> points_ = java.util.Collections.emptyList();;
+      private void ensurePointsIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          points_ = new java.util.ArrayList<java.lang.Integer>(points_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+      public java.util.List<java.lang.Integer>
+          getPointsList() {
+        return java.util.Collections.unmodifiableList(points_);
+      }
+      public int getPointsCount() {
+        return points_.size();
+      }
+      public int getPoints(int index) {
+        return points_.get(index);
+      }
+      public Builder setPoints(
+          int index, int value) {
+        ensurePointsIsMutable();
+        points_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addPoints(int value) {
+        ensurePointsIsMutable();
+        points_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllPoints(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensurePointsIsMutable();
+        super.addAll(values, points_);
+        onChanged();
+        return this;
+      }
+      public Builder clearPoints() {
+        points_ = java.util.Collections.emptyList();;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+      
+      // optional float width = 22;
+      private float width_ ;
+      public boolean hasWidth() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      public float getWidth() {
+        return width_;
+      }
+      public Builder setWidth(float value) {
+        bitField0_ |= 0x00000040;
+        width_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearWidth() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        width_ = 0F;
+        onChanged();
+        return this;
+      }
+      
+      // optional int32 color = 23;
+      private int color_ ;
+      public boolean hasColor() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      public int getColor() {
+        return color_;
+      }
+      public Builder setColor(int value) {
+        bitField0_ |= 0x00000080;
+        color_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearColor() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        color_ = 0;
+        onChanged();
+        return this;
+      }
+      
       // @@protoc_insertion_point(builder_scope:game.GeneralNotification)
     }
     
@@ -2593,6 +3594,16 @@ public final class GameMessageProtos {
     boolean hasStartGameResponse();
     com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse getStartGameResponse();
     com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponseOrBuilder getStartGameResponseOrBuilder();
+    
+    // optional .game.SendDrawDataRequest sendDrawDataRequest = 21;
+    boolean hasSendDrawDataRequest();
+    com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest getSendDrawDataRequest();
+    com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequestOrBuilder getSendDrawDataRequestOrBuilder();
+    
+    // optional .game.SendDrawDataResponse sendDrawDataResponse = 22;
+    boolean hasSendDrawDataResponse();
+    com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse getSendDrawDataResponse();
+    com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponseOrBuilder getSendDrawDataResponseOrBuilder();
     
     // optional .game.GeneralNotification notification = 51;
     boolean hasNotification();
@@ -2752,11 +3763,37 @@ public final class GameMessageProtos {
       return startGameResponse_;
     }
     
+    // optional .game.SendDrawDataRequest sendDrawDataRequest = 21;
+    public static final int SENDDRAWDATAREQUEST_FIELD_NUMBER = 21;
+    private com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest sendDrawDataRequest_;
+    public boolean hasSendDrawDataRequest() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest getSendDrawDataRequest() {
+      return sendDrawDataRequest_;
+    }
+    public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequestOrBuilder getSendDrawDataRequestOrBuilder() {
+      return sendDrawDataRequest_;
+    }
+    
+    // optional .game.SendDrawDataResponse sendDrawDataResponse = 22;
+    public static final int SENDDRAWDATARESPONSE_FIELD_NUMBER = 22;
+    private com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse sendDrawDataResponse_;
+    public boolean hasSendDrawDataResponse() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse getSendDrawDataResponse() {
+      return sendDrawDataResponse_;
+    }
+    public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponseOrBuilder getSendDrawDataResponseOrBuilder() {
+      return sendDrawDataResponse_;
+    }
+    
     // optional .game.GeneralNotification notification = 51;
     public static final int NOTIFICATION_FIELD_NUMBER = 51;
     private com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification notification_;
     public boolean hasNotification() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification getNotification() {
       return notification_;
@@ -2775,6 +3812,8 @@ public final class GameMessageProtos {
       joinGameResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse.getDefaultInstance();
       startGameRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest.getDefaultInstance();
       startGameResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse.getDefaultInstance();
+      sendDrawDataRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance();
+      sendDrawDataResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance();
       notification_ = com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
@@ -2837,6 +3876,12 @@ public final class GameMessageProtos {
         output.writeMessage(14, startGameResponse_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeMessage(21, sendDrawDataRequest_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeMessage(22, sendDrawDataResponse_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeMessage(51, notification_);
       }
       getUnknownFields().writeTo(output);
@@ -2885,6 +3930,14 @@ public final class GameMessageProtos {
           .computeMessageSize(14, startGameResponse_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(21, sendDrawDataRequest_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(22, sendDrawDataResponse_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(51, notification_);
       }
@@ -3008,6 +4061,8 @@ public final class GameMessageProtos {
           getJoinGameResponseFieldBuilder();
           getStartGameRequestFieldBuilder();
           getStartGameResponseFieldBuilder();
+          getSendDrawDataRequestFieldBuilder();
+          getSendDrawDataResponseFieldBuilder();
           getNotificationFieldBuilder();
         }
       }
@@ -3051,12 +4106,24 @@ public final class GameMessageProtos {
           startGameResponseBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000100);
+        if (sendDrawDataRequestBuilder_ == null) {
+          sendDrawDataRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance();
+        } else {
+          sendDrawDataRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
+        if (sendDrawDataResponseBuilder_ == null) {
+          sendDrawDataResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance();
+        } else {
+          sendDrawDataResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
         if (notificationBuilder_ == null) {
           notification_ = com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.getDefaultInstance();
         } else {
           notificationBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
       
@@ -3150,6 +4217,22 @@ public final class GameMessageProtos {
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000200;
         }
+        if (sendDrawDataRequestBuilder_ == null) {
+          result.sendDrawDataRequest_ = sendDrawDataRequest_;
+        } else {
+          result.sendDrawDataRequest_ = sendDrawDataRequestBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        if (sendDrawDataResponseBuilder_ == null) {
+          result.sendDrawDataResponse_ = sendDrawDataResponse_;
+        } else {
+          result.sendDrawDataResponse_ = sendDrawDataResponseBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
         if (notificationBuilder_ == null) {
           result.notification_ = notification_;
         } else {
@@ -3197,6 +4280,12 @@ public final class GameMessageProtos {
         }
         if (other.hasStartGameResponse()) {
           mergeStartGameResponse(other.getStartGameResponse());
+        }
+        if (other.hasSendDrawDataRequest()) {
+          mergeSendDrawDataRequest(other.getSendDrawDataRequest());
+        }
+        if (other.hasSendDrawDataResponse()) {
+          mergeSendDrawDataResponse(other.getSendDrawDataResponse());
         }
         if (other.hasNotification()) {
           mergeNotification(other.getNotification());
@@ -3323,6 +4412,24 @@ public final class GameMessageProtos {
               }
               input.readMessage(subBuilder, extensionRegistry);
               setStartGameResponse(subBuilder.buildPartial());
+              break;
+            }
+            case 170: {
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder subBuilder = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.newBuilder();
+              if (hasSendDrawDataRequest()) {
+                subBuilder.mergeFrom(getSendDrawDataRequest());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setSendDrawDataRequest(subBuilder.buildPartial());
+              break;
+            }
+            case 178: {
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder subBuilder = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.newBuilder();
+              if (hasSendDrawDataResponse()) {
+                subBuilder.mergeFrom(getSendDrawDataResponse());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setSendDrawDataResponse(subBuilder.buildPartial());
               break;
             }
             case 410: {
@@ -3826,12 +4933,192 @@ public final class GameMessageProtos {
         return startGameResponseBuilder_;
       }
       
+      // optional .game.SendDrawDataRequest sendDrawDataRequest = 21;
+      private com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest sendDrawDataRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequestOrBuilder> sendDrawDataRequestBuilder_;
+      public boolean hasSendDrawDataRequest() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest getSendDrawDataRequest() {
+        if (sendDrawDataRequestBuilder_ == null) {
+          return sendDrawDataRequest_;
+        } else {
+          return sendDrawDataRequestBuilder_.getMessage();
+        }
+      }
+      public Builder setSendDrawDataRequest(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest value) {
+        if (sendDrawDataRequestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          sendDrawDataRequest_ = value;
+          onChanged();
+        } else {
+          sendDrawDataRequestBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder setSendDrawDataRequest(
+          com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder builderForValue) {
+        if (sendDrawDataRequestBuilder_ == null) {
+          sendDrawDataRequest_ = builderForValue.build();
+          onChanged();
+        } else {
+          sendDrawDataRequestBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder mergeSendDrawDataRequest(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest value) {
+        if (sendDrawDataRequestBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+              sendDrawDataRequest_ != com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance()) {
+            sendDrawDataRequest_ =
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.newBuilder(sendDrawDataRequest_).mergeFrom(value).buildPartial();
+          } else {
+            sendDrawDataRequest_ = value;
+          }
+          onChanged();
+        } else {
+          sendDrawDataRequestBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder clearSendDrawDataRequest() {
+        if (sendDrawDataRequestBuilder_ == null) {
+          sendDrawDataRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          sendDrawDataRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
+        return this;
+      }
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder getSendDrawDataRequestBuilder() {
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return getSendDrawDataRequestFieldBuilder().getBuilder();
+      }
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequestOrBuilder getSendDrawDataRequestOrBuilder() {
+        if (sendDrawDataRequestBuilder_ != null) {
+          return sendDrawDataRequestBuilder_.getMessageOrBuilder();
+        } else {
+          return sendDrawDataRequest_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequestOrBuilder> 
+          getSendDrawDataRequestFieldBuilder() {
+        if (sendDrawDataRequestBuilder_ == null) {
+          sendDrawDataRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequestOrBuilder>(
+                  sendDrawDataRequest_,
+                  getParentForChildren(),
+                  isClean());
+          sendDrawDataRequest_ = null;
+        }
+        return sendDrawDataRequestBuilder_;
+      }
+      
+      // optional .game.SendDrawDataResponse sendDrawDataResponse = 22;
+      private com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse sendDrawDataResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponseOrBuilder> sendDrawDataResponseBuilder_;
+      public boolean hasSendDrawDataResponse() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse getSendDrawDataResponse() {
+        if (sendDrawDataResponseBuilder_ == null) {
+          return sendDrawDataResponse_;
+        } else {
+          return sendDrawDataResponseBuilder_.getMessage();
+        }
+      }
+      public Builder setSendDrawDataResponse(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse value) {
+        if (sendDrawDataResponseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          sendDrawDataResponse_ = value;
+          onChanged();
+        } else {
+          sendDrawDataResponseBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      public Builder setSendDrawDataResponse(
+          com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder builderForValue) {
+        if (sendDrawDataResponseBuilder_ == null) {
+          sendDrawDataResponse_ = builderForValue.build();
+          onChanged();
+        } else {
+          sendDrawDataResponseBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      public Builder mergeSendDrawDataResponse(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse value) {
+        if (sendDrawDataResponseBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400) &&
+              sendDrawDataResponse_ != com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance()) {
+            sendDrawDataResponse_ =
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.newBuilder(sendDrawDataResponse_).mergeFrom(value).buildPartial();
+          } else {
+            sendDrawDataResponse_ = value;
+          }
+          onChanged();
+        } else {
+          sendDrawDataResponseBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      public Builder clearSendDrawDataResponse() {
+        if (sendDrawDataResponseBuilder_ == null) {
+          sendDrawDataResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance();
+          onChanged();
+        } else {
+          sendDrawDataResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
+        return this;
+      }
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder getSendDrawDataResponseBuilder() {
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return getSendDrawDataResponseFieldBuilder().getBuilder();
+      }
+      public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponseOrBuilder getSendDrawDataResponseOrBuilder() {
+        if (sendDrawDataResponseBuilder_ != null) {
+          return sendDrawDataResponseBuilder_.getMessageOrBuilder();
+        } else {
+          return sendDrawDataResponse_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponseOrBuilder> 
+          getSendDrawDataResponseFieldBuilder() {
+        if (sendDrawDataResponseBuilder_ == null) {
+          sendDrawDataResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponseOrBuilder>(
+                  sendDrawDataResponse_,
+                  getParentForChildren(),
+                  isClean());
+          sendDrawDataResponse_ = null;
+        }
+        return sendDrawDataResponseBuilder_;
+      }
+      
       // optional .game.GeneralNotification notification = 51;
       private com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification notification_ = com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification, com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder, com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotificationOrBuilder> notificationBuilder_;
       public boolean hasNotification() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification getNotification() {
         if (notificationBuilder_ == null) {
@@ -3850,7 +5137,7 @@ public final class GameMessageProtos {
         } else {
           notificationBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000800;
         return this;
       }
       public Builder setNotification(
@@ -3861,12 +5148,12 @@ public final class GameMessageProtos {
         } else {
           notificationBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000800;
         return this;
       }
       public Builder mergeNotification(com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification value) {
         if (notificationBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+          if (((bitField0_ & 0x00000800) == 0x00000800) &&
               notification_ != com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.getDefaultInstance()) {
             notification_ =
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.newBuilder(notification_).mergeFrom(value).buildPartial();
@@ -3877,7 +5164,7 @@ public final class GameMessageProtos {
         } else {
           notificationBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000800;
         return this;
       }
       public Builder clearNotification() {
@@ -3887,11 +5174,11 @@ public final class GameMessageProtos {
         } else {
           notificationBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder getNotificationBuilder() {
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000800;
         onChanged();
         return getNotificationFieldBuilder().getBuilder();
       }
@@ -3948,6 +5235,16 @@ public final class GameMessageProtos {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_game_StartGameResponse_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_game_SendDrawDataRequest_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_game_SendDrawDataRequest_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_game_SendDrawDataResponse_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_game_SendDrawDataResponse_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_game_GeneralNotification_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -3973,22 +5270,29 @@ public final class GameMessageProtos {
       "GameResponse\022(\n\013gameSession\030\001 \002(\0132\023.game" +
       ".PBGameSession\"\022\n\020StartGameRequest\"F\n\021St" +
       "artGameResponse\022\031\n\021currentPlayUserId\030\005 \001" +
-      "(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"\207\001\n\023GeneralNo" +
-      "tification\022\023\n\013sessionHost\030\003 \001(\t\022\025\n\rsessi" +
-      "onStatus\030\004 \001(\005\022\031\n\021currentPlayUserId\030\005 \001(",
-      "\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021\n\tnewUserId\030\007" +
-      " \001(\t\"\232\003\n\013GameMessage\022&\n\007command\030\001 \002(\0162\025." +
-      "game.GameCommandType\022\021\n\tmessageId\030\002 \002(\005\022" +
-      "1\n\nresultCode\030\003 \001(\0162\024.game.GameResultCod" +
-      "e:\007SUCCESS\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030" +
-      "\005 \001(\003:\0010\022.\n\017joinGameRequest\030\013 \001(\0132\025.game" +
-      ".JoinGameRequest\0220\n\020joinGameResponse\030\014 \001" +
-      "(\0132\026.game.JoinGameResponse\0220\n\020startGameR" +
-      "equest\030\r \001(\0132\026.game.StartGameRequest\0222\n\021" +
-      "startGameResponse\030\016 \001(\0132\027.game.StartGame",
-      "Response\022/\n\014notification\0303 \001(\0132\031.game.Ge" +
-      "neralNotificationB=\n(com.orange.network." +
-      "game.protocol.messageB\021GameMessageProtos"
+      "(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"C\n\023SendDrawDa" +
+      "taRequest\022\016\n\006points\030\001 \003(\005\022\r\n\005width\030\026 \001(\002" +
+      "\022\r\n\005color\030\027 \001(\005\"\026\n\024SendDrawDataResponse\"",
+      "\265\001\n\023GeneralNotification\022\023\n\013sessionHost\030\003" +
+      " \001(\t\022\025\n\rsessionStatus\030\004 \001(\005\022\031\n\021currentPl" +
+      "ayUserId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021" +
+      "\n\tnewUserId\030\007 \001(\t\022\016\n\006points\030\025 \003(\005\022\r\n\005wid" +
+      "th\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\"\214\004\n\013GameMessage\022" +
+      "&\n\007command\030\001 \002(\0162\025.game.GameCommandType\022" +
+      "\021\n\tmessageId\030\002 \002(\005\0221\n\nresultCode\030\003 \001(\0162\024" +
+      ".game.GameResultCode:\007SUCCESS\022\016\n\006userId\030" +
+      "\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022.\n\017joinGameR" +
+      "equest\030\013 \001(\0132\025.game.JoinGameRequest\0220\n\020j",
+      "oinGameResponse\030\014 \001(\0132\026.game.JoinGameRes" +
+      "ponse\0220\n\020startGameRequest\030\r \001(\0132\026.game.S" +
+      "tartGameRequest\0222\n\021startGameResponse\030\016 \001" +
+      "(\0132\027.game.StartGameResponse\0226\n\023sendDrawD" +
+      "ataRequest\030\025 \001(\0132\031.game.SendDrawDataRequ" +
+      "est\0228\n\024sendDrawDataResponse\030\026 \001(\0132\032.game" +
+      ".SendDrawDataResponse\022/\n\014notification\0303 " +
+      "\001(\0132\031.game.GeneralNotificationB=\n(com.or" +
+      "ange.network.game.protocol.messageB\021Game" +
+      "MessageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4027,20 +5331,36 @@ public final class GameMessageProtos {
               new java.lang.String[] { "CurrentPlayUserId", "NextPlayUserId", },
               com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse.class,
               com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse.Builder.class);
-          internal_static_game_GeneralNotification_descriptor =
+          internal_static_game_SendDrawDataRequest_descriptor =
             getDescriptor().getMessageTypes().get(4);
+          internal_static_game_SendDrawDataRequest_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_game_SendDrawDataRequest_descriptor,
+              new java.lang.String[] { "Points", "Width", "Color", },
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.class,
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder.class);
+          internal_static_game_SendDrawDataResponse_descriptor =
+            getDescriptor().getMessageTypes().get(5);
+          internal_static_game_SendDrawDataResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_game_SendDrawDataResponse_descriptor,
+              new java.lang.String[] { },
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.class,
+              com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder.class);
+          internal_static_game_GeneralNotification_descriptor =
+            getDescriptor().getMessageTypes().get(6);
           internal_static_game_GeneralNotification_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GeneralNotification_descriptor,
-              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", },
+              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "Points", "Width", "Color", },
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder.class);
           internal_static_game_GameMessage_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(7);
           internal_static_game_GameMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GameMessage_descriptor,
-              new java.lang.String[] { "Command", "MessageId", "ResultCode", "UserId", "SessionId", "JoinGameRequest", "JoinGameResponse", "StartGameRequest", "StartGameResponse", "Notification", },
+              new java.lang.String[] { "Command", "MessageId", "ResultCode", "UserId", "SessionId", "JoinGameRequest", "JoinGameResponse", "StartGameRequest", "StartGameResponse", "SendDrawDataRequest", "SendDrawDataResponse", "Notification", },
               com.orange.network.game.protocol.message.GameMessageProtos.GameMessage.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GameMessage.Builder.class);
           return null;

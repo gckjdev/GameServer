@@ -11,6 +11,7 @@ import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos;
+import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest;
 import com.orange.network.game.protocol.model.GameBasicProtos;
 
 public class GameNotification {
@@ -59,6 +60,38 @@ public class GameNotification {
 				.setNotification(notification)
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.build();
+			
+			HandlerUtils.sendResponse(gameEvent, message);
+		}
+	}
+
+	public static void broadcastDrawDataNotification(GameSession gameSession,
+			GameEvent gameEvent, String userId) {
+		
+		SendDrawDataRequest drawData = gameEvent.getMessage().getSendDrawDataRequest();
+		if (drawData == null){
+			return;
+		}
+		
+		List<UserAtGame> list = gameSession.getUserList();
+		for (UserAtGame user : list){		
+			if (user.getUserId().equals(userId))
+				continue;
+			
+			// send notification for the user
+			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
+				.setColor(drawData.getColor())
+				.addAllPoints(drawData.getPointsList())
+				.setWidth(drawData.getWidth())
+				.build();
+			
+			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(GameCommandType.NEW_DRAW_DATA_NOTIFICATION_REQUEST)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setNotification(notification)
+				.setSessionId(gameSession.getSessionId())
+				.setUserId(userId)
 				.build();
 			
 			HandlerUtils.sendResponse(gameEvent, message);

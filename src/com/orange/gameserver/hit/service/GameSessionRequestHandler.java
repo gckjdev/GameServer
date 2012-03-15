@@ -51,4 +51,28 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		GameNotification.broadcastGameStartNotification(session, gameEvent);
 	}
 
+	
+	public static GameResultCode validateSendDrawDataRequest(GameEvent gameEvent, GameSession session) {
+		String userId = gameEvent.getMessage().getUserId();
+		if (userId == null)
+			return GameResultCode.ERROR_USERID_NULL;
+		
+		if (session == null)
+			return GameResultCode.ERROR_SESSIONID_NULL;
+		
+		if (!session.isStart())
+			return GameResultCode.ERROR_SESSION_NOT_START;
+		
+		if (!gameEvent.getMessage().hasSendDrawDataRequest())
+			return GameResultCode.ERROR_NO_DRAW_DATA;
+		
+		return GameResultCode.SUCCESS;
+	}
+
+	public static void handleSendDrawDataRequest(GameEvent gameEvent,
+			GameSession session) {
+		
+		// broast draw data to all other users in the session
+		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());
+	}
 }
