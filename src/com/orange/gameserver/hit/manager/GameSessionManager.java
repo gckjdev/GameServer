@@ -22,6 +22,7 @@ public class GameSessionManager {
 	public static int SESSION_SET_FULL = 2;
 	public static int SESSION_SET_ILLEGAL = -1;
 
+	Object sessionSetLock = new Object();
 	
 	private ConcurrentHashSet<Integer> getSetByGameSessionSize(int size) {
 		if (size == GameSession.MAX_USER_PER_GAME_SESSION) {
@@ -160,29 +161,31 @@ public class GameSessionManager {
 	}
 	
 	public void adjustGameSession(GameSession gameSession) {
-		if (gameSession == null) {
-			return;
-		}
-		Integer integer = gameSession.getSessionId();
-		ConcurrentHashSet<Integer> oldSet = getGameSessionSetById(integer.intValue());
-		int size = gameSession.getUserCount();
-		ConcurrentHashSet<Integer> newSet = getSetByGameSessionSize(size);
-		
-		if (newSet == null) {
-			return;
-		}
-		
-		int index = getSymbolByGameSessionSet(newSet);
-		logger.info("put " + integer + " into " + index);
-		
-		if (oldSet == null) {
-			newSet.add(integer);
-		}else{
-			if (oldSet == newSet) {
+		synchronized(sessionSetLock){
+			if (gameSession == null) {
 				return;
 			}
-			oldSet.remove(integer);
-			newSet.add(integer);
+			Integer integer = gameSession.getSessionId();
+			ConcurrentHashSet<Integer> oldSet = getGameSessionSetById(integer.intValue());
+			int size = gameSession.getUserCount();
+			ConcurrentHashSet<Integer> newSet = getSetByGameSessionSize(size);
+			
+			if (newSet == null) {
+				return;
+			}
+			
+			int index = getSymbolByGameSessionSet(newSet);
+			logger.info("put " + integer + " into " + index);
+			
+			if (oldSet == null) {
+				newSet.add(integer);
+			}else{
+				if (oldSet == newSet) {
+					return;
+				}
+				oldSet.remove(integer);
+				newSet.add(integer);
+			}
 		}
 	}
 }

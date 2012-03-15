@@ -3,6 +3,7 @@ package com.orange.gameserver.hit.dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
@@ -37,7 +38,9 @@ public class GameSession {
 	UserAtGame nextPlayUser = null;
 	SessionStatus status = SessionStatus.INIT;
 	
-	List<UserAtGame> userList = new ArrayList<UserAtGame>();	
+	
+	
+	List<UserAtGame> userList = new CopyOnWriteArrayList<UserAtGame>();	
 
 	public GameSession(int sessionId, String gameName, String userId) {
 		this.sessionId = sessionId;
@@ -248,6 +251,5 @@ public class GameSession {
 	public void finishGame(){
 		status = SessionStatus.WAIT;
 	}
-
 	
 }
