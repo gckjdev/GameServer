@@ -29,7 +29,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String gameId = request.getJoinGameRequest().getGameId();
 		String nickName = request.getJoinGameRequest().getNickName();
 		
-		int gameSessionId = gameService.matchGameForUser(userId, gameId);
+		int gameSessionId = gameService.matchGameForUser(userId,nickName, gameId);
 		if (gameSessionId == -1){
 			gameSessionId = gameService.createGame(userId, nickName, messageEvent.getChannel());
 		}

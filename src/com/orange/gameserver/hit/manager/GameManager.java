@@ -4,14 +4,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.log4j.Logger;
+
 import com.orange.gameserver.hit.dao.DrawGameSession;
 import com.orange.gameserver.hit.dao.GameSession;
 
 
 public class GameManager {
-	
+	protected static final Logger logger = Logger.getLogger("GameSession");
+
 	public static int NO_SESSION_MATCH_FOR_USER = -1; 
-	
+	public static int GAME_SESSION_COUNT = 10;
 
 	
 	// a map to store game session
@@ -22,11 +25,18 @@ public class GameManager {
 	// thread-safe singleton implementation
     private static GameManager manager = new GameManager();     
     private GameManager(){		
+    	createNewDrawGameSession(GAME_SESSION_COUNT);
+    	logger.info("<GameManager> init");
+    	logger.info("hashMap:"+gameCollection);
 	} 	    
     public static GameManager getInstance() { 
     	return manager; 
     } 
 	
+    public int getGameSessionSize () {
+		return sessionIdIndex.get();
+	}
+    
 	public GameSession createNewGameSession(String gameName, String userId) {
 		return null;
 	}
@@ -37,6 +47,17 @@ public class GameManager {
 		DrawGameSession session = new DrawGameSession(sessionId, roomName, userId);
 		gameCollection.put(Integer.valueOf(sessionId), session);				
 		return session;
+	}
+	
+	
+	public void createNewDrawGameSession(int count)
+	{
+		for (int i = 0; i < count; i++) {
+			int sessionId = sessionIdIndex.incrementAndGet();	
+			String roomName = roomNumber.incrementAndGet() + "";
+			DrawGameSession session = new DrawGameSession(sessionId, roomName, null);
+			gameCollection.put(Integer.valueOf(sessionId), session);
+		}
 	}
 	
 	public int allocNewGameSessionId() {

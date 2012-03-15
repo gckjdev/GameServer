@@ -217,6 +217,15 @@ public class GameSession {
 		logger.info("<chooseNewPlayUser> next play user = "+this.getNextPlayUserId());
 	}
 
+	@Override
+	public String toString() {
+		return "GameSession [createBy=" + createBy + ", createDate="
+				+ createDate + ", currentPlayUser=" + currentPlayUser
+				+ ", currentState=" + currentState + ", host=" + host
+				+ ", name=" + name + ", nextPlayUser=" + nextPlayUser
+				+ ", sessionId=" + sessionId + ", userList=" + userList + "]\n";
+	}
+
 
 	
 }

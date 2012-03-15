@@ -2,24 +2,28 @@ package com.orange.gameserver.hit.manager;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.ConcurrentHashSet;
 
 import com.orange.gameserver.hit.dao.GameSession;
 
 public class GameSessionManager {
+	
+	protected static final Logger logger = Logger.getLogger("GameSession");
+
+	
 	//use three sets to classify the game sessions
 	ConcurrentHashSet<Integer> candidateGameSessionSet = new ConcurrentHashSet<Integer>();
 	ConcurrentHashSet<Integer> freeGameSessionSet = new ConcurrentHashSet<Integer>();
 	ConcurrentHashSet<Integer> fullGameSessionSet = new ConcurrentHashSet<Integer>();
 	
-	
-	public static int SESSION_SET_CANDIDATE = 0;
-	public static int SESSION_SET_FREE = 1;
+	public static int SESSION_SET_FREE = 0;
+	public static int SESSION_SET_CANDIDATE = 1;
 	public static int SESSION_SET_FULL = 2;
 	public static int SESSION_SET_ILLEGAL = -1;
 
 	
-	public ConcurrentHashSet<Integer> getSetByGameSessionSize(int size) {
+	private ConcurrentHashSet<Integer> getSetByGameSessionSize(int size) {
 		if (size == GameSession.MAX_USER_PER_GAME_SESSION) {
 			return fullGameSessionSet;
 		}
@@ -34,11 +38,24 @@ public class GameSessionManager {
 	
     private static GameSessionManager manager = new GameSessionManager();     
     private GameSessionManager(){
-    	
+    	logger.info("<GameSessionManager> init");
+    	GameManager gameManager = GameManager.getInstance();
+    	for (int i = 1; i <= gameManager.getGameSessionSize(); i++) {
+			adjustGameSession(i);
+		}
+    	printSets();
 	} 	    
     public static GameSessionManager getInstance() { 
     	return manager; 
     } 
+    
+    public void printSets() {
+    	for (int i = 0; i < 3; i++) {
+    		ConcurrentHashSet<Integer> set = getGameSessionSetBySymbol(i);
+        	logger.info("<Set " + i + ">:" + set);
+		}
+	}
+    
     
     public ConcurrentHashSet<Integer> getGameSessionSetBySymbol(int symbol)
     {
@@ -55,7 +72,7 @@ public class GameSessionManager {
     }
     
     
-    public int getSymbolByGameSessionSet (ConcurrentHashSet<Integer> set) {
+    private int getSymbolByGameSessionSet (ConcurrentHashSet<Integer> set) {
 		if (set == candidateGameSessionSet) {
 			return SESSION_SET_CANDIDATE;
 		}
@@ -107,9 +124,10 @@ public class GameSessionManager {
     public int getGameSessionSetSymbolById (int sessionId) {
     	return getSymbolByGameSessionSet(getGameSessionSetById(sessionId));
     }
-    
-    public int getCandidateGameSessionNotInList(List<Integer> list) {
-		for (Integer sessionId : this.candidateGameSessionSet) {
+        
+    public int getGameSessionNotInList(int sessionSetSymbol, List<Integer> list) {
+    	ConcurrentHashSet<Integer> set = getGameSessionSetBySymbol(sessionSetSymbol);
+		for (Integer sessionId : set) {
 			if(!list.contains(sessionId))
 			{
 				return sessionId;
@@ -119,15 +137,44 @@ public class GameSessionManager {
 	}
     
 	public void adjustGameSession(int gameSessionId) {
-		Integer integer = new Integer(gameSessionId);
-		ConcurrentHashSet<Integer> oldSet = getGameSessionSetById(gameSessionId);
-		GameManager gameManager = GameManager.getInstance();
-		GameSession session = gameManager.findGameSessionById(gameSessionId);
-		int size = session.getUserCount();
+		GameSession session = GameManager.getInstance().findGameSessionById(gameSessionId);
+		adjustGameSession(session);
+//		Integer integer = new Integer(gameSessionId);
+//		ConcurrentHashSet<Integer> oldSet = getGameSessionSetById(gameSessionId);
+//		GameManager gameManager = GameManager.getInstance();
+//		GameSession session = gameManager.findGameSessionById(gameSessionId);
+//		int size = session.getUserCount();
+//		ConcurrentHashSet<Integer> newSet = getSetByGameSessionSize(size);
+//		if (newSet == null) {
+//			return;
+//		}
+//		if (oldSet == null) {
+//			newSet.add(integer);
+//		}else{
+//			if (oldSet == newSet) {
+//				return;
+//			}
+//			oldSet.remove(integer);
+//			newSet.add(integer);
+//		}
+	}
+	
+	public void adjustGameSession(GameSession gameSession) {
+		if (gameSession == null) {
+			return;
+		}
+		Integer integer = gameSession.getSessionId();
+		ConcurrentHashSet<Integer> oldSet = getGameSessionSetById(integer.intValue());
+		int size = gameSession.getUserCount();
 		ConcurrentHashSet<Integer> newSet = getSetByGameSessionSize(size);
+		
 		if (newSet == null) {
 			return;
 		}
+		
+		int index = getSymbolByGameSessionSet(newSet);
+		logger.info("put " + integer + " into " + index);
+		
 		if (oldSet == null) {
 			newSet.add(integer);
 		}else{
@@ -138,6 +185,4 @@ public class GameSessionManager {
 			newSet.add(integer);
 		}
 	}
-	
-	
 }
