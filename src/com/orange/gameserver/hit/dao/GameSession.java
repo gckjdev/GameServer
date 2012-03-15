@@ -138,6 +138,10 @@ public class GameSession {
 		
 		UserAtGame userAtGame = new UserAtGame(userId, nickName, channel);
 		addUser(userAtGame);		
+		if (userList.size() == 1){
+			this.host = userId;
+		}
+						
 		return true;
 	}
 
