@@ -56,8 +56,8 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();
 		
 		GameBasicProtos.PBGameSession gameSessionData = GameBasicProtos.PBGameSession.newBuilder()		
-										.setCreateBy(gameSession.getCreateBy())
-										.setCreateTime((int)gameSession.getCreateDate().getTime()/1000)
+//										.setCreateBy(gameSession.getCreateBy())
+//										.setCreateTime((int)gameSession.getCreateDate().getTime()/1000)
 										.setGameId("DrawGame")
 										.setHost(gameSession.getHost())
 										.setName(gameSession.getName())
