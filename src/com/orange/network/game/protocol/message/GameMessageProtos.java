@@ -1840,7 +1840,7 @@ public final class GameMessageProtos {
   public interface SendDrawDataRequestOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // repeated int32 points = 1;
+    // repeated int32 points = 1 [packed = true];
     java.util.List<java.lang.Integer> getPointsList();
     int getPointsCount();
     int getPoints(int index);
@@ -1882,7 +1882,7 @@ public final class GameMessageProtos {
     }
     
     private int bitField0_;
-    // repeated int32 points = 1;
+    // repeated int32 points = 1 [packed = true];
     public static final int POINTS_FIELD_NUMBER = 1;
     private java.util.List<java.lang.Integer> points_;
     public java.util.List<java.lang.Integer>
@@ -1895,6 +1895,7 @@ public final class GameMessageProtos {
     public int getPoints(int index) {
       return points_.get(index);
     }
+    private int pointsMemoizedSerializedSize = -1;
     
     // optional float width = 22;
     public static final int WIDTH_FIELD_NUMBER = 22;
@@ -1933,8 +1934,12 @@ public final class GameMessageProtos {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
+      if (getPointsList().size() > 0) {
+        output.writeRawVarint32(10);
+        output.writeRawVarint32(pointsMemoizedSerializedSize);
+      }
       for (int i = 0; i < points_.size(); i++) {
-        output.writeInt32(1, points_.get(i));
+        output.writeInt32NoTag(points_.get(i));
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeFloat(22, width_);
@@ -1958,7 +1963,12 @@ public final class GameMessageProtos {
             .computeInt32SizeNoTag(points_.get(i));
         }
         size += dataSize;
-        size += 1 * getPointsList().size();
+        if (!getPointsList().isEmpty()) {
+          size += 1;
+          size += com.google.protobuf.CodedOutputStream
+              .computeInt32SizeNoTag(dataSize);
+        }
+        pointsMemoizedSerializedSize = dataSize;
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -2242,7 +2252,7 @@ public final class GameMessageProtos {
       
       private int bitField0_;
       
-      // repeated int32 points = 1;
+      // repeated int32 points = 1 [packed = true];
       private java.util.List<java.lang.Integer> points_ = java.util.Collections.emptyList();;
       private void ensurePointsIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -2639,7 +2649,7 @@ public final class GameMessageProtos {
     boolean hasNewUserId();
     String getNewUserId();
     
-    // repeated int32 points = 21;
+    // repeated int32 points = 21 [packed = true];
     java.util.List<java.lang.Integer> getPointsList();
     int getPointsCount();
     int getPoints(int index);
@@ -2819,7 +2829,7 @@ public final class GameMessageProtos {
       }
     }
     
-    // repeated int32 points = 21;
+    // repeated int32 points = 21 [packed = true];
     public static final int POINTS_FIELD_NUMBER = 21;
     private java.util.List<java.lang.Integer> points_;
     public java.util.List<java.lang.Integer>
@@ -2832,6 +2842,7 @@ public final class GameMessageProtos {
     public int getPoints(int index) {
       return points_.get(index);
     }
+    private int pointsMemoizedSerializedSize = -1;
     
     // optional float width = 22;
     public static final int WIDTH_FIELD_NUMBER = 22;
@@ -2890,8 +2901,12 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(7, getNewUserIdBytes());
       }
+      if (getPointsList().size() > 0) {
+        output.writeRawVarint32(170);
+        output.writeRawVarint32(pointsMemoizedSerializedSize);
+      }
       for (int i = 0; i < points_.size(); i++) {
-        output.writeInt32(21, points_.get(i));
+        output.writeInt32NoTag(points_.get(i));
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeFloat(22, width_);
@@ -2935,7 +2950,12 @@ public final class GameMessageProtos {
             .computeInt32SizeNoTag(points_.get(i));
         }
         size += dataSize;
-        size += 2 * getPointsList().size();
+        if (!getPointsList().isEmpty()) {
+          size += 2;
+          size += com.google.protobuf.CodedOutputStream
+              .computeInt32SizeNoTag(dataSize);
+        }
+        pointsMemoizedSerializedSize = dataSize;
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
@@ -3454,7 +3474,7 @@ public final class GameMessageProtos {
         onChanged();
       }
       
-      // repeated int32 points = 21;
+      // repeated int32 points = 21 [packed = true];
       private java.util.List<java.lang.Integer> points_ = java.util.Collections.emptyList();;
       private void ensurePointsIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
@@ -5270,29 +5290,29 @@ public final class GameMessageProtos {
       "GameResponse\022(\n\013gameSession\030\001 \002(\0132\023.game" +
       ".PBGameSession\"\022\n\020StartGameRequest\"F\n\021St" +
       "artGameResponse\022\031\n\021currentPlayUserId\030\005 \001" +
-      "(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"C\n\023SendDrawDa" +
-      "taRequest\022\016\n\006points\030\001 \003(\005\022\r\n\005width\030\026 \001(\002" +
-      "\022\r\n\005color\030\027 \001(\005\"\026\n\024SendDrawDataResponse\"",
-      "\265\001\n\023GeneralNotification\022\023\n\013sessionHost\030\003" +
-      " \001(\t\022\025\n\rsessionStatus\030\004 \001(\005\022\031\n\021currentPl" +
-      "ayUserId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021" +
-      "\n\tnewUserId\030\007 \001(\t\022\016\n\006points\030\025 \003(\005\022\r\n\005wid" +
-      "th\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\"\214\004\n\013GameMessage\022" +
-      "&\n\007command\030\001 \002(\0162\025.game.GameCommandType\022" +
-      "\021\n\tmessageId\030\002 \002(\005\0221\n\nresultCode\030\003 \001(\0162\024" +
-      ".game.GameResultCode:\007SUCCESS\022\016\n\006userId\030" +
-      "\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022.\n\017joinGameR" +
-      "equest\030\013 \001(\0132\025.game.JoinGameRequest\0220\n\020j",
-      "oinGameResponse\030\014 \001(\0132\026.game.JoinGameRes" +
-      "ponse\0220\n\020startGameRequest\030\r \001(\0132\026.game.S" +
-      "tartGameRequest\0222\n\021startGameResponse\030\016 \001" +
-      "(\0132\027.game.StartGameResponse\0226\n\023sendDrawD" +
-      "ataRequest\030\025 \001(\0132\031.game.SendDrawDataRequ" +
-      "est\0228\n\024sendDrawDataResponse\030\026 \001(\0132\032.game" +
-      ".SendDrawDataResponse\022/\n\014notification\0303 " +
-      "\001(\0132\031.game.GeneralNotificationB=\n(com.or" +
-      "ange.network.game.protocol.messageB\021Game" +
-      "MessageProtos"
+      "(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"G\n\023SendDrawDa" +
+      "taRequest\022\022\n\006points\030\001 \003(\005B\002\020\001\022\r\n\005width\030\026" +
+      " \001(\002\022\r\n\005color\030\027 \001(\005\"\026\n\024SendDrawDataRespo",
+      "nse\"\271\001\n\023GeneralNotification\022\023\n\013sessionHo" +
+      "st\030\003 \001(\t\022\025\n\rsessionStatus\030\004 \001(\005\022\031\n\021curre" +
+      "ntPlayUserId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001" +
+      "(\t\022\021\n\tnewUserId\030\007 \001(\t\022\022\n\006points\030\025 \003(\005B\002\020" +
+      "\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\"\214\004\n\013Game" +
+      "Message\022&\n\007command\030\001 \002(\0162\025.game.GameComm" +
+      "andType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nresultCode" +
+      "\030\003 \001(\0162\024.game.GameResultCode:\007SUCCESS\022\016\n" +
+      "\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022.\n\017j" +
+      "oinGameRequest\030\013 \001(\0132\025.game.JoinGameRequ",
+      "est\0220\n\020joinGameResponse\030\014 \001(\0132\026.game.Joi" +
+      "nGameResponse\0220\n\020startGameRequest\030\r \001(\0132" +
+      "\026.game.StartGameRequest\0222\n\021startGameResp" +
+      "onse\030\016 \001(\0132\027.game.StartGameResponse\0226\n\023s" +
+      "endDrawDataRequest\030\025 \001(\0132\031.game.SendDraw" +
+      "DataRequest\0228\n\024sendDrawDataResponse\030\026 \001(" +
+      "\0132\032.game.SendDrawDataResponse\022/\n\014notific" +
+      "ation\0303 \001(\0132\031.game.GeneralNotificationB=" +
+      "\n(com.orange.network.game.protocol.messa" +
+      "geB\021GameMessageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
