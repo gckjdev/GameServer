@@ -62,6 +62,21 @@ public class GameService {
 		return workerThreads;
 	}
 
+	private Object getMatchSessionLock = new Object();
+
+	private int getMatchedSessionId(User user) {
+		GameSessionManager gameSessionManager = GameSessionManager
+				.getInstance();
+		int joinSessionId = -1;
+		joinSessionId = gameSessionManager
+				.getRandGameSessionId(GameSessionManager.SESSION_SET_CANDIDATE);
+		if (joinSessionId == -1) {
+			joinSessionId = gameSessionManager
+					.getRandGameSessionId(GameSessionManager.SESSION_SET_FREE);
+		}
+		return joinSessionId;
+	}
+
 	private int getMatchedSessionId(User user, boolean useRecentSessions) {
 		GameSessionManager gameSessionManager = GameSessionManager
 				.getInstance();
@@ -106,12 +121,13 @@ public class GameService {
 			joinSessionId = gameSessionManager.getGameSessionNotInList(
 					GameSessionManager.SESSION_SET_CANDIDATE, user
 							.getRecentGameSessionList());
-			
-			//if can not find a candidate session not in the list, then find a free session not in the list.
+
+			// if can not find a candidate session not in the list, then find a
+			// free session not in the list.
 			if (joinSessionId == -1) {
 				joinSessionId = gameSessionManager.getGameSessionNotInList(
 						GameSessionManager.SESSION_SET_FREE, user
-						.getRecentGameSessionList());
+								.getRecentGameSessionList());
 			}
 		}
 		if (joinSessionId != -1) {
@@ -124,18 +140,35 @@ public class GameService {
 		return joinSessionId;
 	}
 
-	public int matchGameForUser(String userId, String nickName, String gameId) {
+	public int matchGameForUser(String userId, String nickName, String gameId,
+			Channel channel) {
 		boolean useRecentSessions = false;
-		if (userId != null) {
-			UserManager userManager = UserManager.getInstance();
-			User user = userManager.findUserById(userId);
-			if (user == null) {
-				user = new User(userId, nickName);
-				userManager.addOnlineUser(user);
+		synchronized (getMatchSessionLock) {
+			if (userId != null) {
+				UserManager userManager = UserManager.getInstance();
+				User user = userManager.findUserById(userId);
+				if (user == null) {
+					user = new User(userId, nickName);
+					userManager.addOnlineUser(user);
+				}
+				int joinSessionId = getMatchedSessionId(user);
+
+				if (joinSessionId != -1) {
+					GameManager gameManager = GameManager.getInstance();
+					GameSession gameSession = gameManager
+							.findGameSessionById(joinSessionId);
+					gameSession.addUser(userId, nickName, channel);
+					GameSessionManager gameSessionManager = GameSessionManager
+							.getInstance();
+					gameSessionManager.adjustGameSession(joinSessionId);
+					user.addGameSessionId(joinSessionId);
+				}
+				logger.info("<GameService>:did find room: " + joinSessionId
+						+ " for user: " + user.getUserId());
+				return joinSessionId;
 			}
-			return getMatchedSessionId(user, useRecentSessions);
+			return -1;
 		}
-		return -1;
 	}
 
 	public int createGame(String userId, String nickName, Channel channel) {

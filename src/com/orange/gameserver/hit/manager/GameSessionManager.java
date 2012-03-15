@@ -25,7 +25,7 @@ public class GameSessionManager {
 	Object sessionSetLock = new Object();
 	
 	private ConcurrentHashSet<Integer> getSetByGameSessionSize(int size) {
-		if (size == GameSession.MAX_USER_PER_GAME_SESSION) {
+		if (size >= GameSession.MAX_USER_PER_GAME_SESSION) {
 			return fullGameSessionSet;
 		}
 		if (size >= GameSession.MAX_USER_PER_GAME_SESSION - 2) {
@@ -175,7 +175,7 @@ public class GameSessionManager {
 			}
 			
 			int index = getSymbolByGameSessionSet(newSet);
-			logger.info("put " + integer + " into " + index);
+			logger.info("put game session " + integer + " into set " + index);
 			
 			if (oldSet == null) {
 				newSet.add(integer);
@@ -186,6 +186,7 @@ public class GameSessionManager {
 				oldSet.remove(integer);
 				newSet.add(integer);
 			}
+			printSets();
 		}
 	}
 }
