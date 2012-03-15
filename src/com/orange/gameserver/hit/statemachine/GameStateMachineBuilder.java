@@ -28,8 +28,9 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING)
 			.addTransition(GameCommandType.START_GAME_REQUEST, GameStateKey.PLAYING);
 		
-		sm.addState(new GamePlayingState(GameStateKey.PLAYING));
-//			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING)
+		sm.addState(new GamePlayingState(GameStateKey.PLAYING))
+			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.PLAYING)
+			.addTransition(GameCommandType.SEND_DRAW_DATA_REQUEST, GameStateKey.PLAYING);
 
 		sm.addState(GameFinishState.defaultState);
 		
