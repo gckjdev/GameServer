@@ -107,14 +107,24 @@ public final class GameConstantsProtos {
     ERROR_JOIN_GAME(1, 1),
     ERROR_USERID_NULL(2, 100),
     ERROR_USER_CANNOT_START_GAME(3, 101),
-    ERROR_SYSTEM_HANDLER_NOT_FOUND(4, 910),
+    ERROR_NO_SESSION_ID(4, 200),
+    ERROR_NEXT_STATE_NOT_FOUND(5, 201),
+    ERROR_SESSIONID_NULL(6, 202),
+    ERROR_SESSION_ALREADY_START(7, 203),
+    ERROR_SYSTEM_HANDLER_NOT_FOUND(8, 910),
+    ERROR_SYSTEM_EXCEPTION(9, 911),
     ;
     
     public static final int SUCCESS_VALUE = 0;
     public static final int ERROR_JOIN_GAME_VALUE = 1;
     public static final int ERROR_USERID_NULL_VALUE = 100;
     public static final int ERROR_USER_CANNOT_START_GAME_VALUE = 101;
+    public static final int ERROR_NO_SESSION_ID_VALUE = 200;
+    public static final int ERROR_NEXT_STATE_NOT_FOUND_VALUE = 201;
+    public static final int ERROR_SESSIONID_NULL_VALUE = 202;
+    public static final int ERROR_SESSION_ALREADY_START_VALUE = 203;
     public static final int ERROR_SYSTEM_HANDLER_NOT_FOUND_VALUE = 910;
+    public static final int ERROR_SYSTEM_EXCEPTION_VALUE = 911;
     
     
     public final int getNumber() { return value; }
@@ -125,7 +135,12 @@ public final class GameConstantsProtos {
         case 1: return ERROR_JOIN_GAME;
         case 100: return ERROR_USERID_NULL;
         case 101: return ERROR_USER_CANNOT_START_GAME;
+        case 200: return ERROR_NO_SESSION_ID;
+        case 201: return ERROR_NEXT_STATE_NOT_FOUND;
+        case 202: return ERROR_SESSIONID_NULL;
+        case 203: return ERROR_SESSION_ALREADY_START;
         case 910: return ERROR_SYSTEM_HANDLER_NOT_FOUND;
+        case 911: return ERROR_SYSTEM_EXCEPTION;
         default: return null;
       }
     }
@@ -156,7 +171,7 @@ public final class GameConstantsProtos {
     }
     
     private static final GameResultCode[] VALUES = {
-      SUCCESS, ERROR_JOIN_GAME, ERROR_USERID_NULL, ERROR_USER_CANNOT_START_GAME, ERROR_SYSTEM_HANDLER_NOT_FOUND, 
+      SUCCESS, ERROR_JOIN_GAME, ERROR_USERID_NULL, ERROR_USER_CANNOT_START_GAME, ERROR_NO_SESSION_ID, ERROR_NEXT_STATE_NOT_FOUND, ERROR_SESSIONID_NULL, ERROR_SESSION_ALREADY_START, ERROR_SYSTEM_HANDLER_NOT_FOUND, ERROR_SYSTEM_EXCEPTION, 
     };
     
     public static GameResultCode valueOf(
@@ -197,12 +212,16 @@ public final class GameConstantsProtos {
       "TION_REQUEST\0205\022%\n!HOST_CHANGE_NOTIFICATI" +
       "ON_RESPONSE\0206\022#\n\037GAME_START_NOTIFICATION" +
       "_REQUEST\0207\022$\n GAME_START_NOTIFICATION_RE" +
-      "SPONSE\0208*\220\001\n\016GameResultCode\022\013\n\007SUCCESS\020\000",
+      "SPONSE\0208*\245\002\n\016GameResultCode\022\013\n\007SUCCESS\020\000",
       "\022\023\n\017ERROR_JOIN_GAME\020\001\022\025\n\021ERROR_USERID_NU" +
-      "LL\020d\022 \n\034ERROR_USER_CANNOT_START_GAME\020e\022#" +
-      "\n\036ERROR_SYSTEM_HANDLER_NOT_FOUND\020\216\007BA\n*c" +
-      "om.orange.network.game.protocol.constant" +
-      "sB\023GameConstantsProtos"
+      "LL\020d\022 \n\034ERROR_USER_CANNOT_START_GAME\020e\022\030" +
+      "\n\023ERROR_NO_SESSION_ID\020\310\001\022\037\n\032ERROR_NEXT_S" +
+      "TATE_NOT_FOUND\020\311\001\022\031\n\024ERROR_SESSIONID_NUL" +
+      "L\020\312\001\022 \n\033ERROR_SESSION_ALREADY_START\020\313\001\022#" +
+      "\n\036ERROR_SYSTEM_HANDLER_NOT_FOUND\020\216\007\022\033\n\026E" +
+      "RROR_SYSTEM_EXCEPTION\020\217\007BA\n*com.orange.n" +
+      "etwork.game.protocol.constantsB\023GameCons" +
+      "tantsProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

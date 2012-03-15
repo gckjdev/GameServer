@@ -23,8 +23,14 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 	public static GameResultCode validateStartGameRequest(GameEvent gameEvent, GameSession session) {
 		String userId = gameEvent.getMessage().getUserId();
-		if (userId == null || session == null)
+		if (userId == null)
 			return GameResultCode.ERROR_USERID_NULL;
+		
+		if (session == null)
+			return GameResultCode.ERROR_SESSIONID_NULL;
+		
+		if (session.isStart())
+			return GameResultCode.ERROR_SESSION_ALREADY_START;
 		
 		if (!session.canUserStartGame(userId))
 			return GameResultCode.ERROR_USER_CANNOT_START_GAME;		
@@ -37,6 +43,11 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// set current play user id and next play user id
 		session.chooseNewPlayUser();		
+		
+		// start game
+		session.startGame();
+		
+		// broast to all users in the session
 		GameNotification.broadcastGameStartNotification(session, gameEvent);
 	}
 

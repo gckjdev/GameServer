@@ -16,6 +16,12 @@ import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 
 public class GameSession {
+	
+	enum SessionStatus{
+		INIT,
+		WAIT,
+		PLAYING		
+	};
 
 	protected static final Logger logger = Logger.getLogger("GameSession");
 	
@@ -29,6 +35,7 @@ public class GameSession {
 	State  currentState;
 	UserAtGame currentPlayUser = null;
 	UserAtGame nextPlayUser = null;
+	SessionStatus status = SessionStatus.INIT;
 	
 	List<UserAtGame> userList = new ArrayList<UserAtGame>();	
 
@@ -230,6 +237,17 @@ public class GameSession {
 				+ ", sessionId=" + sessionId + ", userList=" + userList + "]\n";
 	}
 
+	public boolean isStart() {
+		return (status == SessionStatus.PLAYING);
+	}
+
+	public void startGame(){
+		status = SessionStatus.PLAYING;
+	}
+	
+	public void finishGame(){
+		status = SessionStatus.WAIT;
+	}
 
 	
 }
