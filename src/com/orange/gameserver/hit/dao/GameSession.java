@@ -264,5 +264,9 @@ public class GameSession {
 			logger.info("remove " + userId + " from session " + sessionId);
 		}
 	}
+
+	public void resetGame() {
+		status = SessionStatus.INIT;
+	}
 	
 }

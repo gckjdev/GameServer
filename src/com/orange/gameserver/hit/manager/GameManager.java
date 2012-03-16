@@ -11,7 +11,7 @@ import com.orange.gameserver.hit.dao.GameSession;
 
 
 public class GameManager {
-	protected static final Logger logger = Logger.getLogger("GameSession");
+	protected static final Logger logger = Logger.getLogger("GameManager");
 
 	public static int NO_SESSION_MATCH_FOR_USER = -1; 
 	public static int GAME_SESSION_COUNT = 10;

@@ -87,14 +87,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx,
             ChannelStateEvent e){
-		logger.info("GameServerHandler channel disconnected");				
-		ChannelUserManager.getInstance().addChannel(e.getChannel());
-	}
-	
-	@Override
-	public void channelConnected(ChannelHandlerContext ctx,
-            ChannelStateEvent e){
-		logger.info("GameServerHandler channel connected");		
+		logger.info("GameServerHandler channel disconnected");		
 		
 		// find all users related to the channel and post a message to game session that this user is quit
 		Channel channel = e.getChannel();		
@@ -107,6 +100,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 					.setCommand(GameCommandType.LOCAL_CHANNEL_DISCONNECT)
 					.setSessionId(sessionId)
 					.setUserId(userId)
+					.setMessageId(0)
 					.build();
 				
 				GameEvent event = new GameEvent(GameCommandType.LOCAL_CHANNEL_DISCONNECT, 
@@ -117,6 +111,14 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		
 		// remove channel
 		ChannelUserManager.getInstance().removeChannel(e.getChannel());
+	}
+	
+	@Override
+	public void channelConnected(ChannelHandlerContext ctx,
+            ChannelStateEvent e){
+		logger.info("GameServerHandler channel connected");		
+		ChannelUserManager.getInstance().addChannel(e.getChannel());
+		
 	}
 	
 //	private static String toString(Continent c) {

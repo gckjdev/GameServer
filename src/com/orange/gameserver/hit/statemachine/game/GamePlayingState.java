@@ -14,8 +14,7 @@ public class GamePlayingState extends CommonGameState {
 
 	
 	@Override
-	public void handleEvent(GameEvent event, GameSession session){
-		
-		
+	public void handleEvent(GameEvent event, GameSession session){		
+		session.startGame();
 	}
 }

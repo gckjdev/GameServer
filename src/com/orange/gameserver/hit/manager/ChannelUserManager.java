@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 
 
 public class ChannelUserManager {
 
+	protected static final Logger logger = Logger.getLogger("ChannelUserManager");
+	
 	ConcurrentMap<Channel, CopyOnWriteArrayList<String>> channelUserMap 
 		= new ConcurrentHashMap<Channel, CopyOnWriteArrayList<String>>();
 	
@@ -26,6 +30,7 @@ public class ChannelUserManager {
     
     public void addChannel(Channel channel){
     	synchronized(transactionLock){
+    		logger.info("Create Channel " + channel.toString());
     		CopyOnWriteArrayList<String> userList = new CopyOnWriteArrayList<String>();
     		channelUserMap.put(channel, userList);
     	}
@@ -34,6 +39,7 @@ public class ChannelUserManager {
     public void addUserIntoChannel(Channel channel, String userId){
     	
     	synchronized(transactionLock){
+    		logger.info("Add " + userId + " Into Channel " + channel.toString());
     		CopyOnWriteArrayList<String> userList = channelUserMap.get(channel);
     		if (userList == null)
     			return;
@@ -45,6 +51,7 @@ public class ChannelUserManager {
     
     public void removeUserFromChannel(Channel channel, String userId){
     	synchronized(transactionLock){
+    		logger.info("Remove " + userId + " From Channel " + channel.toString());    		
 	    	CopyOnWriteArrayList<String> userList = channelUserMap.get(channel);
 	    	if (userList == null)
 	    		return;
@@ -55,6 +62,7 @@ public class ChannelUserManager {
     }
     
     public void removeChannel(Channel channel){
+		logger.info("Remove Channel " + channel.toString());    		
     	channelUserMap.remove(channel);
     }
     

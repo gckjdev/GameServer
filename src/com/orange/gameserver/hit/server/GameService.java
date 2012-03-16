@@ -15,6 +15,7 @@ import com.orange.gameserver.hit.dao.DrawGameSession;
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.dao.User;
 import com.orange.gameserver.hit.dao.UserAtGame;
+import com.orange.gameserver.hit.manager.ChannelUserManager;
 import com.orange.gameserver.hit.manager.GameManager;
 import com.orange.gameserver.hit.manager.GameSessionManager;
 import com.orange.gameserver.hit.manager.UserAtGameManager;
@@ -164,6 +165,9 @@ public class GameService {
 
 			// TODO code below can be moved out of synchronized lock
 			UserManager.getInstance().addOnlineUser(userId, nickName, channel, joinSessionId);
+			//ChannelUserManager.getInstance().addChannel(channel);
+			ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);
+
 			logger.info("<GameService>:did find room: " + joinSessionId
 					+ " for user: " + userId);
 			return joinSessionId;

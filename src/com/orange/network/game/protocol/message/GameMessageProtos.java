@@ -2649,6 +2649,10 @@ public final class GameMessageProtos {
     boolean hasNewUserId();
     String getNewUserId();
     
+    // optional string quitUserId = 8;
+    boolean hasQuitUserId();
+    String getQuitUserId();
+    
     // repeated int32 points = 21 [packed = true];
     java.util.List<java.lang.Integer> getPointsList();
     int getPointsCount();
@@ -2829,6 +2833,38 @@ public final class GameMessageProtos {
       }
     }
     
+    // optional string quitUserId = 8;
+    public static final int QUITUSERID_FIELD_NUMBER = 8;
+    private java.lang.Object quitUserId_;
+    public boolean hasQuitUserId() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public String getQuitUserId() {
+      java.lang.Object ref = quitUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          quitUserId_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getQuitUserIdBytes() {
+      java.lang.Object ref = quitUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        quitUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     // repeated int32 points = 21 [packed = true];
     public static final int POINTS_FIELD_NUMBER = 21;
     private java.util.List<java.lang.Integer> points_;
@@ -2848,7 +2884,7 @@ public final class GameMessageProtos {
     public static final int WIDTH_FIELD_NUMBER = 22;
     private float width_;
     public boolean hasWidth() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     public float getWidth() {
       return width_;
@@ -2858,7 +2894,7 @@ public final class GameMessageProtos {
     public static final int COLOR_FIELD_NUMBER = 23;
     private int color_;
     public boolean hasColor() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     public int getColor() {
       return color_;
@@ -2870,6 +2906,7 @@ public final class GameMessageProtos {
       currentPlayUserId_ = "";
       nextPlayUserId_ = "";
       newUserId_ = "";
+      quitUserId_ = "";
       points_ = java.util.Collections.emptyList();;
       width_ = 0F;
       color_ = 0;
@@ -2901,6 +2938,9 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(7, getNewUserIdBytes());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(8, getQuitUserIdBytes());
+      }
       if (getPointsList().size() > 0) {
         output.writeRawVarint32(170);
         output.writeRawVarint32(pointsMemoizedSerializedSize);
@@ -2908,10 +2948,10 @@ public final class GameMessageProtos {
       for (int i = 0; i < points_.size(); i++) {
         output.writeInt32NoTag(points_.get(i));
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeFloat(22, width_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeInt32(23, color_);
       }
       getUnknownFields().writeTo(output);
@@ -2943,6 +2983,10 @@ public final class GameMessageProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(7, getNewUserIdBytes());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, getQuitUserIdBytes());
+      }
       {
         int dataSize = 0;
         for (int i = 0; i < points_.size(); i++) {
@@ -2957,11 +3001,11 @@ public final class GameMessageProtos {
         }
         pointsMemoizedSerializedSize = dataSize;
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(22, width_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(23, color_);
       }
@@ -3099,12 +3143,14 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000008);
         newUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
-        points_ = java.util.Collections.emptyList();;
+        quitUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
-        width_ = 0F;
+        points_ = java.util.Collections.emptyList();;
         bitField0_ = (bitField0_ & ~0x00000040);
-        color_ = 0;
+        width_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000080);
+        color_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       
@@ -3163,17 +3209,21 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000010;
         }
         result.newUserId_ = newUserId_;
-        if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          points_ = java.util.Collections.unmodifiableList(points_);
-          bitField0_ = (bitField0_ & ~0x00000020);
-        }
-        result.points_ = points_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.width_ = width_;
+        result.quitUserId_ = quitUserId_;
+        if (((bitField0_ & 0x00000040) == 0x00000040)) {
+          points_ = java.util.Collections.unmodifiableList(points_);
+          bitField0_ = (bitField0_ & ~0x00000040);
+        }
+        result.points_ = points_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000040;
+        }
+        result.width_ = width_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000080;
         }
         result.color_ = color_;
         result.bitField0_ = to_bitField0_;
@@ -3207,10 +3257,13 @@ public final class GameMessageProtos {
         if (other.hasNewUserId()) {
           setNewUserId(other.getNewUserId());
         }
+        if (other.hasQuitUserId()) {
+          setQuitUserId(other.getQuitUserId());
+        }
         if (!other.points_.isEmpty()) {
           if (points_.isEmpty()) {
             points_ = other.points_;
-            bitField0_ = (bitField0_ & ~0x00000020);
+            bitField0_ = (bitField0_ & ~0x00000040);
           } else {
             ensurePointsIsMutable();
             points_.addAll(other.points_);
@@ -3279,6 +3332,11 @@ public final class GameMessageProtos {
               newUserId_ = input.readBytes();
               break;
             }
+            case 66: {
+              bitField0_ |= 0x00000020;
+              quitUserId_ = input.readBytes();
+              break;
+            }
             case 168: {
               ensurePointsIsMutable();
               points_.add(input.readInt32());
@@ -3294,12 +3352,12 @@ public final class GameMessageProtos {
               break;
             }
             case 181: {
-              bitField0_ |= 0x00000040;
+              bitField0_ |= 0x00000080;
               width_ = input.readFloat();
               break;
             }
             case 184: {
-              bitField0_ |= 0x00000080;
+              bitField0_ |= 0x00000100;
               color_ = input.readInt32();
               break;
             }
@@ -3474,12 +3532,48 @@ public final class GameMessageProtos {
         onChanged();
       }
       
+      // optional string quitUserId = 8;
+      private java.lang.Object quitUserId_ = "";
+      public boolean hasQuitUserId() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public String getQuitUserId() {
+        java.lang.Object ref = quitUserId_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          quitUserId_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setQuitUserId(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        quitUserId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearQuitUserId() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        quitUserId_ = getDefaultInstance().getQuitUserId();
+        onChanged();
+        return this;
+      }
+      void setQuitUserId(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000020;
+        quitUserId_ = value;
+        onChanged();
+      }
+      
       // repeated int32 points = 21 [packed = true];
       private java.util.List<java.lang.Integer> points_ = java.util.Collections.emptyList();;
       private void ensurePointsIsMutable() {
-        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
           points_ = new java.util.ArrayList<java.lang.Integer>(points_);
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000040;
          }
       }
       public java.util.List<java.lang.Integer>
@@ -3514,7 +3608,7 @@ public final class GameMessageProtos {
       }
       public Builder clearPoints() {
         points_ = java.util.Collections.emptyList();;
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         onChanged();
         return this;
       }
@@ -3522,19 +3616,19 @@ public final class GameMessageProtos {
       // optional float width = 22;
       private float width_ ;
       public boolean hasWidth() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       public float getWidth() {
         return width_;
       }
       public Builder setWidth(float value) {
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         width_ = value;
         onChanged();
         return this;
       }
       public Builder clearWidth() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000080);
         width_ = 0F;
         onChanged();
         return this;
@@ -3543,19 +3637,19 @@ public final class GameMessageProtos {
       // optional int32 color = 23;
       private int color_ ;
       public boolean hasColor() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       public int getColor() {
         return color_;
       }
       public Builder setColor(int value) {
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000100;
         color_ = value;
         onChanged();
         return this;
       }
       public Builder clearColor() {
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000100);
         color_ = 0;
         onChanged();
         return this;
@@ -5293,26 +5387,27 @@ public final class GameMessageProtos {
       "(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"G\n\023SendDrawDa" +
       "taRequest\022\022\n\006points\030\001 \003(\005B\002\020\001\022\r\n\005width\030\026" +
       " \001(\002\022\r\n\005color\030\027 \001(\005\"\026\n\024SendDrawDataRespo",
-      "nse\"\271\001\n\023GeneralNotification\022\023\n\013sessionHo" +
+      "nse\"\315\001\n\023GeneralNotification\022\023\n\013sessionHo" +
       "st\030\003 \001(\t\022\025\n\rsessionStatus\030\004 \001(\005\022\031\n\021curre" +
       "ntPlayUserId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001" +
-      "(\t\022\021\n\tnewUserId\030\007 \001(\t\022\022\n\006points\030\025 \003(\005B\002\020" +
-      "\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\"\214\004\n\013Game" +
-      "Message\022&\n\007command\030\001 \002(\0162\025.game.GameComm" +
-      "andType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nresultCode" +
-      "\030\003 \001(\0162\024.game.GameResultCode:\007SUCCESS\022\016\n" +
-      "\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022.\n\017j" +
-      "oinGameRequest\030\013 \001(\0132\025.game.JoinGameRequ",
-      "est\0220\n\020joinGameResponse\030\014 \001(\0132\026.game.Joi" +
-      "nGameResponse\0220\n\020startGameRequest\030\r \001(\0132" +
-      "\026.game.StartGameRequest\0222\n\021startGameResp" +
-      "onse\030\016 \001(\0132\027.game.StartGameResponse\0226\n\023s" +
-      "endDrawDataRequest\030\025 \001(\0132\031.game.SendDraw" +
-      "DataRequest\0228\n\024sendDrawDataResponse\030\026 \001(" +
-      "\0132\032.game.SendDrawDataResponse\022/\n\014notific" +
-      "ation\0303 \001(\0132\031.game.GeneralNotificationB=" +
-      "\n(com.orange.network.game.protocol.messa" +
-      "geB\021GameMessageProtos"
+      "(\t\022\021\n\tnewUserId\030\007 \001(\t\022\022\n\nquitUserId\030\010 \001(" +
+      "\t\022\022\n\006points\030\025 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005" +
+      "color\030\027 \001(\005\"\214\004\n\013GameMessage\022&\n\007command\030\001" +
+      " \002(\0162\025.game.GameCommandType\022\021\n\tmessageId" +
+      "\030\002 \002(\005\0221\n\nresultCode\030\003 \001(\0162\024.game.GameRe" +
+      "sultCode:\007SUCCESS\022\016\n\006userId\030\004 \001(\t\022\024\n\tses" +
+      "sionId\030\005 \001(\003:\0010\022.\n\017joinGameRequest\030\013 \001(\013",
+      "2\025.game.JoinGameRequest\0220\n\020joinGameRespo" +
+      "nse\030\014 \001(\0132\026.game.JoinGameResponse\0220\n\020sta" +
+      "rtGameRequest\030\r \001(\0132\026.game.StartGameRequ" +
+      "est\0222\n\021startGameResponse\030\016 \001(\0132\027.game.St" +
+      "artGameResponse\0226\n\023sendDrawDataRequest\030\025" +
+      " \001(\0132\031.game.SendDrawDataRequest\0228\n\024sendD" +
+      "rawDataResponse\030\026 \001(\0132\032.game.SendDrawDat" +
+      "aResponse\022/\n\014notification\0303 \001(\0132\031.game.G" +
+      "eneralNotificationB=\n(com.orange.network" +
+      ".game.protocol.messageB\021GameMessageProto",
+      "s"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5372,7 +5467,7 @@ public final class GameMessageProtos {
           internal_static_game_GeneralNotification_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GeneralNotification_descriptor,
-              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "Points", "Width", "Color", },
+              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "QuitUserId", "Points", "Width", "Color", },
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder.class);
           internal_static_game_GameMessage_descriptor =

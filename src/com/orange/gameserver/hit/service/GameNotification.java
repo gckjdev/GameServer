@@ -44,10 +44,30 @@ public class GameNotification {
 		}
 	}
 	
-	public static void broadcastUserQuitNotification(GameSession session, String quitUserId,
+	public static void broadcastUserQuitNotification(GameSession gameSession, String quitUserId,
 			GameEvent gameEvent) {
-		// TODO Auto-generated method stub
 		
+		List<UserAtGame> list = gameSession.getUserList();
+		for (UserAtGame user : list){
+			if (user.getUserId().equals(quitUserId)){
+				continue;
+			}
+			
+			// send notification for the user
+			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
+				.setQuitUserId(quitUserId)
+				.build();
+			
+			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(GameCommandType.USER_QUIT_NOTIFICATION_REQUEST)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setNotification(notification)
+				.setSessionId(gameSession.getSessionId())
+				.setUserId(user.getUserId())
+				.build();
+			
+			HandlerUtils.sendMessage(gameEvent, response, user.getChannel());
+		}
 	}
 
 
