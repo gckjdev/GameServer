@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.cassandra.cli.CliParser.newColumnFamily_return;
 import org.apache.cassandra.thrift.Cassandra.system_add_column_family_args;
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.util.log.Log;
 import org.jboss.netty.channel.Channel;
 
 import com.orange.gameserver.hit.dao.DrawGameSession;
@@ -21,6 +22,8 @@ import com.orange.gameserver.hit.manager.GameSessionManager;
 import com.orange.gameserver.hit.manager.UserAtGameManager;
 import com.orange.gameserver.hit.manager.UserManager;
 import com.orange.gameserver.hit.statemachine.game.GameEvent;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
+import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 
 import com.orange.gameserver.hit.dao.GameSession;
@@ -207,5 +210,26 @@ public class GameService {
 
 	public int generateMessageId() {
 		return messageIdIndex.incrementAndGet();
+	}
+
+	public void fireAndDispatchEvent(GameCommandType command,
+			int sessionId, String userId) {
+
+		Log.info("fire event " + command + ", sessionId = " + sessionId + ", userId = " + userId);
+		
+		String userIdForMessage = userId;
+		if (userId == null){
+			userIdForMessage = "";
+		}
+		
+		GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+			.setCommand(command)
+			.setSessionId(sessionId)
+			.setUserId(userIdForMessage)
+			.setMessageId(0)
+			.build();
+		
+		GameEvent event = new GameEvent(command, sessionId, message, null);		
+		dispatchEvent(event);
 	}
 }

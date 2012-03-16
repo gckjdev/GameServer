@@ -6,6 +6,7 @@ import com.orange.common.statemachine.Event;
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.server.GameService;
 import com.orange.gameserver.hit.statemachine.game.GameEvent;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 
@@ -90,7 +91,19 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		// remove user in session
 		session.removeUser(message.getUserId());
 		
-		// broadcast user exit message
-		GameNotification.broadcastUserQuitNotification(session, message.getUserId(), gameEvent);
+		if (session.isRoomEmpty()){
+			// if there is no user, fire a finish message
+			GameService.getInstance().fireAndDispatchEvent(GameCommandType.LOCAL_FINISH_GAME, 
+					session.getSessionId(), null);
+		}
+		else{
+			// broadcast user exit message to all other users
+			GameNotification.broadcastUserQuitNotification(session, message.getUserId(), gameEvent);			
+		}		
+	}
+
+	public static void hanndleFinishGame(GameEvent gameEvent,
+			GameSession session) {
+		session.resetGame();
 	}
 }

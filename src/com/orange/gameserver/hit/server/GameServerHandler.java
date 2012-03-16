@@ -95,17 +95,9 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		for (String userId : userIdList){
 			int sessionId = UserManager.getInstance().findGameSessionIdByUserId(userId);
 			if (sessionId != -1){
-				// fire event to the game session
-				GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
-					.setCommand(GameCommandType.LOCAL_CHANNEL_DISCONNECT)
-					.setSessionId(sessionId)
-					.setUserId(userId)
-					.setMessageId(0)
-					.build();
-				
-				GameEvent event = new GameEvent(GameCommandType.LOCAL_CHANNEL_DISCONNECT, 
-															sessionId, message, null);
-				gameService.dispatchEvent(event);
+				// fire event to the game session								
+				gameService.fireAndDispatchEvent(GameCommandType.LOCAL_CHANNEL_DISCONNECT,
+						sessionId, userId);
 			}
 		}
 		

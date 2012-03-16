@@ -46,12 +46,17 @@ public class CommonGameState extends State {
 			case LOCAL_CHANNEL_DISCONNECT:
 				GameSessionRequestHandler.hanndleChannelDisconnect(gameEvent, session);
 				break;
+				
+			case LOCAL_FINISH_GAME:
+				GameSessionRequestHandler.hanndleFinishGame(gameEvent, session);
+				break;
 
 			default:
-				// handle event by sub class
-				handleEvent(gameEvent, session);
 				break;
 		}				
+
+		// handle event by sub class
+		handleEvent(gameEvent, session);
 	}
 	
 	@Override

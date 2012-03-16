@@ -268,5 +268,9 @@ public class GameSession {
 	public void resetGame() {
 		status = SessionStatus.INIT;
 	}
+
+	public boolean isRoomEmpty() {
+		return (userList.size() == 0) ? true : false;
+	}
 	
 }
