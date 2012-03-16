@@ -42,6 +42,10 @@ public class CommonGameState extends State {
 			case CLEAN_DRAW_REQUEST:
 				GameSessionRequestHandler.handleCleanDrawRequest(gameEvent, session);
 				break;
+				
+			case LOCAL_CHANNEL_DISCONNECT:
+				GameSessionRequestHandler.hanndleChannelDisconnect(gameEvent, session);
+				break;
 
 			default:
 				// handle event by sub class

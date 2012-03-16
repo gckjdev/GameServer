@@ -43,6 +43,13 @@ public class GameNotification {
 			HandlerUtils.sendResponse(gameEvent, response);
 		}
 	}
+	
+	public static void broadcastUserQuitNotification(GameSession session, String quitUserId,
+			GameEvent gameEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	public static void broadcastGameStartNotification(GameSession gameSession, GameEvent gameEvent) {
 		
@@ -117,4 +124,5 @@ public class GameNotification {
 			HandlerUtils.sendResponse(gameEvent, message);
 		}
 	}
+
 }

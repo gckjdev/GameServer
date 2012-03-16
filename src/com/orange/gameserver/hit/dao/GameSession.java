@@ -105,10 +105,7 @@ public class GameSession {
 	}
 
 	public int getUserCount() {
-		if (this.userList != null) {
-			return this.userList.size();
-		}
-		return 0;
+		return this.userList.size();
 	}
 	
 	public void setUserList(List<UserAtGame> userList) {
@@ -137,7 +134,8 @@ public class GameSession {
 	public boolean addUser(String userId, String nickName, Channel channel) {
 		for (UserAtGame user : userList){
 			if (user.userId.equals(userId)){
-				// exist, don't need to add
+				// exist, don't need to add, just update channel
+				user.setChannel(channel);
 				return true;
 			}
 		}
@@ -250,6 +248,21 @@ public class GameSession {
 	
 	public void finishGame(){
 		status = SessionStatus.WAIT;
+	}
+
+	public void removeUser(String userId) {
+		UserAtGame userFound = null;
+		for (UserAtGame user : userList){
+			if (user.getUserId().equals(userId)){
+				userFound = user;
+				break;
+			}
+		}
+		
+		if (userFound != null){
+			userList.remove(userFound);
+			logger.info("remove " + userId + " from session " + sessionId);
+		}
 	}
 	
 }

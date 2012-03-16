@@ -1,9 +1,11 @@
 package com.orange.gameserver.hit.server;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
@@ -13,10 +15,12 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.orange.gameserver.hit.manager.ChannelUserManager;
 import com.orange.gameserver.hit.manager.GameManager;
+import com.orange.gameserver.hit.manager.UserManager;
 import com.orange.gameserver.hit.service.AbstractRequestHandler;
 import com.orange.gameserver.hit.service.GameSessionRequestHandler;
 import com.orange.gameserver.hit.service.HandlerUtils;
 import com.orange.gameserver.hit.service.JoinGameRequestHandler;
+import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.constants.GameConstantsProtos;
@@ -93,7 +97,23 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		logger.info("GameServerHandler channel connected");		
 		
 		// find all users related to the channel and post a message to game session that this user is quit
-//		List<String> userList = 
+		Channel channel = e.getChannel();		
+		List<String> userIdList = ChannelUserManager.getInstance().findUsersInChannel(channel);
+		for (String userId : userIdList){
+			int sessionId = UserManager.getInstance().findGameSessionIdByUserId(userId);
+			if (sessionId != -1){
+				// fire event to the game session
+				GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+					.setCommand(GameCommandType.LOCAL_CHANNEL_DISCONNECT)
+					.setSessionId(sessionId)
+					.setUserId(userId)
+					.build();
+				
+				GameEvent event = new GameEvent(GameCommandType.LOCAL_CHANNEL_DISCONNECT, 
+															sessionId, message, null);
+				gameService.dispatchEvent(event);
+			}
+		}
 		
 		// remove channel
 		ChannelUserManager.getInstance().removeChannel(e.getChannel());

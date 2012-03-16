@@ -7,6 +7,7 @@ import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.manager.GameManager;
+import com.orange.gameserver.hit.manager.UserManager;
 import com.orange.gameserver.hit.server.GameService;
 import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.gameserver.hit.statemachine.game.GameEventKey;
@@ -28,6 +29,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String userId = request.getJoinGameRequest().getUserId();
 		String gameId = request.getJoinGameRequest().getGameId();
 		String nickName = request.getJoinGameRequest().getNickName();
+		
 		
 		int gameSessionId = gameService.matchGameForUser(userId,nickName, gameId, messageEvent.getChannel());
 		if (gameSessionId == -1){

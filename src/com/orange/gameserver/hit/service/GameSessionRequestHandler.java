@@ -81,4 +81,16 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		// broast draw data to all other users in the session
 		GameNotification.broadcastCleanDrawNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 	}
+
+	public static void hanndleChannelDisconnect(GameEvent gameEvent,
+			GameSession session) {
+		
+		GameMessage message = gameEvent.getMessage();
+		
+		// remove user in session
+		session.removeUser(message.getUserId());
+		
+		// broadcast user exit message
+		GameNotification.broadcastUserQuitNotification(session, message.getUserId(), gameEvent);
+	}
 }

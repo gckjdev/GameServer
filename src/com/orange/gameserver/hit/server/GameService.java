@@ -64,7 +64,7 @@ public class GameService {
 
 	private Object getMatchSessionLock = new Object();
 
-	private int getMatchedSessionId(User user) {
+	private int getMatchedSessionId() {
 		GameSessionManager gameSessionManager = GameSessionManager
 				.getInstance();
 		int joinSessionId = -1;
@@ -142,32 +142,31 @@ public class GameService {
 
 	public int matchGameForUser(String userId, String nickName, String gameId,
 			Channel channel) {
-		boolean useRecentSessions = false;
-		synchronized (getMatchSessionLock) {
-			if (userId != null) {
-				UserManager userManager = UserManager.getInstance();
-				User user = userManager.findUserById(userId);
-				if (user == null) {
-					user = new User(userId, nickName);
-					userManager.addOnlineUser(user);
-				}
-				int joinSessionId = getMatchedSessionId(user);
-
-				if (joinSessionId != -1) {
-					GameManager gameManager = GameManager.getInstance();
-					GameSession gameSession = gameManager
-							.findGameSessionById(joinSessionId);
-					gameSession.addUser(userId, nickName, channel);
-					GameSessionManager gameSessionManager = GameSessionManager
-							.getInstance();
-					gameSessionManager.adjustGameSession(joinSessionId);
-					user.addGameSessionId(joinSessionId);
-				}
-				logger.info("<GameService>:did find room: " + joinSessionId
-						+ " for user: " + user.getUserId());
-				return joinSessionId;
-			}
+		
+		if (userId == null){
 			return -1;
+		}
+		
+		boolean useRecentSessions = false;
+		synchronized (getMatchSessionLock) {			
+			int joinSessionId = getMatchedSessionId();
+
+			if (joinSessionId != -1) {
+				GameManager gameManager = GameManager.getInstance();
+				GameSession gameSession = gameManager
+						.findGameSessionById(joinSessionId);
+				gameSession.addUser(userId, nickName, channel);
+				GameSessionManager gameSessionManager = GameSessionManager
+						.getInstance();
+				gameSessionManager.adjustGameSession(joinSessionId);
+				
+			}
+
+			// TODO code below can be moved out of synchronized lock
+			UserManager.getInstance().addOnlineUser(userId, nickName, channel, joinSessionId);
+			logger.info("<GameService>:did find room: " + joinSessionId
+					+ " for user: " + userId);
+			return joinSessionId;
 		}
 	}
 
