@@ -1,6 +1,7 @@
 package com.orange.gameserver.hit.service;
 
 import org.apache.log4j.Logger;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.hit.server.GameWorkerThread;
@@ -14,6 +15,16 @@ public class HandlerUtils {
 
 	protected static final Logger logger = Logger.getLogger(HandlerUtils.class.getName());
 
+	public static void sendMessage(GameEvent gameEvent, GameMessage message, Channel channel) {
+		if (gameEvent == null || message == null || channel == null)
+			return;
+		
+		logger.info(String.format("[%08X] [SEND] %s", message.getSessionId(), message.toString()));
+		if (channel.isConnected() && channel.isWritable()){
+			channel.write(message);
+		}
+	}
+	
 	public static void sendResponse(GameEvent gameEvent, GameMessage response) {
 		if (gameEvent == null || response == null || gameEvent.getChannel() == null)
 			return;

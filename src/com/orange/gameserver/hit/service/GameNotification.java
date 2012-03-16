@@ -40,7 +40,7 @@ public class GameNotification {
 				.setUserId(user.getUserId())
 				.build();
 			
-			HandlerUtils.sendResponse(gameEvent, response);
+			HandlerUtils.sendMessage(gameEvent, response, user.getChannel());
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class GameNotification {
 				.setUserId(user.getUserId())
 				.build();
 			
-			HandlerUtils.sendResponse(gameEvent, message);
+			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
 		}
 	}
 
@@ -101,7 +101,7 @@ public class GameNotification {
 				.setUserId(userId)
 				.build();
 			
-			HandlerUtils.sendResponse(gameEvent, message);
+			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
 		}
 	}
 
@@ -121,7 +121,7 @@ public class GameNotification {
 				.setUserId(userId)
 				.build();
 			
-			HandlerUtils.sendResponse(gameEvent, message);
+			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
 		}
 	}
 
