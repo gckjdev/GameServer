@@ -75,4 +75,10 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		// broast draw data to all other users in the session
 		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 	}
+
+	public static void handleCleanDrawRequest(GameEvent gameEvent,
+			GameSession session) {
+		// broast draw data to all other users in the session
+		GameNotification.broadcastCleanDrawNotification(session, gameEvent, gameEvent.getMessage().getUserId());
+	}
 }

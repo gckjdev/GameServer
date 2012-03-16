@@ -39,6 +39,10 @@ public class CommonGameState extends State {
 				GameSessionRequestHandler.handleSendDrawDataRequest(gameEvent, session);
 				break;
 			
+			case CLEAN_DRAW_REQUEST:
+				GameSessionRequestHandler.handleCleanDrawRequest(gameEvent, session);
+				break;
+
 			default:
 				// handle event by sub class
 				handleEvent(gameEvent, session);

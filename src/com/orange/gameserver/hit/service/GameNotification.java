@@ -97,4 +97,24 @@ public class GameNotification {
 			HandlerUtils.sendResponse(gameEvent, message);
 		}
 	}
+
+	public static void broadcastCleanDrawNotification(GameSession gameSession,
+			GameEvent gameEvent, String userId) {
+		
+		List<UserAtGame> list = gameSession.getUserList();
+		for (UserAtGame user : list){		
+			if (user.getUserId().equals(userId))
+				continue;
+			
+			// send notification for the user			
+			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(GameCommandType.CLEAN_DRAW_NOTIFICATION_REQUEST)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setSessionId(gameSession.getSessionId())
+				.setUserId(userId)
+				.build();
+			
+			HandlerUtils.sendResponse(gameEvent, message);
+		}
+	}
 }
