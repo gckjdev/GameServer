@@ -8,6 +8,7 @@ import com.orange.gameserver.hit.server.GameService;
 import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
+import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 
 public class GameSessionRequestHandler extends AbstractRequestHandler {
@@ -47,6 +48,19 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// start game
 		session.startGame();
+		
+		// send reponse
+		GameMessageProtos.StartGameResponse gameResponse = GameMessageProtos.StartGameResponse.newBuilder()
+			.setCurrentPlayUserId(session.getCurrentPlayUserId())
+			.setNextPlayUserId(session.getNextPlayUserId())
+			.build();
+		GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
+			.setCommand(GameCommandType.START_GAME_RESPONSE)
+			.setMessageId(gameEvent.getMessage().getMessageId())
+			.setResultCode(GameResultCode.SUCCESS)
+			.setStartGameResponse(gameResponse)
+			.build();
+		HandlerUtils.sendResponse(gameEvent, response);
 		
 		// broast to all users in the session
 		GameNotification.broadcastGameStartNotification(session, gameEvent);
