@@ -178,6 +178,23 @@ public class GameSession {
 		return (nextPlayUser == null) ? "" : nextPlayUser.userId;
 	}
 
+	public void chooseNewHost(int oldHostIndex){
+		if (userList.size() == 0){
+			this.host = "";
+			return;
+		}
+		
+		if (oldHostIndex < 0 || oldHostIndex >= userList.size()){			
+			this.host = userList.get(0).userId;
+			return;
+		}
+		else {
+			this.host = userList.get(oldHostIndex).userId;
+		}
+		
+		logger.info("set new host = " + host);
+	}
+		
 	public void chooseNewPlayUser() {
 		
 		// set current play user
@@ -203,6 +220,21 @@ public class GameSession {
 					currentPlayUser = userList.get(index+1);
 				}
 			}
+			else{
+				// current play user not found (maybe removed)
+				if (userList.indexOf(nextPlayUser) != -1){
+					currentPlayUser = nextPlayUser;
+				}
+				else if (userList.size() == 0){
+					logger.warn("<chooseNewPlayUser> but no user?");
+					return;
+				}
+				else{
+					// use the first user
+					currentPlayUser = userList.get(0);
+				}
+			}
+				
 		}
 		
 		logger.info("<chooseNewPlayUser> current play user = "+this.getCurrentPlayUserId());
@@ -260,8 +292,23 @@ public class GameSession {
 		}
 		
 		if (userFound != null){
-			userList.remove(userFound);
+						
+			int index = userList.indexOf(userFound);
+			if (index != -1){
+				userList.remove(index);
+			}
 			logger.info("remove " + userId + " from session " + sessionId);
+
+			if (this.host.equals(userId)){
+				// set next user as host
+				chooseNewHost(index);
+			}
+			
+			if (currentPlayUser != null && currentPlayUser.equals(userId)){
+				// set new current play user and next play user
+				this.chooseNewPlayUser();
+			}
+			
 		}
 	}
 

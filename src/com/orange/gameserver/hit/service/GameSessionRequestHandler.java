@@ -44,7 +44,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameSession session) {
 		
 		// set current play user id and next play user id
-		session.chooseNewPlayUser();		
+		session.chooseNewPlayUser();				
 		
 		// start game
 		session.startGame();
@@ -103,7 +103,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		GameMessage message = gameEvent.getMessage();
 		
 		// remove user in session
-		session.removeUser(message.getUserId());
+		session.removeUser(message.getUserId());		
 		
 		if (session.isRoomEmpty()){
 			// if there is no user, fire a finish message

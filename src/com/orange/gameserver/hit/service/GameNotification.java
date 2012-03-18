@@ -56,6 +56,9 @@ public class GameNotification {
 			// send notification for the user
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
 				.setQuitUserId(quitUserId)
+				.setNextPlayUserId(gameSession.getNextPlayUserId())
+				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+				.setSessionHost(gameSession.getHost())
 				.build();
 			
 			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
