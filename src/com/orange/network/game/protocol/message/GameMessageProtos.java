@@ -2099,6 +2099,14 @@ public final class GameMessageProtos {
   public interface SendDrawDataRequestOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
+    // optional string word = 10;
+    boolean hasWord();
+    String getWord();
+    
+    // optional int32 level = 11;
+    boolean hasLevel();
+    int getLevel();
+    
     // repeated int32 points = 1 [packed = true];
     java.util.List<java.lang.Integer> getPointsList();
     int getPointsCount();
@@ -2141,6 +2149,48 @@ public final class GameMessageProtos {
     }
     
     private int bitField0_;
+    // optional string word = 10;
+    public static final int WORD_FIELD_NUMBER = 10;
+    private java.lang.Object word_;
+    public boolean hasWord() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getWord() {
+      java.lang.Object ref = word_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          word_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getWordBytes() {
+      java.lang.Object ref = word_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        word_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional int32 level = 11;
+    public static final int LEVEL_FIELD_NUMBER = 11;
+    private int level_;
+    public boolean hasLevel() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getLevel() {
+      return level_;
+    }
+    
     // repeated int32 points = 1 [packed = true];
     public static final int POINTS_FIELD_NUMBER = 1;
     private java.util.List<java.lang.Integer> points_;
@@ -2160,7 +2210,7 @@ public final class GameMessageProtos {
     public static final int WIDTH_FIELD_NUMBER = 22;
     private float width_;
     public boolean hasWidth() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     public float getWidth() {
       return width_;
@@ -2170,13 +2220,15 @@ public final class GameMessageProtos {
     public static final int COLOR_FIELD_NUMBER = 23;
     private int color_;
     public boolean hasColor() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     public int getColor() {
       return color_;
     }
     
     private void initFields() {
+      word_ = "";
+      level_ = 0;
       points_ = java.util.Collections.emptyList();;
       width_ = 0F;
       color_ = 0;
@@ -2201,9 +2253,15 @@ public final class GameMessageProtos {
         output.writeInt32NoTag(points_.get(i));
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeFloat(22, width_);
+        output.writeBytes(10, getWordBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(11, level_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeFloat(22, width_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeInt32(23, color_);
       }
       getUnknownFields().writeTo(output);
@@ -2231,9 +2289,17 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(22, width_);
+          .computeBytesSize(10, getWordBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(11, level_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(22, width_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(23, color_);
       }
@@ -2361,12 +2427,16 @@ public final class GameMessageProtos {
       
       public Builder clear() {
         super.clear();
-        points_ = java.util.Collections.emptyList();;
+        word_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        width_ = 0F;
+        level_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
-        color_ = 0;
+        points_ = java.util.Collections.emptyList();;
         bitField0_ = (bitField0_ & ~0x00000004);
+        width_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        color_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -2405,17 +2475,25 @@ public final class GameMessageProtos {
         com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest result = new com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          points_ = java.util.Collections.unmodifiableList(points_);
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.points_ = points_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.width_ = width_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+        result.word_ = word_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
+        }
+        result.level_ = level_;
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          points_ = java.util.Collections.unmodifiableList(points_);
+          bitField0_ = (bitField0_ & ~0x00000004);
+        }
+        result.points_ = points_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.width_ = width_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
         }
         result.color_ = color_;
         result.bitField0_ = to_bitField0_;
@@ -2434,10 +2512,16 @@ public final class GameMessageProtos {
       
       public Builder mergeFrom(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest other) {
         if (other == com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance()) return this;
+        if (other.hasWord()) {
+          setWord(other.getWord());
+        }
+        if (other.hasLevel()) {
+          setLevel(other.getLevel());
+        }
         if (!other.points_.isEmpty()) {
           if (points_.isEmpty()) {
             points_ = other.points_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000004);
           } else {
             ensurePointsIsMutable();
             points_.addAll(other.points_);
@@ -2495,13 +2579,23 @@ public final class GameMessageProtos {
               input.popLimit(limit);
               break;
             }
-            case 181: {
+            case 82: {
+              bitField0_ |= 0x00000001;
+              word_ = input.readBytes();
+              break;
+            }
+            case 88: {
               bitField0_ |= 0x00000002;
+              level_ = input.readInt32();
+              break;
+            }
+            case 181: {
+              bitField0_ |= 0x00000008;
               width_ = input.readFloat();
               break;
             }
             case 184: {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000010;
               color_ = input.readInt32();
               break;
             }
@@ -2511,12 +2605,69 @@ public final class GameMessageProtos {
       
       private int bitField0_;
       
+      // optional string word = 10;
+      private java.lang.Object word_ = "";
+      public boolean hasWord() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public String getWord() {
+        java.lang.Object ref = word_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          word_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setWord(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        word_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearWord() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        word_ = getDefaultInstance().getWord();
+        onChanged();
+        return this;
+      }
+      void setWord(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        word_ = value;
+        onChanged();
+      }
+      
+      // optional int32 level = 11;
+      private int level_ ;
+      public boolean hasLevel() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public int getLevel() {
+        return level_;
+      }
+      public Builder setLevel(int value) {
+        bitField0_ |= 0x00000002;
+        level_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLevel() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        level_ = 0;
+        onChanged();
+        return this;
+      }
+      
       // repeated int32 points = 1 [packed = true];
       private java.util.List<java.lang.Integer> points_ = java.util.Collections.emptyList();;
       private void ensurePointsIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
           points_ = new java.util.ArrayList<java.lang.Integer>(points_);
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000004;
          }
       }
       public java.util.List<java.lang.Integer>
@@ -2551,7 +2702,7 @@ public final class GameMessageProtos {
       }
       public Builder clearPoints() {
         points_ = java.util.Collections.emptyList();;
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -2559,19 +2710,19 @@ public final class GameMessageProtos {
       // optional float width = 22;
       private float width_ ;
       public boolean hasWidth() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public float getWidth() {
         return width_;
       }
       public Builder setWidth(float value) {
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000008;
         width_ = value;
         onChanged();
         return this;
       }
       public Builder clearWidth() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000008);
         width_ = 0F;
         onChanged();
         return this;
@@ -2580,19 +2731,19 @@ public final class GameMessageProtos {
       // optional int32 color = 23;
       private int color_ ;
       public boolean hasColor() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public int getColor() {
         return color_;
       }
       public Builder setColor(int value) {
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000010;
         color_ = value;
         onChanged();
         return this;
       }
       public Builder clearColor() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000010);
         color_ = 0;
         onChanged();
         return this;
@@ -2932,6 +3083,18 @@ public final class GameMessageProtos {
     // optional int32 color = 23;
     boolean hasColor();
     int getColor();
+    
+    // optional string word = 31;
+    boolean hasWord();
+    String getWord();
+    
+    // optional int32 level = 32;
+    boolean hasLevel();
+    int getLevel();
+    
+    // optional int32 round = 33;
+    boolean hasRound();
+    int getRound();
   }
   public static final class GeneralNotification extends
       com.google.protobuf.GeneratedMessage
@@ -3231,6 +3394,58 @@ public final class GameMessageProtos {
       return color_;
     }
     
+    // optional string word = 31;
+    public static final int WORD_FIELD_NUMBER = 31;
+    private java.lang.Object word_;
+    public boolean hasWord() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    public String getWord() {
+      java.lang.Object ref = word_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          word_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getWordBytes() {
+      java.lang.Object ref = word_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        word_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional int32 level = 32;
+    public static final int LEVEL_FIELD_NUMBER = 32;
+    private int level_;
+    public boolean hasLevel() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    public int getLevel() {
+      return level_;
+    }
+    
+    // optional int32 round = 33;
+    public static final int ROUND_FIELD_NUMBER = 33;
+    private int round_;
+    public boolean hasRound() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    public int getRound() {
+      return round_;
+    }
+    
     private void initFields() {
       sessionHost_ = "";
       sessionStatus_ = 0;
@@ -3243,6 +3458,9 @@ public final class GameMessageProtos {
       points_ = java.util.Collections.emptyList();;
       width_ = 0F;
       color_ = 0;
+      word_ = "";
+      level_ = 0;
+      round_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3292,6 +3510,15 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeInt32(23, color_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeBytes(31, getWordBytes());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeInt32(32, level_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeInt32(33, round_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -3355,6 +3582,18 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(23, color_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(31, getWordBytes());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(32, level_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(33, round_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3502,6 +3741,12 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000200);
         color_ = 0;
         bitField0_ = (bitField0_ & ~0x00000400);
+        word_ = "";
+        bitField0_ = (bitField0_ & ~0x00000800);
+        level_ = 0;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        round_ = 0;
+        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
       
@@ -3585,6 +3830,18 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000200;
         }
         result.color_ = color_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.word_ = word_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.level_ = level_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.round_ = round_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3640,6 +3897,15 @@ public final class GameMessageProtos {
         }
         if (other.hasColor()) {
           setColor(other.getColor());
+        }
+        if (other.hasWord()) {
+          setWord(other.getWord());
+        }
+        if (other.hasLevel()) {
+          setLevel(other.getLevel());
+        }
+        if (other.hasRound()) {
+          setRound(other.getRound());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3734,6 +4000,21 @@ public final class GameMessageProtos {
             case 184: {
               bitField0_ |= 0x00000400;
               color_ = input.readInt32();
+              break;
+            }
+            case 250: {
+              bitField0_ |= 0x00000800;
+              word_ = input.readBytes();
+              break;
+            }
+            case 256: {
+              bitField0_ |= 0x00001000;
+              level_ = input.readInt32();
+              break;
+            }
+            case 264: {
+              bitField0_ |= 0x00002000;
+              round_ = input.readInt32();
               break;
             }
           }
@@ -4098,6 +4379,84 @@ public final class GameMessageProtos {
       public Builder clearColor() {
         bitField0_ = (bitField0_ & ~0x00000400);
         color_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional string word = 31;
+      private java.lang.Object word_ = "";
+      public boolean hasWord() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      public String getWord() {
+        java.lang.Object ref = word_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          word_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setWord(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000800;
+        word_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearWord() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        word_ = getDefaultInstance().getWord();
+        onChanged();
+        return this;
+      }
+      void setWord(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000800;
+        word_ = value;
+        onChanged();
+      }
+      
+      // optional int32 level = 32;
+      private int level_ ;
+      public boolean hasLevel() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      public int getLevel() {
+        return level_;
+      }
+      public Builder setLevel(int value) {
+        bitField0_ |= 0x00001000;
+        level_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLevel() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        level_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional int32 round = 33;
+      private int round_ ;
+      public boolean hasRound() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      public int getRound() {
+        return round_;
+      }
+      public Builder setRound(int value) {
+        bitField0_ |= 0x00002000;
+        round_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearRound() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        round_ = 0;
         onChanged();
         return this;
       }
@@ -5833,30 +6192,32 @@ public final class GameMessageProtos {
       "se\022(\n\013gameSession\030\001 \002(\0132\023.game.PBGameSes" +
       "sion\"\022\n\020StartGameRequest\"F\n\021StartGameRes" +
       "ponse\022\031\n\021currentPlayUserId\030\005 \001(\t\022\026\n\016next" +
-      "PlayUserId\030\006 \001(\t\"G\n\023SendDrawDataRequest\022",
-      "\022\n\006points\030\001 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005co" +
-      "lor\030\027 \001(\005\"\026\n\024SendDrawDataResponse\"\363\001\n\023Ge" +
-      "neralNotification\022\023\n\013sessionHost\030\003 \001(\t\022\025" +
-      "\n\rsessionStatus\030\004 \001(\005\022\031\n\021currentPlayUser" +
-      "Id\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021\n\tnewU" +
-      "serId\030\007 \001(\t\022\022\n\nquitUserId\030\010 \001(\t\022\020\n\010nickN" +
-      "ame\030\t \001(\t\022\022\n\nuserAvatar\030\n \001(\t\022\022\n\006points\030" +
-      "\025 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\"" +
-      "\214\004\n\013GameMessage\022&\n\007command\030\001 \002(\0162\025.game." +
-      "GameCommandType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nre",
-      "sultCode\030\003 \001(\0162\024.game.GameResultCode:\007SU" +
-      "CCESS\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003" +
-      ":\0010\022.\n\017joinGameRequest\030\013 \001(\0132\025.game.Join" +
-      "GameRequest\0220\n\020joinGameResponse\030\014 \001(\0132\026." +
-      "game.JoinGameResponse\0220\n\020startGameReques" +
-      "t\030\r \001(\0132\026.game.StartGameRequest\0222\n\021start" +
-      "GameResponse\030\016 \001(\0132\027.game.StartGameRespo" +
-      "nse\0226\n\023sendDrawDataRequest\030\025 \001(\0132\031.game." +
-      "SendDrawDataRequest\0228\n\024sendDrawDataRespo" +
-      "nse\030\026 \001(\0132\032.game.SendDrawDataResponse\022/\n",
-      "\014notification\0303 \001(\0132\031.game.GeneralNotifi" +
-      "cationB=\n(com.orange.network.game.protoc" +
-      "ol.messageB\021GameMessageProtos"
+      "PlayUserId\030\006 \001(\t\"d\n\023SendDrawDataRequest\022",
+      "\014\n\004word\030\n \001(\t\022\r\n\005level\030\013 \001(\005\022\022\n\006points\030\001" +
+      " \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\"\026" +
+      "\n\024SendDrawDataResponse\"\237\002\n\023GeneralNotifi" +
+      "cation\022\023\n\013sessionHost\030\003 \001(\t\022\025\n\rsessionSt" +
+      "atus\030\004 \001(\005\022\031\n\021currentPlayUserId\030\005 \001(\t\022\026\n" +
+      "\016nextPlayUserId\030\006 \001(\t\022\021\n\tnewUserId\030\007 \001(\t" +
+      "\022\022\n\nquitUserId\030\010 \001(\t\022\020\n\010nickName\030\t \001(\t\022\022" +
+      "\n\nuserAvatar\030\n \001(\t\022\022\n\006points\030\025 \003(\005B\002\020\001\022\r" +
+      "\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\022\014\n\004word\030\037 \001" +
+      "(\t\022\r\n\005level\030  \001(\005\022\r\n\005round\030! \001(\005\"\214\004\n\013Gam",
+      "eMessage\022&\n\007command\030\001 \002(\0162\025.game.GameCom" +
+      "mandType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nresultCod" +
+      "e\030\003 \001(\0162\024.game.GameResultCode:\007SUCCESS\022\016" +
+      "\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022.\n\017" +
+      "joinGameRequest\030\013 \001(\0132\025.game.JoinGameReq" +
+      "uest\0220\n\020joinGameResponse\030\014 \001(\0132\026.game.Jo" +
+      "inGameResponse\0220\n\020startGameRequest\030\r \001(\013" +
+      "2\026.game.StartGameRequest\0222\n\021startGameRes" +
+      "ponse\030\016 \001(\0132\027.game.StartGameResponse\0226\n\023" +
+      "sendDrawDataRequest\030\025 \001(\0132\031.game.SendDra",
+      "wDataRequest\0228\n\024sendDrawDataResponse\030\026 \001" +
+      "(\0132\032.game.SendDrawDataResponse\022/\n\014notifi" +
+      "cation\0303 \001(\0132\031.game.GeneralNotificationB" +
+      "=\n(com.orange.network.game.protocol.mess" +
+      "ageB\021GameMessageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5900,7 +6261,7 @@ public final class GameMessageProtos {
           internal_static_game_SendDrawDataRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_SendDrawDataRequest_descriptor,
-              new java.lang.String[] { "Points", "Width", "Color", },
+              new java.lang.String[] { "Word", "Level", "Points", "Width", "Color", },
               com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.class,
               com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder.class);
           internal_static_game_SendDrawDataResponse_descriptor =
@@ -5916,7 +6277,7 @@ public final class GameMessageProtos {
           internal_static_game_GeneralNotification_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GeneralNotification_descriptor,
-              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "QuitUserId", "NickName", "UserAvatar", "Points", "Width", "Color", },
+              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "QuitUserId", "NickName", "UserAvatar", "Points", "Width", "Color", "Word", "Level", "Round", },
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder.class);
           internal_static_game_GameMessage_descriptor =

@@ -16,6 +16,7 @@ import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResult
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest;
+import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest;
 
 public class GameSessionRequestHandler extends AbstractRequestHandler {
 
@@ -92,6 +93,16 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 	public static void handleSendDrawDataRequest(GameEvent gameEvent,
 			GameSession session) {
+		
+		GameMessage message = gameEvent.getMessage();
+		SendDrawDataRequest drawRequest = message.getSendDrawDataRequest();
+		if (drawRequest == null){
+			return;
+		}
+
+		if (drawRequest.hasWord()){
+			session.startNewTurn(drawRequest.getWord(), drawRequest.getLevel());
+		}
 		
 		// broast draw data to all other users in the session
 		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());

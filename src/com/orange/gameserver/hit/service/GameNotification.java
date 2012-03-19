@@ -114,6 +114,9 @@ public class GameNotification {
 				.setColor(drawData.getColor())
 				.addAllPoints(drawData.getPointsList())
 				.setWidth(drawData.getWidth())
+				.setWord(drawData.getWord())
+				.setLevel(drawData.getLevel())
+				.setRound(gameSession.getCurrentRound())
 				.build();
 			
 			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()

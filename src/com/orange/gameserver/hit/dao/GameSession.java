@@ -38,6 +38,7 @@ public class GameSession {
 	UserAtGame nextPlayUser = null;
 	SessionStatus status = SessionStatus.INIT;
 	
+	GameTurn currentTurn = null;
 	
 	
 	List<UserAtGame> userList = new CopyOnWriteArrayList<UserAtGame>();
@@ -325,4 +326,22 @@ public class GameSession {
 		return (userList.size() == 0) ? true : false;
 	}
 	
+	public void startNewTurn(String word, int level){
+		if (currentTurn == null){
+			currentTurn = new GameTurn(1);
+		}
+		else{
+			currentTurn = new GameTurn(currentTurn.getRound() + 1);
+		}
+		
+		currentTurn.setWordText(word);
+		currentTurn.setWordLevel(level);
+	}
+
+	public int getCurrentRound() {
+		if (currentTurn == null)
+			return 1;
+		
+		return currentTurn.getRound();
+	}
 }
