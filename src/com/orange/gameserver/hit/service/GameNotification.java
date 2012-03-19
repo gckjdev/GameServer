@@ -18,6 +18,27 @@ public class GameNotification {
 
 	protected static final Logger logger = Logger.getLogger(GameNotification.class.getName());
 	
+	public static void broadcastNotification(GameSession gameSession,
+			GameEvent gameEvent, String userId, GameCommandType command) {
+		
+		List<UserAtGame> list = gameSession.getUserList();
+		for (UserAtGame user : list){		
+			if (user.getUserId().equals(userId))
+				continue;
+			
+			// send notification for the user			
+			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(command)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setSessionId(gameSession.getSessionId())
+				.setUserId(userId)
+				.build();
+			
+			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
+		}
+	}
+
+	
 	public static void broadcastUserJoinNotification(GameSession gameSession,
 			String newUserId, GameEvent gameEvent) {
 		
@@ -151,6 +172,11 @@ public class GameNotification {
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
 		}
+	}
+
+	public static void broadcastProlongGameNotification(GameSession session,
+			GameEvent gameEvent, String userId) {		
+		broadcastNotification(session, gameEvent, userId, GameCommandType.PROLONG_GAME_NOTIFICATION_REQUEST);
 	}
 
 }

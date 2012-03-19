@@ -74,6 +74,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		// broast to all users in the session
 		GameNotification.broadcastGameStartNotification(session, gameEvent);
 	}
+	
+	
 
 	
 	public static GameResultCode validateSendDrawDataRequest(GameEvent gameEvent, GameSession session) {
@@ -114,6 +116,12 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameSession session) {
 		// broast draw data to all other users in the session
 		GameNotification.broadcastCleanDrawNotification(session, gameEvent, gameEvent.getMessage().getUserId());
+	}
+	
+	public static void handleProlongGameRequest(GameEvent gameEvent,
+			GameSession session) {
+		// broast draw data to all other users in the session
+		GameNotification.broadcastProlongGameNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 	}
 
 	public static void userQuitSession(GameEvent gameEvent,
