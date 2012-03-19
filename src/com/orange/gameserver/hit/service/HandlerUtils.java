@@ -50,4 +50,21 @@ public class HandlerUtils {
 
 		sendResponse(gameEvent, response);		
 	}
+	
+	public static void sendErrorResponse(GameMessage request, GameResultCode resultCode, Channel channel){
+		
+		if (request == null || channel == null)
+			return;
+		
+		GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
+			.setCommand(HandlerUtils.getResponseCommandByRequest(request.getCommand()))
+			.setMessageId(request.getMessageId())
+			.setResultCode(resultCode)
+			.build();
+
+		logger.info(String.format("[%08X] [SEND] %s", response.getSessionId(), response.toString()));
+		if (channel.isConnected() && channel.isWritable()){
+			channel.write(response);
+		}
+	}
 }

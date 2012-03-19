@@ -1,6 +1,8 @@
 package com.orange.gameserver.hit.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.MessageEvent;
@@ -28,14 +30,14 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		
 		String userId = request.getJoinGameRequest().getUserId();
 		String gameId = request.getJoinGameRequest().getGameId();
-		String nickName = request.getJoinGameRequest().getNickName();
+		String nickName = request.getJoinGameRequest().getNickName();				
 		
-		
-		int gameSessionId = gameService.matchGameForUser(userId,nickName, gameId, messageEvent.getChannel());
+		int gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, messageEvent.getChannel(), null);
 		if (gameSessionId == -1){
-			gameSessionId = gameService.createGame(userId, nickName, messageEvent.getChannel());
+			HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
+			return;
 		}
-		
+				
 		GameEvent gameEvent = new GameEvent(
 				GameCommandType.JOIN_GAME_REQUEST, 
 				gameSessionId, 
@@ -53,10 +55,16 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String userId = request.getJoinGameRequest().getUserId();
 		String nickName = request.getJoinGameRequest().getNickName();
 		
-		boolean result = gameSession.addUser(userId, nickName, gameEvent.getChannel());
+		if (request.getJoinGameRequest().hasSessionToBeChange()){
+			GameSessionRequestHandler.handleChangeRoomRequest(gameEvent, gameSession);
+			return true;
+		}
 		
-		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();
+		// add user
+		gameSession.addUser(userId, nickName, gameEvent.getChannel());
 		
+		// send back response
+		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();		
 		GameBasicProtos.PBGameSession gameSessionData = GameBasicProtos.PBGameSession.newBuilder()		
 //										.setCreateBy(gameSession.getCreateBy())
 //										.setCreateTime((int)gameSession.getCreateDate().getTime()/1000)

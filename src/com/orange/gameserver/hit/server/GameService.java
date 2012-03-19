@@ -18,7 +18,6 @@ import com.orange.gameserver.hit.dao.User;
 import com.orange.gameserver.hit.dao.UserAtGame;
 import com.orange.gameserver.hit.manager.ChannelUserManager;
 import com.orange.gameserver.hit.manager.GameManager;
-import com.orange.gameserver.hit.manager.GameSessionManager;
 import com.orange.gameserver.hit.manager.UserAtGameManager;
 import com.orange.gameserver.hit.manager.UserManager;
 import com.orange.gameserver.hit.statemachine.game.GameEvent;
@@ -68,15 +67,16 @@ public class GameService {
 
 	private Object getMatchSessionLock = new Object();
 
+	/*
 	private int getMatchedSessionId() {
 		GameSessionManager gameSessionManager = GameSessionManager
 				.getInstance();
 		int joinSessionId = -1;
 		joinSessionId = gameSessionManager
-				.getRandGameSessionId(GameSessionManager.SESSION_SET_CANDIDATE);
+				.getRandId(GameSessionManager.SESSION_SET_CANDIDATE);
 		if (joinSessionId == -1) {
 			joinSessionId = gameSessionManager
-					.getRandGameSessionId(GameSessionManager.SESSION_SET_FREE);
+					.getRandId(GameSessionManager.SESSION_SET_FREE);
 		}
 		return joinSessionId;
 	}
@@ -91,7 +91,7 @@ public class GameService {
 			// recent session list
 			for (Integer sessionId : user.getRecentGameSessionList()) {
 				int sessionSymbol = gameSessionManager
-						.getGameSessionSetSymbolById(sessionId);
+						.getSetSymbolBySessionId(sessionId);
 				if (sessionSymbol == GameSessionManager.SESSION_SET_CANDIDATE) {
 					joinSessionId = sessionId.intValue();
 					break;
@@ -105,7 +105,7 @@ public class GameService {
 			// candidate
 			if (joinSessionId == -1) {
 				joinSessionId = gameSessionManager
-						.getRandGameSessionId(GameSessionManager.SESSION_SET_CANDIDATE);
+						.getRandId(GameSessionManager.SESSION_SET_CANDIDATE);
 			}
 
 			// if all the candidate game session is full, then find the recent
@@ -115,21 +115,21 @@ public class GameService {
 					joinSessionId = freeSessionIdInList;
 				} else {
 					joinSessionId = gameSessionManager
-							.getRandGameSessionId(GameSessionManager.SESSION_SET_FREE);
+							.getRandId(GameSessionManager.SESSION_SET_FREE);
 				}
 			}
 
 		} else {
 			// if don't use the recent list
 			// find a candidate session not in the list
-			joinSessionId = gameSessionManager.getGameSessionNotInList(
+			joinSessionId = gameSessionManager.getSessionNotInList(
 					GameSessionManager.SESSION_SET_CANDIDATE, user
 							.getRecentGameSessionList());
 
 			// if can not find a candidate session not in the list, then find a
 			// free session not in the list.
 			if (joinSessionId == -1) {
-				joinSessionId = gameSessionManager.getGameSessionNotInList(
+				joinSessionId = gameSessionManager.getSessionNotInList(
 						GameSessionManager.SESSION_SET_FREE, user
 								.getRecentGameSessionList());
 			}
@@ -143,6 +143,12 @@ public class GameService {
 		gameSessionManager.printSets();
 		return joinSessionId;
 	}
+	
+	public int matchGameForUser(String userId, String string, String string2,
+			Channel channel, int sessionId) {
+		return 0;
+	}
+	
 
 	public int matchGameForUser(String userId, String nickName, String gameId,
 			Channel channel) {
@@ -176,19 +182,7 @@ public class GameService {
 			return joinSessionId;
 		}
 	}
-
-	public int createGame(String userId, String nickName, Channel channel) {
-		GameSession gameSession = gameManager.createNewDrawGameSession(userId);
-		UserAtGame userAtGame = userManager
-				.userLogin(userId, nickName, channel);
-		gameSession.addUser(userAtGame);
-		return gameSession.getSessionId();
-	}
-
-	/*
-	 * public int allocNewGameSessionId() { return
-	 * gameManager.allocNewGameSessionId(); }
-	 */
+	*/
 
 	public void dispatchEvent(GameEvent gameEvent) {
 		long assignWorkerThreadIndex = hash(gameEvent.getTargetSession());
@@ -198,7 +192,7 @@ public class GameService {
 			worker.putEvent(gameEvent);
 		}
 	}
-
+	
 	private long hash(long targetSession) {
 		return (targetSession + 31) % numberOfWorkerThread;
 	}
@@ -215,6 +209,18 @@ public class GameService {
 	public void fireAndDispatchEvent(GameCommandType command,
 			int sessionId, String userId) {
 
+		fireAndDispatchEvent(command, sessionId, userId, GameEvent.MEDIUM);				
+	}
+	
+	public void fireAndDispatchEventHead(GameCommandType command,
+			int sessionId, String userId) {
+
+		fireAndDispatchEvent(command, sessionId, userId, GameEvent.HIGH);	
+	}
+
+	public void fireAndDispatchEvent(GameCommandType command,
+			int sessionId, String userId, int priority) {
+		
 		Log.info("fire event " + command + ", sessionId = " + sessionId + ", userId = " + userId);
 		
 		String userIdForMessage = userId;
@@ -230,6 +236,8 @@ public class GameService {
 			.build();
 		
 		GameEvent event = new GameEvent(command, sessionId, message, null);		
+		event.setPriority(priority);
 		dispatchEvent(event);
 	}
+
 }

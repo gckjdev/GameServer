@@ -26,6 +26,19 @@ public final class GameMessageProtos {
     // required string nickName = 4;
     boolean hasNickName();
     String getNickName();
+    
+    // optional string avatar = 5;
+    boolean hasAvatar();
+    String getAvatar();
+    
+    // repeated int64 excludeSessionId = 6;
+    java.util.List<java.lang.Long> getExcludeSessionIdList();
+    int getExcludeSessionIdCount();
+    long getExcludeSessionId(int index);
+    
+    // optional int64 sessionToBeChange = 7;
+    boolean hasSessionToBeChange();
+    long getSessionToBeChange();
   }
   public static final class JoinGameRequest extends
       com.google.protobuf.GeneratedMessage
@@ -162,11 +175,70 @@ public final class GameMessageProtos {
       }
     }
     
+    // optional string avatar = 5;
+    public static final int AVATAR_FIELD_NUMBER = 5;
+    private java.lang.Object avatar_;
+    public boolean hasAvatar() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public String getAvatar() {
+      java.lang.Object ref = avatar_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          avatar_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getAvatarBytes() {
+      java.lang.Object ref = avatar_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        avatar_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // repeated int64 excludeSessionId = 6;
+    public static final int EXCLUDESESSIONID_FIELD_NUMBER = 6;
+    private java.util.List<java.lang.Long> excludeSessionId_;
+    public java.util.List<java.lang.Long>
+        getExcludeSessionIdList() {
+      return excludeSessionId_;
+    }
+    public int getExcludeSessionIdCount() {
+      return excludeSessionId_.size();
+    }
+    public long getExcludeSessionId(int index) {
+      return excludeSessionId_.get(index);
+    }
+    
+    // optional int64 sessionToBeChange = 7;
+    public static final int SESSIONTOBECHANGE_FIELD_NUMBER = 7;
+    private long sessionToBeChange_;
+    public boolean hasSessionToBeChange() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public long getSessionToBeChange() {
+      return sessionToBeChange_;
+    }
+    
     private void initFields() {
       userId_ = "";
       gameId_ = "";
       autoNew_ = 0;
       nickName_ = "";
+      avatar_ = "";
+      excludeSessionId_ = java.util.Collections.emptyList();;
+      sessionToBeChange_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -204,6 +276,15 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBytes(4, getNickNameBytes());
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, getAvatarBytes());
+      }
+      for (int i = 0; i < excludeSessionId_.size(); i++) {
+        output.writeInt64(6, excludeSessionId_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt64(7, sessionToBeChange_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -228,6 +309,23 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, getNickNameBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getAvatarBytes());
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < excludeSessionId_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt64SizeNoTag(excludeSessionId_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getExcludeSessionIdList().size();
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(7, sessionToBeChange_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -361,6 +459,12 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000004);
         nickName_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        avatar_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
+        excludeSessionId_ = java.util.Collections.emptyList();;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        sessionToBeChange_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
       
@@ -415,6 +519,19 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000008;
         }
         result.nickName_ = nickName_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.avatar_ = avatar_;
+        if (((bitField0_ & 0x00000020) == 0x00000020)) {
+          excludeSessionId_ = java.util.Collections.unmodifiableList(excludeSessionId_);
+          bitField0_ = (bitField0_ & ~0x00000020);
+        }
+        result.excludeSessionId_ = excludeSessionId_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.sessionToBeChange_ = sessionToBeChange_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -442,6 +559,22 @@ public final class GameMessageProtos {
         }
         if (other.hasNickName()) {
           setNickName(other.getNickName());
+        }
+        if (other.hasAvatar()) {
+          setAvatar(other.getAvatar());
+        }
+        if (!other.excludeSessionId_.isEmpty()) {
+          if (excludeSessionId_.isEmpty()) {
+            excludeSessionId_ = other.excludeSessionId_;
+            bitField0_ = (bitField0_ & ~0x00000020);
+          } else {
+            ensureExcludeSessionIdIsMutable();
+            excludeSessionId_.addAll(other.excludeSessionId_);
+          }
+          onChanged();
+        }
+        if (other.hasSessionToBeChange()) {
+          setSessionToBeChange(other.getSessionToBeChange());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -504,6 +637,30 @@ public final class GameMessageProtos {
             case 34: {
               bitField0_ |= 0x00000008;
               nickName_ = input.readBytes();
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000010;
+              avatar_ = input.readBytes();
+              break;
+            }
+            case 48: {
+              ensureExcludeSessionIdIsMutable();
+              excludeSessionId_.add(input.readInt64());
+              break;
+            }
+            case 50: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              while (input.getBytesUntilLimit() > 0) {
+                addExcludeSessionId(input.readInt64());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              sessionToBeChange_ = input.readInt64();
               break;
             }
           }
@@ -639,6 +796,108 @@ public final class GameMessageProtos {
         bitField0_ |= 0x00000008;
         nickName_ = value;
         onChanged();
+      }
+      
+      // optional string avatar = 5;
+      private java.lang.Object avatar_ = "";
+      public boolean hasAvatar() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public String getAvatar() {
+        java.lang.Object ref = avatar_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          avatar_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setAvatar(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        avatar_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearAvatar() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        avatar_ = getDefaultInstance().getAvatar();
+        onChanged();
+        return this;
+      }
+      void setAvatar(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000010;
+        avatar_ = value;
+        onChanged();
+      }
+      
+      // repeated int64 excludeSessionId = 6;
+      private java.util.List<java.lang.Long> excludeSessionId_ = java.util.Collections.emptyList();;
+      private void ensureExcludeSessionIdIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          excludeSessionId_ = new java.util.ArrayList<java.lang.Long>(excludeSessionId_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+      public java.util.List<java.lang.Long>
+          getExcludeSessionIdList() {
+        return java.util.Collections.unmodifiableList(excludeSessionId_);
+      }
+      public int getExcludeSessionIdCount() {
+        return excludeSessionId_.size();
+      }
+      public long getExcludeSessionId(int index) {
+        return excludeSessionId_.get(index);
+      }
+      public Builder setExcludeSessionId(
+          int index, long value) {
+        ensureExcludeSessionIdIsMutable();
+        excludeSessionId_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addExcludeSessionId(long value) {
+        ensureExcludeSessionIdIsMutable();
+        excludeSessionId_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllExcludeSessionId(
+          java.lang.Iterable<? extends java.lang.Long> values) {
+        ensureExcludeSessionIdIsMutable();
+        super.addAll(values, excludeSessionId_);
+        onChanged();
+        return this;
+      }
+      public Builder clearExcludeSessionId() {
+        excludeSessionId_ = java.util.Collections.emptyList();;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+      
+      // optional int64 sessionToBeChange = 7;
+      private long sessionToBeChange_ ;
+      public boolean hasSessionToBeChange() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      public long getSessionToBeChange() {
+        return sessionToBeChange_;
+      }
+      public Builder setSessionToBeChange(long value) {
+        bitField0_ |= 0x00000040;
+        sessionToBeChange_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearSessionToBeChange() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        sessionToBeChange_ = 0L;
+        onChanged();
+        return this;
       }
       
       // @@protoc_insertion_point(builder_scope:game.JoinGameRequest)
@@ -5566,36 +5825,38 @@ public final class GameMessageProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\021GameMessage.proto\022\004game\032\017GameBasic.pro" +
-      "to\032\023GameConstants.proto\"W\n\017JoinGameReque" +
-      "st\022\016\n\006userId\030\001 \002(\t\022\016\n\006gameId\030\002 \002(\t\022\022\n\007au" +
-      "toNew\030\003 \001(\005:\0010\022\020\n\010nickName\030\004 \002(\t\"<\n\020Join" +
-      "GameResponse\022(\n\013gameSession\030\001 \002(\0132\023.game" +
-      ".PBGameSession\"\022\n\020StartGameRequest\"F\n\021St" +
-      "artGameResponse\022\031\n\021currentPlayUserId\030\005 \001" +
-      "(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"G\n\023SendDrawDa" +
-      "taRequest\022\022\n\006points\030\001 \003(\005B\002\020\001\022\r\n\005width\030\026" +
-      " \001(\002\022\r\n\005color\030\027 \001(\005\"\026\n\024SendDrawDataRespo",
-      "nse\"\363\001\n\023GeneralNotification\022\023\n\013sessionHo" +
-      "st\030\003 \001(\t\022\025\n\rsessionStatus\030\004 \001(\005\022\031\n\021curre" +
-      "ntPlayUserId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001" +
-      "(\t\022\021\n\tnewUserId\030\007 \001(\t\022\022\n\nquitUserId\030\010 \001(" +
-      "\t\022\020\n\010nickName\030\t \001(\t\022\022\n\nuserAvatar\030\n \001(\t\022" +
-      "\022\n\006points\030\025 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005co" +
-      "lor\030\027 \001(\005\"\214\004\n\013GameMessage\022&\n\007command\030\001 \002" +
-      "(\0162\025.game.GameCommandType\022\021\n\tmessageId\030\002" +
-      " \002(\005\0221\n\nresultCode\030\003 \001(\0162\024.game.GameResu" +
-      "ltCode:\007SUCCESS\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessi",
-      "onId\030\005 \001(\003:\0010\022.\n\017joinGameRequest\030\013 \001(\0132\025" +
-      ".game.JoinGameRequest\0220\n\020joinGameRespons" +
-      "e\030\014 \001(\0132\026.game.JoinGameResponse\0220\n\020start" +
-      "GameRequest\030\r \001(\0132\026.game.StartGameReques" +
-      "t\0222\n\021startGameResponse\030\016 \001(\0132\027.game.Star" +
-      "tGameResponse\0226\n\023sendDrawDataRequest\030\025 \001" +
-      "(\0132\031.game.SendDrawDataRequest\0228\n\024sendDra" +
-      "wDataResponse\030\026 \001(\0132\032.game.SendDrawDataR" +
-      "esponse\022/\n\014notification\0303 \001(\0132\031.game.Gen" +
-      "eralNotificationB=\n(com.orange.network.g",
-      "ame.protocol.messageB\021GameMessageProtos"
+      "to\032\023GameConstants.proto\"\234\001\n\017JoinGameRequ" +
+      "est\022\016\n\006userId\030\001 \002(\t\022\016\n\006gameId\030\002 \002(\t\022\022\n\007a" +
+      "utoNew\030\003 \001(\005:\0010\022\020\n\010nickName\030\004 \002(\t\022\016\n\006ava" +
+      "tar\030\005 \001(\t\022\030\n\020excludeSessionId\030\006 \003(\003\022\031\n\021s" +
+      "essionToBeChange\030\007 \001(\003\"<\n\020JoinGameRespon" +
+      "se\022(\n\013gameSession\030\001 \002(\0132\023.game.PBGameSes" +
+      "sion\"\022\n\020StartGameRequest\"F\n\021StartGameRes" +
+      "ponse\022\031\n\021currentPlayUserId\030\005 \001(\t\022\026\n\016next" +
+      "PlayUserId\030\006 \001(\t\"G\n\023SendDrawDataRequest\022",
+      "\022\n\006points\030\001 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005co" +
+      "lor\030\027 \001(\005\"\026\n\024SendDrawDataResponse\"\363\001\n\023Ge" +
+      "neralNotification\022\023\n\013sessionHost\030\003 \001(\t\022\025" +
+      "\n\rsessionStatus\030\004 \001(\005\022\031\n\021currentPlayUser" +
+      "Id\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021\n\tnewU" +
+      "serId\030\007 \001(\t\022\022\n\nquitUserId\030\010 \001(\t\022\020\n\010nickN" +
+      "ame\030\t \001(\t\022\022\n\nuserAvatar\030\n \001(\t\022\022\n\006points\030" +
+      "\025 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\"" +
+      "\214\004\n\013GameMessage\022&\n\007command\030\001 \002(\0162\025.game." +
+      "GameCommandType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nre",
+      "sultCode\030\003 \001(\0162\024.game.GameResultCode:\007SU" +
+      "CCESS\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003" +
+      ":\0010\022.\n\017joinGameRequest\030\013 \001(\0132\025.game.Join" +
+      "GameRequest\0220\n\020joinGameResponse\030\014 \001(\0132\026." +
+      "game.JoinGameResponse\0220\n\020startGameReques" +
+      "t\030\r \001(\0132\026.game.StartGameRequest\0222\n\021start" +
+      "GameResponse\030\016 \001(\0132\027.game.StartGameRespo" +
+      "nse\0226\n\023sendDrawDataRequest\030\025 \001(\0132\031.game." +
+      "SendDrawDataRequest\0228\n\024sendDrawDataRespo" +
+      "nse\030\026 \001(\0132\032.game.SendDrawDataResponse\022/\n",
+      "\014notification\0303 \001(\0132\031.game.GeneralNotifi" +
+      "cationB=\n(com.orange.network.game.protoc" +
+      "ol.messageB\021GameMessageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5607,7 +5868,7 @@ public final class GameMessageProtos {
           internal_static_game_JoinGameRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_JoinGameRequest_descriptor,
-              new java.lang.String[] { "UserId", "GameId", "AutoNew", "NickName", },
+              new java.lang.String[] { "UserId", "GameId", "AutoNew", "NickName", "Avatar", "ExcludeSessionId", "SessionToBeChange", },
               com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.class,
               com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.Builder.class);
           internal_static_game_JoinGameResponse_descriptor =

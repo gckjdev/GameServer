@@ -40,7 +40,8 @@ public class GameSession {
 	
 	
 	
-	List<UserAtGame> userList = new CopyOnWriteArrayList<UserAtGame>();	
+	List<UserAtGame> userList = new CopyOnWriteArrayList<UserAtGame>();
+	Object userLock = new Object();
 
 	public GameSession(int sessionId, String gameName, String userId) {
 		this.sessionId = sessionId;
@@ -124,33 +125,35 @@ public class GameSession {
 		return list;
 	}
 
-	public void addUser(UserAtGame userAtGame) {
+	private void addUser(UserAtGame userAtGame) {
 		if (userAtGame == null)
 			return;
 		logger.info("add user " + userAtGame.userId);
 		userList.add(userAtGame);
 	}
 
-	public boolean addUser(String userId, String nickName, Channel channel) {
-		for (UserAtGame user : userList){
-			if (user.userId.equals(userId)){
-				// exist, don't need to add, just update channel
-				user.setChannel(channel);
-				return true;
+	public int addUser(String userId, String nickName, Channel channel) {
+		synchronized(userLock){
+			for (UserAtGame user : userList){
+				if (user.userId.equals(userId)){
+					// exist, don't need to add, just update channel
+					user.setChannel(channel);
+					return userList.size();
+				}
 			}
+			
+			if (isUserFull()){
+				return userList.size();
+			}
+			
+			UserAtGame userAtGame = new UserAtGame(userId, nickName, channel);
+			addUser(userAtGame);		
+			if (userList.size() == 1){
+				this.host = userId;
+			}
+							
+			return userList.size();
 		}
-		
-		if (isUserFull()){
-			return false;
-		}
-		
-		UserAtGame userAtGame = new UserAtGame(userId, nickName, channel);
-		addUser(userAtGame);		
-		if (userList.size() == 1){
-			this.host = userId;
-		}
-						
-		return true;
 	}
 
 	private boolean isUserFull() {
@@ -283,32 +286,34 @@ public class GameSession {
 	}
 
 	public void removeUser(String userId) {
-		UserAtGame userFound = null;
-		for (UserAtGame user : userList){
-			if (user.getUserId().equals(userId)){
-				userFound = user;
-				break;
-			}
-		}
-		
-		if (userFound != null){
-						
-			int index = userList.indexOf(userFound);
-			if (index != -1){
-				userList.remove(index);
-			}
-			logger.info("remove " + userId + " from session " + sessionId);
-
-			if (this.host.equals(userId)){
-				// set next user as host
-				chooseNewHost(index);
+		synchronized(userLock){
+			UserAtGame userFound = null;
+			for (UserAtGame user : userList){
+				if (user.getUserId().equals(userId)){
+					userFound = user;
+					break;
+				}
 			}
 			
-			if (currentPlayUser != null && currentPlayUser.equals(userId)){
-				// set new current play user and next play user
-				this.chooseNewPlayUser();
+			if (userFound != null){
+							
+				int index = userList.indexOf(userFound);
+				if (index != -1){
+					userList.remove(index);
+				}
+				logger.info("remove " + userId + " from session " + sessionId);
+	
+				if (this.host.equals(userId)){
+					// set next user as host
+					chooseNewHost(index);
+				}
+				
+				if (currentPlayUser != null && currentPlayUser.equals(userId)){
+					// set new current play user and next play user
+					this.chooseNewPlayUser();
+				}
+				
 			}
-			
 		}
 	}
 

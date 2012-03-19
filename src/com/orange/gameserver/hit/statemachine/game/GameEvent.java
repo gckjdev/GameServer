@@ -6,8 +6,14 @@ import com.orange.common.statemachine.Event;
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 
-public class GameEvent extends Event {
+public class GameEvent extends Event implements Comparable {
 
+	public static final int HIGH = 1;
+	public static final int MEDIUM = 2;
+	public static final int LOW = 3;
+	
+	int priority = MEDIUM;
+	
 	public GameEvent(Object eventKey) {
 		super(eventKey);
 	}
@@ -44,6 +50,16 @@ public class GameEvent extends Event {
 	}
 	public void setMessage(GameMessage message) {
 		this.message = message;
+	}
+
+	public void setPriority(int p){
+		this.priority = p;
+	}
+	
+	@Override
+	public int compareTo(Object arg0) {
+		GameEvent e = (GameEvent)arg0;		
+		return (this.priority - e.priority);
 	}
 	
 	

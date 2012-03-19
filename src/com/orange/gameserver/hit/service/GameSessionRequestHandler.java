@@ -1,15 +1,21 @@
 package com.orange.gameserver.hit.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.common.statemachine.Event;
 import com.orange.gameserver.hit.dao.GameSession;
+import com.orange.gameserver.hit.manager.GameManager;
 import com.orange.gameserver.hit.server.GameService;
 import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
+import com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest;
 
 public class GameSessionRequestHandler extends AbstractRequestHandler {
 
@@ -97,27 +103,75 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		GameNotification.broadcastCleanDrawNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 	}
 
-	public static void hanndleChannelDisconnect(GameEvent gameEvent,
+	public static void userQuitSession(GameEvent gameEvent,
 			GameSession session) {
 		
 		GameMessage message = gameEvent.getMessage();
-		
-		// remove user in session
-		session.removeUser(message.getUserId());		
-		
+
+		GameManager.getInstance().removeUserFromSession(message.getUserId(), session);		
 		if (session.isRoomEmpty()){
 			// if there is no user, fire a finish message
-			GameService.getInstance().fireAndDispatchEvent(GameCommandType.LOCAL_FINISH_GAME, 
+			GameService.getInstance().fireAndDispatchEventHead(GameCommandType.LOCAL_FINISH_GAME, 
 					session.getSessionId(), null);
 		}
 		else{
 			// broadcast user exit message to all other users
 			GameNotification.broadcastUserQuitNotification(session, message.getUserId(), gameEvent);			
-		}		
+		}	
+		
+	}
+	
+	public static void hanndleChannelDisconnect(GameEvent gameEvent,
+			GameSession session) {
+		
+		userQuitSession(gameEvent, session);	
 	}
 
 	public static void hanndleFinishGame(GameEvent gameEvent,
 			GameSession session) {
 		session.resetGame();
+	}
+
+	public static void handleChangeRoomRequest(GameEvent gameEvent,
+			GameSession session) {
+
+		// user quit session
+		userQuitSession(gameEvent, session);
+				
+		GameMessage message = gameEvent.getMessage();		
+		
+		// create exclude session set
+		Set<Integer> excludeSessionSet = new HashSet<Integer>();
+		List<Long> list = message.getJoinGameRequest().getExcludeSessionIdList();
+		if (list != null){
+			for (Long i : list){
+				excludeSessionSet.add(i.intValue());
+			}
+		}
+		
+		// alloc user to new room
+		int sessionId = GameManager.getInstance().allocGameSessionForUser(message.getUserId(), "", gameEvent.getChannel(), excludeSessionSet);
+		if (sessionId != -1){
+						
+			JoinGameRequest joinRequest = GameMessageProtos.JoinGameRequest.newBuilder(message.getJoinGameRequest())
+					.clearSessionToBeChange()
+					.build();
+			
+			GameMessage newMessage = GameMessageProtos.GameMessage.newBuilder(message)
+					.setJoinGameRequest(joinRequest)
+					.build();
+
+			GameEvent event = new GameEvent(
+					GameCommandType.JOIN_GAME_REQUEST, 
+					sessionId, 
+					newMessage, 
+					gameEvent.getChannel());
+			
+			GameService.getInstance().dispatchEvent(event);				
+		}
+		else{
+			// no session available, send back error response
+			HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.ERROR_NO_SESSION_AVAILABLE);
+		}
 	}
 }

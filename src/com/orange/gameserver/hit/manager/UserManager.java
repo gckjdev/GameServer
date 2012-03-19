@@ -35,9 +35,11 @@ public class UserManager {
 	*/
 	
 	public void removeOnlineUserById(String userId) {
-		if (userId != null) {
-			this.onlineUserMap.remove(userId);	
-		}	
+		synchronized(transactionLock){
+			if (userId != null) {
+				this.onlineUserMap.remove(userId);	
+			}	
+		}
 	}
 	
 	public User findUserById(String userId) {

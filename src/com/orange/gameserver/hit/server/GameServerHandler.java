@@ -51,12 +51,12 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		GameMessage message = (GameMessageProtos.GameMessage)e.getMessage();
 		
 		AbstractRequestHandler handler = null;
-		if (message.getCommand() == GameConstantsProtos.GameCommandType.JOIN_GAME_REQUEST){
-			handler = new JoinGameRequestHandler(e);
-		}				
-		else if (message.hasSessionId()){
+		if (message.hasSessionId()){
 			handler = new GameSessionRequestHandler(e);
 		}
+		else if (message.getCommand() == GameConstantsProtos.GameCommandType.JOIN_GAME_REQUEST){
+			handler = new JoinGameRequestHandler(e);
+		}				
 		
 		if (handler == null){	
 			sendErrorResponse(e, message, GameConstantsProtos.GameResultCode.ERROR_SYSTEM_HANDLER_NOT_FOUND);
@@ -99,6 +99,8 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 				gameService.fireAndDispatchEvent(GameCommandType.LOCAL_CHANNEL_DISCONNECT,
 						sessionId, userId);
 			}
+
+			UserManager.getInstance().removeOnlineUserById(userId);
 		}
 		
 		// remove channel

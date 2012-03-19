@@ -1,7 +1,9 @@
 package com.orange.gameserver.hit.server;
 
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
@@ -22,7 +24,7 @@ public class GameWorkerThread extends Thread {
 	static final StateMachine stateMachine = GameStateMachineBuilder.getInstance().buildStateMachine();
 	GameManager gameManager = GameManager.getInstance();
 	GameService gameService = GameService.getInstance();
-	LinkedBlockingQueue<GameEvent> queue = new LinkedBlockingQueue<GameEvent>();
+	PriorityBlockingQueue<GameEvent> queue = new PriorityBlockingQueue<GameEvent>(4096);
 	AtomicInteger stopFlag = new AtomicInteger(0);
 
 	public int threadHashKey;
@@ -87,6 +89,14 @@ public class GameWorkerThread extends Thread {
 			logger.error("<putEvent> but catch exception " + e.toString(), e);
 		}		
 	}
+
+//	public void putEventHead(GameEvent gameEvent) {
+//		try {
+//			queue.put(gameEvent);
+//		} catch (Exception e) {
+//			logger.error("<putEventHead> but catch exception " + e.toString(), e);
+//		}		
+//	}
 	
 	
 }
