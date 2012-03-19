@@ -8,7 +8,9 @@ import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.common.statemachine.Event;
 import com.orange.gameserver.hit.dao.GameSession;
+import com.orange.gameserver.hit.dao.UserAtGame;
 import com.orange.gameserver.hit.manager.GameManager;
+import com.orange.gameserver.hit.manager.UserManager;
 import com.orange.gameserver.hit.server.GameService;
 import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
@@ -146,6 +148,16 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 	public static void handleChangeRoomRequest(GameEvent gameEvent,
 			GameSession session) {
 
+		UserAtGame user = session.findUserById(gameEvent.getMessage().getUserId());
+		if (user == null){
+			logger.info("<handleChangeRoomRequest> but user id "+gameEvent.getMessage().getUserId()
+					+" not found at session "+session.getSessionId());
+			return;
+		}
+
+		String nickName = user.getNickName();
+		String avatar = user.getAvatar();
+
 		// user quit session
 		userQuitSession(gameEvent, session);
 				
@@ -161,7 +173,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		}
 		
 		// alloc user to new room
-		int sessionId = GameManager.getInstance().allocGameSessionForUser(message.getUserId(), "", gameEvent.getChannel(), excludeSessionSet);
+		int sessionId = GameManager.getInstance().allocGameSessionForUser(message.getUserId(), 
+				nickName, avatar, gameEvent.getChannel(), excludeSessionSet);
 		if (sessionId != -1){
 						
 			JoinGameRequest joinRequest = GameMessageProtos.JoinGameRequest.newBuilder(message.getJoinGameRequest())

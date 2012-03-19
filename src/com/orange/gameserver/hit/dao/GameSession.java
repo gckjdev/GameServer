@@ -120,6 +120,7 @@ public class GameSession {
 			GameBasicProtos.PBGameUser gameUser = GameBasicProtos.PBGameUser.newBuilder()
 																				.setUserId(user.userId)																				
 																				.setNickName(user.nickName)
+																				.setAvatar(user.avatar)
 																				.build();
 			list.add(gameUser);
 		}
@@ -133,7 +134,7 @@ public class GameSession {
 		userList.add(userAtGame);
 	}
 
-	public int addUser(String userId, String nickName, Channel channel) {
+	public int addUser(String userId, String nickName, String avatar, Channel channel) {
 		synchronized(userLock){
 			for (UserAtGame user : userList){
 				if (user.userId.equals(userId)){
@@ -147,7 +148,7 @@ public class GameSession {
 				return userList.size();
 			}
 			
-			UserAtGame userAtGame = new UserAtGame(userId, nickName, channel);
+			UserAtGame userAtGame = new UserAtGame(userId, nickName, avatar, channel);
 			addUser(userAtGame);		
 			if (userList.size() == 1){
 				this.host = userId;
@@ -285,6 +286,19 @@ public class GameSession {
 	public void finishGame(){
 		status = SessionStatus.WAIT;
 	}
+	
+	public UserAtGame findUserById(String userId) {
+		synchronized(userLock){
+			for (UserAtGame user : userList){
+				if (user.getUserId().equals(userId)){
+					return user;
+				}
+			}			
+			
+			return null;
+		}
+	}
+
 
 	public void removeUser(String userId) {
 		synchronized(userLock){
@@ -344,4 +358,5 @@ public class GameSession {
 		
 		return currentTurn.getRound();
 	}
+
 }

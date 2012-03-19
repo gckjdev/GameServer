@@ -46,7 +46,7 @@ public class UserManager {
 		return onlineUserMap.get(userId);
 	}
 	
-	public void addOnlineUser(String userId, String nickName, Channel channel,
+	public void addOnlineUser(String userId, String nickName, String avatar, Channel channel,
 			int sessionId) {
 		
 		if (userId == null || channel == null)
@@ -55,7 +55,7 @@ public class UserManager {
 		synchronized(transactionLock){
 			User user = findUserById(userId);
 			if (user == null){
-				user = new User(userId, nickName, channel, sessionId);
+				user = new User(userId, nickName, avatar, channel, sessionId);
 				onlineUserMap.put(userId, user);		
 				logger.info("<addOnlineUser> Create " + userId + ", nick=" + nickName + " at session " + sessionId);
 			}

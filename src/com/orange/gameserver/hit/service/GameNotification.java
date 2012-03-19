@@ -30,6 +30,8 @@ public class GameNotification {
 			// send notification for the user
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
 				.setNewUserId(newUserId)
+				.setNickName(user.getNickName())
+				.setUserAvatar(user.getAvatar())
 				.build();
 			
 			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()

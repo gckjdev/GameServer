@@ -27,11 +27,5 @@ public class UserAtGameManager {
 			
 		return null;
 	} 
-
-	public UserAtGame userLogin(String userId, String nickName, Channel channel){
-		UserAtGame user = new UserAtGame(userId, nickName, channel);
-		userMap.put(userId, user);
-		return user;
-	}
 	
 }

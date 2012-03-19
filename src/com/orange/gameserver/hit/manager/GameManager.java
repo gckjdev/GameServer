@@ -96,7 +96,7 @@ public class GameManager {
 		return sessionId;
 	}
 	
-	public int allocGameSessionForUser(String userId, String nickName, Channel channel, Set<Integer> excludeSessionSet) {		
+	public int allocGameSessionForUser(String userId, String nickName, String avatar, Channel channel, Set<Integer> excludeSessionSet) {		
 		int sessionId = NO_SESSION_MATCH_FOR_USER;
 		synchronized(sessionUserLock){
 			
@@ -118,7 +118,7 @@ public class GameManager {
 				
 				// add user into game session
 				GameSession session = this.findGameSessionById(sessionId);
-				int userCount = addUserIntoSession(userId, nickName, channel, session);
+				int userCount = addUserIntoSession(userId, nickName, avatar, channel, session);
 				
 				// adjust candidate and full set, also add user
 				if (userCount >= MAX_USER_PER_GAME_SESSION){
@@ -135,7 +135,7 @@ public class GameManager {
 		}		
 		
 		if (sessionId != -1){
-			UserManager.getInstance().addOnlineUser(userId, nickName, channel, sessionId);
+			UserManager.getInstance().addOnlineUser(userId, nickName, avatar, channel, sessionId);
 		}
 		
 		ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);		
@@ -172,8 +172,8 @@ public class GameManager {
 			UserManager.getInstance().removeOnlineUserById(userId);
 	}
 	
-	private int addUserIntoSession(String userId, String nickName, Channel channel, GameSession session){
-			return session.addUser(userId, nickName, channel);
+	private int addUserIntoSession(String userId, String nickName, String avatar, Channel channel, GameSession session){
+			return session.addUser(userId, nickName, avatar, channel);
 	}		
 	
 	public void printSets() {		

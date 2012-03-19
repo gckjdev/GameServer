@@ -11,15 +11,17 @@ public class User {
 	
 	String userId;
 	String nickName;
+	String avatar;
 	int currentSessionId = -1;
 	List<Integer> recentGameSessionList;
 	Channel channel;
 	
 	private final int MAX_RECENT_GAMESESSION_COUNT = 5;
-	public User(String userId, String nickName, Channel channel, int sessionId) {
+	public User(String userId, String nickName, String avatar, Channel channel, int sessionId) {
 		super();
 		this.userId = userId;
 		this.nickName = nickName;
+		this.avatar = avatar;
 		this.channel = channel;
 		this.currentSessionId = sessionId;
 		this.recentGameSessionList = new ArrayList<Integer>(MAX_RECENT_GAMESESSION_COUNT);
