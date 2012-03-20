@@ -57,6 +57,7 @@ public class GameTurn {
 		UserGuessWord guess = userGuessWordMap.get(userId);
 		if (guess == null){
 			guess = new UserGuessWord(userId);
+			userGuessWordMap.put(userId, guess);
 		}
 		
 		guess.guess(guessWord, guessWord.equals(wordText));
