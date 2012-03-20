@@ -142,6 +142,32 @@ public class GameManager {
 		return sessionId;
 	}
 	
+	public void adjustSessionSetForPlaying(GameSession session) {
+		synchronized(sessionUserLock){
+			int sessionId = session.getSessionId();
+			candidateSet.remove(sessionId);
+			freeSet.remove(sessionId);						
+		}
+	}
+	
+	public void adjustSessionSetForWaiting(GameSession session){
+		synchronized(sessionUserLock){
+			int sessionId = session.getSessionId();
+			int userCount = session.getUserCount();
+			
+			// adjust candidate and full set, also add user
+			if (userCount >= MAX_USER_PER_GAME_SESSION){
+				fullSet.add(sessionId);
+			}
+			else if (userCount >= MAX_USER_PER_GAME_SESSION - 2){
+				candidateSet.add(sessionId);
+			}				
+			else{
+				freeSet.add(sessionId);
+			}
+		}		
+	}
+	
 	public void adjustSessionSet(GameSession session) {
 		synchronized(sessionUserLock){
 			

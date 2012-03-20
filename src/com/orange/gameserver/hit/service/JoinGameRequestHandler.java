@@ -63,7 +63,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		}
 		
 		// add user
-		gameSession.addUser(userId, nickName, avatar, gameEvent.getChannel());
+		gameSession.addUser(userId, nickName, avatar, gameEvent.getChannel());		
 		
 		// send back response
 		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();		
@@ -71,6 +71,8 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 //										.setCreateBy(gameSession.getCreateBy())
 //										.setCreateTime((int)gameSession.getCreateDate().getTime()/1000)
 										.setGameId("DrawGame")
+										.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+										.setNextPlayUserId(gameSession.getNextPlayUserId())
 										.setHost(gameSession.getHost())
 										.setName(gameSession.getName())
 										.setSessionId(gameSession.getSessionId())

@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.jboss.netty.channel.MessageEvent;
 
+import sun.tools.tree.ThisExpression;
+
 import com.orange.common.statemachine.Event;
 import com.orange.gameserver.hit.dao.GameSession;
 import com.orange.gameserver.hit.dao.UserAtGame;
@@ -53,10 +55,11 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameSession session) {
 		
 		// set current play user id and next play user id
-		session.chooseNewPlayUser();				
+		// session.chooseNewPlayUser();				
 		
 		// start game
 		session.startGame();
+		GameManager.getInstance().adjustSessionSetForPlaying(session); // adjust set so that it's not allowed to join
 				
 		// send reponse
 		GameMessageProtos.StartGameResponse gameResponse = GameMessageProtos.StartGameResponse.newBuilder()
@@ -147,8 +150,20 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		GameMessage message = gameEvent.getMessage();
 
-		GameManager.getInstance().removeUserFromSession(message.getUserId(), session);		
+		// if draw user quit, then game also completed
+		boolean completeGameTurn = false;
+		String userId = gameEvent.getMessage().getUserId();
+		if (session.isCurrentPlayUser(userId)){
+			completeGameTurn = true;
+		}
+
+		GameManager.getInstance().removeUserFromSession(message.getUserId(), session);
+		boolean completeGame = false;
 		if (session.isRoomEmpty()){
+			completeGame = true;
+		}
+		
+		if (completeGame){
 			// if there is no user, fire a finish message
 			GameService.getInstance().fireAndDispatchEventHead(GameCommandType.LOCAL_FINISH_GAME, 
 					session.getSessionId(), null);
@@ -158,12 +173,15 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameNotification.broadcastUserQuitNotification(session, message.getUserId(), gameEvent);			
 		}	
 		
+		if (completeGameTurn){
+			GameService.getInstance().fireTurnFinishEvent(session);
+		}		
 	}
 	
 	public static void hanndleChannelDisconnect(GameEvent gameEvent,
 			GameSession session) {
-		
-		userQuitSession(gameEvent, session);	
+				
+		userQuitSession(gameEvent, session);		
 	}
 
 	public static void hanndleFinishGame(GameEvent gameEvent,
@@ -230,5 +248,14 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		GameNotification.broadcastNotification(session, gameEvent, "", 
 				GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST);
+	}
+
+	public static void handleQuitGameRequest(GameEvent gameEvent,
+			GameSession session) {
+		
+		userQuitSession(gameEvent, session);	
+		
+		// send back response
+		HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.SUCCESS);
 	}
 }

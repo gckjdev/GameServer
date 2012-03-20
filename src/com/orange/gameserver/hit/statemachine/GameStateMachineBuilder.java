@@ -33,11 +33,12 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 			.addTransition(GameCommandType.LOCAL_JOIN_GAME, GameStateKey.WAITING)
 			.addTransition(GameCommandType.LOCAL_CHANNEL_DISCONNECT, GameStateKey.WAITING)
 			.addTransition(GameCommandType.START_GAME_REQUEST, GameStateKey.PLAYING)
+			.addTransition(GameCommandType.QUIT_GAME_REQUEST, GameStateKey.WAITING)
 			.addTransition(GameCommandType.PROLONG_GAME_REQUEST, GameStateKey.WAITING)
 			.addTransition(GameCommandType.LOCAL_FINISH_GAME, GameStateKey.CREATE);
 		
 		sm.addState(new GamePlayingState(GameStateKey.PLAYING))
-			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.PLAYING)
+			.addTransition(GameCommandType.QUIT_GAME_REQUEST, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.LOCAL_JOIN_GAME, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.SEND_DRAW_DATA_REQUEST, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.CLEAN_DRAW_REQUEST, GameStateKey.PLAYING)

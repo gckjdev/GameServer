@@ -53,6 +53,8 @@ public class GameNotification {
 				.setNewUserId(newUserId)
 				.setNickName(user.getNickName())
 				.setUserAvatar(user.getAvatar())
+				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+				.setNextPlayUserId(gameSession.getNextPlayUserId())
 				.build();
 			
 			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()

@@ -152,7 +152,12 @@ public class GameSession {
 			}
 			
 			UserAtGame userAtGame = new UserAtGame(userId, nickName, avatar, channel);
-			addUser(userAtGame);		
+			addUser(userAtGame);	
+			
+			// update current play user and next play user
+			updatePlayUser();
+			
+			// update host
 			if (userList.size() == 1){
 				this.host = userId;
 			}
@@ -201,6 +206,23 @@ public class GameSession {
 		}
 		
 		logger.info("set new host = " + host);
+	}
+	
+	private void updatePlayUser(){
+		int userCount = userList.size();
+		if (userCount >= 2){
+			if (currentPlayUser == null || nextPlayUser == null){
+				this.chooseNewPlayUser();
+			}
+			return;
+		}
+		
+		if (userCount == 1){
+			currentPlayUser = userList.get(0);
+			return;
+		}
+		
+		return;
 	}
 		
 	public void chooseNewPlayUser() {
@@ -353,7 +375,7 @@ public class GameSession {
 		}
 		
 		currentTurn.setWordText(word);
-		currentTurn.setWordLevel(level);
+		currentTurn.setWordLevel(level);		
 	}
 
 	public int getCurrentRound() {
@@ -389,6 +411,9 @@ public class GameSession {
 	public boolean isTurnFinish() {
 		// all users guess the word
 		int userCount = userList.size();
+		if (userCount == 1)
+			return false; // TODO only one user, here for test only
+		
 		return (currentTurn.isAllUserGuessWord(userCount));
 	}
 
@@ -397,6 +422,13 @@ public class GameSession {
 			return;
 		
 		currentTurn.userGuessWord(guessUserId, guessWord);
+	}
+
+	public boolean isCurrentPlayUser(String userId) {
+		if (currentPlayUser == null)
+			return false;
+				
+		return currentPlayUser.userId.equals(userId);
 	}
 
 }
