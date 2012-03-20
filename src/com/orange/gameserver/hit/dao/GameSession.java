@@ -359,4 +359,11 @@ public class GameSession {
 		return currentTurn.getRound();
 	}
 
+	public String getCurrentGuessWord() {
+		if (currentTurn == null)
+			return "";
+		
+		return currentTurn.getWordText();
+	}
+
 }

@@ -127,6 +127,13 @@ public class GameNotification {
 			return;
 		}
 		
+		boolean guessCorrect = false;
+		if (drawData.hasGuessWord()){
+			String currentWord = gameSession.getCurrentGuessWord();
+			if (currentWord != null)
+				guessCorrect = drawData.getGuessWord().equals(currentWord);
+		}
+		
 		List<UserAtGame> list = gameSession.getUserList();
 		for (UserAtGame user : list){		
 			if (user.getUserId().equals(userId))
@@ -138,8 +145,11 @@ public class GameNotification {
 				.addAllPoints(drawData.getPointsList())
 				.setWidth(drawData.getWidth())
 				.setWord(drawData.getWord())
-				.setLevel(drawData.getLevel())
+				.setLevel(drawData.getLevel())				
 				.setRound(gameSession.getCurrentRound())
+				.setGuessWord(drawData.getGuessWord())
+				.setGuessUserId(drawData.getGuessUserId())
+				.setGuessCorrect(guessCorrect)
 				.build();
 			
 			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
