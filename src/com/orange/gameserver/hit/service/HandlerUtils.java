@@ -42,8 +42,12 @@ public class HandlerUtils {
 		
 		GameMessage request = gameEvent.getMessage();
 		
+		GameCommandType command = HandlerUtils.getResponseCommandByRequest(request.getCommand());
+		if (command == null)
+			return;
+		
 		GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
-			.setCommand(HandlerUtils.getResponseCommandByRequest(request.getCommand()))
+			.setCommand(command)
 			.setMessageId(request.getMessageId())
 			.setResultCode(resultCode)
 			.build();

@@ -19,11 +19,11 @@ public class GameNotification {
 	protected static final Logger logger = Logger.getLogger(GameNotification.class.getName());
 	
 	public static void broadcastNotification(GameSession gameSession,
-			GameEvent gameEvent, String userId, GameCommandType command) {
+			GameEvent gameEvent, String excludeUserId, GameCommandType command) {
 		
 		List<UserAtGame> list = gameSession.getUserList();
 		for (UserAtGame user : list){		
-			if (user.getUserId().equals(userId))
+			if (excludeUserId != null && user.getUserId().equals(excludeUserId))
 				continue;
 			
 			// send notification for the user			
@@ -31,7 +31,7 @@ public class GameNotification {
 				.setCommand(command)
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(gameSession.getSessionId())
-				.setUserId(userId)
+				.setUserId(user.getUserId())
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());

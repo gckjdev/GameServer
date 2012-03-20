@@ -14,5 +14,6 @@ public class GameWaitingState extends CommonGameState {
 
 	@Override
 	public void handleEvent(GameEvent event, GameSession session){
+		session.resetExpireTimer();
 	}
 }

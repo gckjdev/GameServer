@@ -1,6 +1,8 @@
 package com.orange.gameserver.hit.server;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -237,6 +239,39 @@ public class GameService {
 		
 		GameEvent event = new GameEvent(command, sessionId, message, null);		
 		event.setPriority(priority);
+		dispatchEvent(event);
+	}
+
+	private static int EXPIRE_TIME_SECONDS = 120;
+	
+	public void scheduleGameSessionExpireTimer(final GameSession session) {
+		if (session == null)
+			return;
+		
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				fireTurnFinishEvent(session);
+			}
+			
+		}, EXPIRE_TIME_SECONDS*1000);
+		
+		session.setExpireTimer(timer);
+	}
+
+	public void fireTurnFinishEvent(GameSession session) {
+		GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+			.setCommand(GameCommandType.LOCAL_GAME_TURN_COMPLETE)
+			.setSessionId(session.getSessionId())
+			.setUserId("")
+			.setMessageId(0)
+			.build();
+
+		GameEvent event = new GameEvent(GameCommandType.LOCAL_GAME_TURN_COMPLETE, 
+			session.getSessionId(), message, null);
+
 		dispatchEvent(event);
 	}
 

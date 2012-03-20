@@ -55,6 +55,10 @@ public class CommonGameState extends State {
 			case LOCAL_FINISH_GAME:
 				GameSessionRequestHandler.hanndleFinishGame(gameEvent, session);
 				break;
+				
+			case LOCAL_GAME_TURN_COMPLETE:
+				GameSessionRequestHandler.handleTurnComplete(gameEvent, session);
+				break;
 
 			default:
 				break;

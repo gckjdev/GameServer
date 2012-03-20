@@ -43,6 +43,7 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 			.addTransition(GameCommandType.CLEAN_DRAW_REQUEST, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.PROLONG_GAME_REQUEST, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.LOCAL_CHANNEL_DISCONNECT, GameStateKey.PLAYING)
+			.addTransition(GameCommandType.LOCAL_GAME_TURN_COMPLETE, GameStateKey.WAITING)
 			.addTransition(GameCommandType.LOCAL_FINISH_GAME, GameStateKey.CREATE);
 		
 		sm.addState(GameFinishState.defaultState);

@@ -3,6 +3,7 @@ package com.orange.gameserver.hit.dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
@@ -39,6 +40,8 @@ public class GameSession {
 	SessionStatus status = SessionStatus.INIT;
 	
 	GameTurn currentTurn = null;
+	
+	Timer expireTimer;
 	
 	
 	List<UserAtGame> userList = new CopyOnWriteArrayList<UserAtGame>();
@@ -334,6 +337,7 @@ public class GameSession {
 
 	public void resetGame() {
 		status = SessionStatus.INIT;
+		this.resetExpireTimer();
 	}
 
 	public boolean isRoomEmpty() {
@@ -364,6 +368,35 @@ public class GameSession {
 			return "";
 		
 		return currentTurn.getWordText();
+	}
+
+	public void resetExpireTimer(){
+		if (this.expireTimer != null){
+			this.expireTimer.cancel();
+			this.expireTimer = null;
+		}		
+	}
+	
+	public void setExpireTimer(Timer timer) {
+		if (this.expireTimer != null){
+			this.expireTimer.cancel();
+			this.expireTimer = null;
+		}
+		
+		this.expireTimer = timer;
+	}
+
+	public boolean isTurnFinish() {
+		// all users guess the word
+		int userCount = userList.size();
+		return (currentTurn.isAllUserGuessWord(userCount));
+	}
+
+	public void userGuessWord(String guessUserId, String guessWord) {
+		if (currentTurn == null)
+			return;
+		
+		currentTurn.userGuessWord(guessUserId, guessWord);
 	}
 
 }

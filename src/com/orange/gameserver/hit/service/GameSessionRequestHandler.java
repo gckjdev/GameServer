@@ -57,7 +57,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// start game
 		session.startGame();
-		
+				
 		// send reponse
 		GameMessageProtos.StartGameResponse gameResponse = GameMessageProtos.StartGameResponse.newBuilder()
 			.setCurrentPlayUserId(session.getCurrentPlayUserId())
@@ -106,14 +106,32 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 		if (drawRequest.hasWord()){
 			session.startNewTurn(drawRequest.getWord(), drawRequest.getLevel());
+
+			// schedule timer for finishing this turn
+			GameService.getInstance().scheduleGameSessionExpireTimer(session);
 		}
 		
+		if (drawRequest.getPointsCount() > 0){
+			// TODO save draw data into turn data
+		}
+		
+		if (drawRequest.hasGuessWord()){
+			session.userGuessWord(drawRequest.getGuessUserId(), drawRequest.getGuessWord());
+		}
+				
 		// broast draw data to all other users in the session
 		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());
+		
+		if (session.isTurnFinish()){
+			GameService.getInstance().fireTurnFinishEvent(session);
+		}
 	}
 
 	public static void handleCleanDrawRequest(GameEvent gameEvent,
 			GameSession session) {
+		
+		// TODO save clean draw into turn data 		
+		
 		// broast draw data to all other users in the session
 		GameNotification.broadcastCleanDrawNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 	}
@@ -205,5 +223,12 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			// no session available, send back error response
 			HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.ERROR_NO_SESSION_AVAILABLE);
 		}
+	}
+
+	public static void handleTurnComplete(GameEvent gameEvent,
+			GameSession session) {
+		
+		GameNotification.broadcastNotification(session, gameEvent, "", 
+				GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST);
 	}
 }
