@@ -11,6 +11,8 @@ import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos;
+import com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest;
+import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest;
 import com.orange.network.game.protocol.model.GameBasicProtos;
 
@@ -186,9 +188,38 @@ public class GameNotification {
 		}
 	}
 
-	public static void broadcastProlongGameNotification(GameSession session,
+	public static void broadcastChatNotification(GameSession session,
 			GameEvent gameEvent, String userId) {		
-		broadcastNotification(session, gameEvent, userId, GameCommandType.PROLONG_GAME_NOTIFICATION_REQUEST);
+		
+		GameMessage message = gameEvent.getMessage();
+		if (message.getChatRequest() == null)
+			return;
+		
+		GameChatRequest chatRequest = message.getChatRequest();
+
+		List<UserAtGame> list = session.getUserList();		
+		for (UserAtGame user : list){		
+			// don't send to request user, he knows it!
+			if (user.getUserId().equals(userId))
+				continue;
+			
+			// send notification for the user
+			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
+				.addAllChatToUserId(chatRequest.getToUserIdList())
+				.setChatContent(chatRequest.getContent())
+				.build();
+
+			// send notification for the user			
+			GameMessageProtos.GameMessage m = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(GameCommandType.CHAT_NOTIFICATION_REQUEST)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setSessionId(session.getSessionId())
+				.setUserId(userId)
+				.setNotification(notification)
+				.build();
+			
+			HandlerUtils.sendMessage(gameEvent, m, user.getChannel());
+		}
 	}
 
 }
