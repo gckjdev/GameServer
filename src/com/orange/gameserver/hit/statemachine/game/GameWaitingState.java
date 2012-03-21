@@ -16,7 +16,7 @@ public class GameWaitingState extends CommonGameState {
 
 	@Override
 	public void handleEvent(GameEvent event, GameSession session){
-		session.resetExpireTimer();
+		session.waitForPlay();
 		GameManager.getInstance().adjustSessionSetForWaiting(session); // TODO so so performance here...		
 	}
 }

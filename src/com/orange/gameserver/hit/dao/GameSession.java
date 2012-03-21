@@ -362,6 +362,11 @@ public class GameSession {
 		this.resetExpireTimer();
 	}
 
+	public void waitForPlay() {
+		status = SessionStatus.WAIT;
+		this.resetExpireTimer();
+	}
+
 	public boolean isRoomEmpty() {
 		return (userList.size() == 0) ? true : false;
 	}
