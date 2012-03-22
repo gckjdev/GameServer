@@ -166,6 +166,10 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		}
 
 		GameManager.getInstance().removeUserFromSession(message.getUserId(), session);
+		if (session.getUserCount() <= 1){
+			completeGameTurn = true;			
+		}
+		
 		boolean completeGame = false;
 		if (session.isRoomEmpty()){
 			completeGame = true;
