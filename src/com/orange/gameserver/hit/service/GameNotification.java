@@ -28,12 +28,18 @@ public class GameNotification {
 			if (excludeUserId != null && user.getUserId().equals(excludeUserId))
 				continue;
 			
+			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
+				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+				.setNextPlayUserId(gameSession.getNextPlayUserId())
+				.build();
+
 			// send notification for the user			
 			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
 				.setCommand(command)
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.setNotification(notification)
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
@@ -216,6 +222,7 @@ public class GameNotification {
 				.setSessionId(session.getSessionId())
 				.setUserId(userId)
 				.setNotification(notification)
+				.setRound(message.getRound())
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, m, user.getChannel());

@@ -18,6 +18,7 @@ import com.orange.gameserver.hit.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos;
+import com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest;
 import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest;
@@ -141,6 +142,13 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 	
 	public static void handleChatRequest(GameEvent gameEvent,
 			GameSession session) {
+		
+		GameChatRequest chatRequest = gameEvent.getMessage().getChatRequest();
+		if (chatRequest == null)
+			return;				
+		
+		// TODO record chat data into turn
+		
 		// broast draw data to all other users in the session
 		GameNotification.broadcastChatNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 	}
@@ -245,6 +253,9 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 	public static void handleTurnComplete(GameEvent gameEvent,
 			GameSession session) {
+		
+		// turn complete, select next user and start new turn
+		session.chooseNewPlayUser();
 		
 		GameNotification.broadcastNotification(session, gameEvent, "", 
 				GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST);

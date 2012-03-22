@@ -5952,6 +5952,10 @@ public final class GameMessageProtos {
     boolean hasSessionId();
     long getSessionId();
     
+    // optional int32 round = 6;
+    boolean hasRound();
+    int getRound();
+    
     // optional .game.JoinGameRequest joinGameRequest = 11;
     boolean hasJoinGameRequest();
     com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest getJoinGameRequest();
@@ -6098,11 +6102,21 @@ public final class GameMessageProtos {
       return sessionId_;
     }
     
+    // optional int32 round = 6;
+    public static final int ROUND_FIELD_NUMBER = 6;
+    private int round_;
+    public boolean hasRound() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public int getRound() {
+      return round_;
+    }
+    
     // optional .game.JoinGameRequest joinGameRequest = 11;
     public static final int JOINGAMEREQUEST_FIELD_NUMBER = 11;
     private com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest joinGameRequest_;
     public boolean hasJoinGameRequest() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest getJoinGameRequest() {
       return joinGameRequest_;
@@ -6115,7 +6129,7 @@ public final class GameMessageProtos {
     public static final int JOINGAMERESPONSE_FIELD_NUMBER = 12;
     private com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse joinGameResponse_;
     public boolean hasJoinGameResponse() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse getJoinGameResponse() {
       return joinGameResponse_;
@@ -6128,7 +6142,7 @@ public final class GameMessageProtos {
     public static final int STARTGAMEREQUEST_FIELD_NUMBER = 13;
     private com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest startGameRequest_;
     public boolean hasStartGameRequest() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest getStartGameRequest() {
       return startGameRequest_;
@@ -6141,7 +6155,7 @@ public final class GameMessageProtos {
     public static final int STARTGAMERESPONSE_FIELD_NUMBER = 14;
     private com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse startGameResponse_;
     public boolean hasStartGameResponse() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse getStartGameResponse() {
       return startGameResponse_;
@@ -6154,7 +6168,7 @@ public final class GameMessageProtos {
     public static final int SENDDRAWDATAREQUEST_FIELD_NUMBER = 21;
     private com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest sendDrawDataRequest_;
     public boolean hasSendDrawDataRequest() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest getSendDrawDataRequest() {
       return sendDrawDataRequest_;
@@ -6167,7 +6181,7 @@ public final class GameMessageProtos {
     public static final int SENDDRAWDATARESPONSE_FIELD_NUMBER = 22;
     private com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse sendDrawDataResponse_;
     public boolean hasSendDrawDataResponse() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse getSendDrawDataResponse() {
       return sendDrawDataResponse_;
@@ -6180,7 +6194,7 @@ public final class GameMessageProtos {
     public static final int CHATREQUEST_FIELD_NUMBER = 23;
     private com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest chatRequest_;
     public boolean hasChatRequest() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+      return ((bitField0_ & 0x00001000) == 0x00001000);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest getChatRequest() {
       return chatRequest_;
@@ -6193,7 +6207,7 @@ public final class GameMessageProtos {
     public static final int CHATRESPONSE_FIELD_NUMBER = 24;
     private com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse chatResponse_;
     public boolean hasChatResponse() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+      return ((bitField0_ & 0x00002000) == 0x00002000);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse getChatResponse() {
       return chatResponse_;
@@ -6206,7 +6220,7 @@ public final class GameMessageProtos {
     public static final int NOTIFICATION_FIELD_NUMBER = 51;
     private com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification notification_;
     public boolean hasNotification() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     public com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification getNotification() {
       return notification_;
@@ -6221,6 +6235,7 @@ public final class GameMessageProtos {
       resultCode_ = com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode.SUCCESS;
       userId_ = "";
       sessionId_ = 0L;
+      round_ = 0;
       joinGameRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.getDefaultInstance();
       joinGameResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse.getDefaultInstance();
       startGameRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest.getDefaultInstance();
@@ -6279,30 +6294,33 @@ public final class GameMessageProtos {
         output.writeInt64(5, sessionId_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeMessage(11, joinGameRequest_);
+        output.writeInt32(6, round_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeMessage(12, joinGameResponse_);
+        output.writeMessage(11, joinGameRequest_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeMessage(13, startGameRequest_);
+        output.writeMessage(12, joinGameResponse_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeMessage(14, startGameResponse_);
+        output.writeMessage(13, startGameRequest_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeMessage(21, sendDrawDataRequest_);
+        output.writeMessage(14, startGameResponse_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeMessage(22, sendDrawDataResponse_);
+        output.writeMessage(21, sendDrawDataRequest_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeMessage(23, chatRequest_);
+        output.writeMessage(22, sendDrawDataResponse_);
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeMessage(24, chatResponse_);
+        output.writeMessage(23, chatRequest_);
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeMessage(24, chatResponse_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
         output.writeMessage(51, notification_);
       }
       getUnknownFields().writeTo(output);
@@ -6336,37 +6354,41 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(11, joinGameRequest_);
+          .computeInt32Size(6, round_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(12, joinGameResponse_);
+          .computeMessageSize(11, joinGameRequest_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(13, startGameRequest_);
+          .computeMessageSize(12, joinGameResponse_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(14, startGameResponse_);
+          .computeMessageSize(13, startGameRequest_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(21, sendDrawDataRequest_);
+          .computeMessageSize(14, startGameResponse_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(22, sendDrawDataResponse_);
+          .computeMessageSize(21, sendDrawDataRequest_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(23, chatRequest_);
+          .computeMessageSize(22, sendDrawDataResponse_);
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(24, chatResponse_);
+          .computeMessageSize(23, chatRequest_);
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(24, chatResponse_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(51, notification_);
       }
@@ -6513,60 +6535,62 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000008);
         sessionId_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000010);
+        round_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
         if (joinGameRequestBuilder_ == null) {
           joinGameRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.getDefaultInstance();
         } else {
           joinGameRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         if (joinGameResponseBuilder_ == null) {
           joinGameResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse.getDefaultInstance();
         } else {
           joinGameResponseBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000080);
         if (startGameRequestBuilder_ == null) {
           startGameRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest.getDefaultInstance();
         } else {
           startGameRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000100);
         if (startGameResponseBuilder_ == null) {
           startGameResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse.getDefaultInstance();
         } else {
           startGameResponseBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         if (sendDrawDataRequestBuilder_ == null) {
           sendDrawDataRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance();
         } else {
           sendDrawDataRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000400);
         if (sendDrawDataResponseBuilder_ == null) {
           sendDrawDataResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance();
         } else {
           sendDrawDataResponseBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000800);
         if (chatRequestBuilder_ == null) {
           chatRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest.getDefaultInstance();
         } else {
           chatRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00001000);
         if (chatResponseBuilder_ == null) {
           chatResponse_ = com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse.getDefaultInstance();
         } else {
           chatResponseBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         if (notificationBuilder_ == null) {
           notification_ = com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.getDefaultInstance();
         } else {
           notificationBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
       
@@ -6628,69 +6652,73 @@ public final class GameMessageProtos {
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
+        result.round_ = round_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
         if (joinGameRequestBuilder_ == null) {
           result.joinGameRequest_ = joinGameRequest_;
         } else {
           result.joinGameRequest_ = joinGameRequestBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
         }
         if (joinGameResponseBuilder_ == null) {
           result.joinGameResponse_ = joinGameResponse_;
         } else {
           result.joinGameResponse_ = joinGameResponseBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
         }
         if (startGameRequestBuilder_ == null) {
           result.startGameRequest_ = startGameRequest_;
         } else {
           result.startGameRequest_ = startGameRequestBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
         }
         if (startGameResponseBuilder_ == null) {
           result.startGameResponse_ = startGameResponse_;
         } else {
           result.startGameResponse_ = startGameResponseBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000200;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
         }
         if (sendDrawDataRequestBuilder_ == null) {
           result.sendDrawDataRequest_ = sendDrawDataRequest_;
         } else {
           result.sendDrawDataRequest_ = sendDrawDataRequestBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000400;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
         }
         if (sendDrawDataResponseBuilder_ == null) {
           result.sendDrawDataResponse_ = sendDrawDataResponse_;
         } else {
           result.sendDrawDataResponse_ = sendDrawDataResponseBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000800;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
         }
         if (chatRequestBuilder_ == null) {
           result.chatRequest_ = chatRequest_;
         } else {
           result.chatRequest_ = chatRequestBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00001000;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
         }
         if (chatResponseBuilder_ == null) {
           result.chatResponse_ = chatResponse_;
         } else {
           result.chatResponse_ = chatResponseBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00002000;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
         }
         if (notificationBuilder_ == null) {
           result.notification_ = notification_;
@@ -6727,6 +6755,9 @@ public final class GameMessageProtos {
         }
         if (other.hasSessionId()) {
           setSessionId(other.getSessionId());
+        }
+        if (other.hasRound()) {
+          setRound(other.getRound());
         }
         if (other.hasJoinGameRequest()) {
           mergeJoinGameRequest(other.getJoinGameRequest());
@@ -6841,6 +6872,11 @@ public final class GameMessageProtos {
             case 40: {
               bitField0_ |= 0x00000010;
               sessionId_ = input.readInt64();
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              round_ = input.readInt32();
               break;
             }
             case 90: {
@@ -7056,12 +7092,33 @@ public final class GameMessageProtos {
         return this;
       }
       
+      // optional int32 round = 6;
+      private int round_ ;
+      public boolean hasRound() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public int getRound() {
+        return round_;
+      }
+      public Builder setRound(int value) {
+        bitField0_ |= 0x00000020;
+        round_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearRound() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        round_ = 0;
+        onChanged();
+        return this;
+      }
+      
       // optional .game.JoinGameRequest joinGameRequest = 11;
       private com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest joinGameRequest_ = com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest, com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.Builder, com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequestOrBuilder> joinGameRequestBuilder_;
       public boolean hasJoinGameRequest() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest getJoinGameRequest() {
         if (joinGameRequestBuilder_ == null) {
@@ -7080,7 +7137,7 @@ public final class GameMessageProtos {
         } else {
           joinGameRequestBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         return this;
       }
       public Builder setJoinGameRequest(
@@ -7091,12 +7148,12 @@ public final class GameMessageProtos {
         } else {
           joinGameRequestBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         return this;
       }
       public Builder mergeJoinGameRequest(com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest value) {
         if (joinGameRequestBuilder_ == null) {
-          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
               joinGameRequest_ != com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.getDefaultInstance()) {
             joinGameRequest_ =
               com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.newBuilder(joinGameRequest_).mergeFrom(value).buildPartial();
@@ -7107,7 +7164,7 @@ public final class GameMessageProtos {
         } else {
           joinGameRequestBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         return this;
       }
       public Builder clearJoinGameRequest() {
@@ -7117,11 +7174,11 @@ public final class GameMessageProtos {
         } else {
           joinGameRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.Builder getJoinGameRequestBuilder() {
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         onChanged();
         return getJoinGameRequestFieldBuilder().getBuilder();
       }
@@ -7151,7 +7208,7 @@ public final class GameMessageProtos {
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse, com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse.Builder, com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponseOrBuilder> joinGameResponseBuilder_;
       public boolean hasJoinGameResponse() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse getJoinGameResponse() {
         if (joinGameResponseBuilder_ == null) {
@@ -7170,7 +7227,7 @@ public final class GameMessageProtos {
         } else {
           joinGameResponseBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         return this;
       }
       public Builder setJoinGameResponse(
@@ -7181,12 +7238,12 @@ public final class GameMessageProtos {
         } else {
           joinGameResponseBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         return this;
       }
       public Builder mergeJoinGameResponse(com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse value) {
         if (joinGameResponseBuilder_ == null) {
-          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+          if (((bitField0_ & 0x00000080) == 0x00000080) &&
               joinGameResponse_ != com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse.getDefaultInstance()) {
             joinGameResponse_ =
               com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse.newBuilder(joinGameResponse_).mergeFrom(value).buildPartial();
@@ -7197,7 +7254,7 @@ public final class GameMessageProtos {
         } else {
           joinGameResponseBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         return this;
       }
       public Builder clearJoinGameResponse() {
@@ -7207,11 +7264,11 @@ public final class GameMessageProtos {
         } else {
           joinGameResponseBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.JoinGameResponse.Builder getJoinGameResponseBuilder() {
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         onChanged();
         return getJoinGameResponseFieldBuilder().getBuilder();
       }
@@ -7241,7 +7298,7 @@ public final class GameMessageProtos {
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest, com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest.Builder, com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequestOrBuilder> startGameRequestBuilder_;
       public boolean hasStartGameRequest() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest getStartGameRequest() {
         if (startGameRequestBuilder_ == null) {
@@ -7260,7 +7317,7 @@ public final class GameMessageProtos {
         } else {
           startGameRequestBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000100;
         return this;
       }
       public Builder setStartGameRequest(
@@ -7271,12 +7328,12 @@ public final class GameMessageProtos {
         } else {
           startGameRequestBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000100;
         return this;
       }
       public Builder mergeStartGameRequest(com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest value) {
         if (startGameRequestBuilder_ == null) {
-          if (((bitField0_ & 0x00000080) == 0x00000080) &&
+          if (((bitField0_ & 0x00000100) == 0x00000100) &&
               startGameRequest_ != com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest.getDefaultInstance()) {
             startGameRequest_ =
               com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest.newBuilder(startGameRequest_).mergeFrom(value).buildPartial();
@@ -7287,7 +7344,7 @@ public final class GameMessageProtos {
         } else {
           startGameRequestBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000100;
         return this;
       }
       public Builder clearStartGameRequest() {
@@ -7297,11 +7354,11 @@ public final class GameMessageProtos {
         } else {
           startGameRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.StartGameRequest.Builder getStartGameRequestBuilder() {
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000100;
         onChanged();
         return getStartGameRequestFieldBuilder().getBuilder();
       }
@@ -7331,7 +7388,7 @@ public final class GameMessageProtos {
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse, com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse.Builder, com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponseOrBuilder> startGameResponseBuilder_;
       public boolean hasStartGameResponse() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse getStartGameResponse() {
         if (startGameResponseBuilder_ == null) {
@@ -7350,7 +7407,7 @@ public final class GameMessageProtos {
         } else {
           startGameResponseBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       public Builder setStartGameResponse(
@@ -7361,12 +7418,12 @@ public final class GameMessageProtos {
         } else {
           startGameResponseBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       public Builder mergeStartGameResponse(com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse value) {
         if (startGameResponseBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+          if (((bitField0_ & 0x00000200) == 0x00000200) &&
               startGameResponse_ != com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse.getDefaultInstance()) {
             startGameResponse_ =
               com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse.newBuilder(startGameResponse_).mergeFrom(value).buildPartial();
@@ -7377,7 +7434,7 @@ public final class GameMessageProtos {
         } else {
           startGameResponseBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       public Builder clearStartGameResponse() {
@@ -7387,11 +7444,11 @@ public final class GameMessageProtos {
         } else {
           startGameResponseBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.StartGameResponse.Builder getStartGameResponseBuilder() {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         onChanged();
         return getStartGameResponseFieldBuilder().getBuilder();
       }
@@ -7421,7 +7478,7 @@ public final class GameMessageProtos {
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequestOrBuilder> sendDrawDataRequestBuilder_;
       public boolean hasSendDrawDataRequest() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest getSendDrawDataRequest() {
         if (sendDrawDataRequestBuilder_ == null) {
@@ -7440,7 +7497,7 @@ public final class GameMessageProtos {
         } else {
           sendDrawDataRequestBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         return this;
       }
       public Builder setSendDrawDataRequest(
@@ -7451,12 +7508,12 @@ public final class GameMessageProtos {
         } else {
           sendDrawDataRequestBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         return this;
       }
       public Builder mergeSendDrawDataRequest(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest value) {
         if (sendDrawDataRequestBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+          if (((bitField0_ & 0x00000400) == 0x00000400) &&
               sendDrawDataRequest_ != com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.getDefaultInstance()) {
             sendDrawDataRequest_ =
               com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.newBuilder(sendDrawDataRequest_).mergeFrom(value).buildPartial();
@@ -7467,7 +7524,7 @@ public final class GameMessageProtos {
         } else {
           sendDrawDataRequestBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         return this;
       }
       public Builder clearSendDrawDataRequest() {
@@ -7477,11 +7534,11 @@ public final class GameMessageProtos {
         } else {
           sendDrawDataRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder getSendDrawDataRequestBuilder() {
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         onChanged();
         return getSendDrawDataRequestFieldBuilder().getBuilder();
       }
@@ -7511,7 +7568,7 @@ public final class GameMessageProtos {
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder, com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponseOrBuilder> sendDrawDataResponseBuilder_;
       public boolean hasSendDrawDataResponse() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse getSendDrawDataResponse() {
         if (sendDrawDataResponseBuilder_ == null) {
@@ -7530,7 +7587,7 @@ public final class GameMessageProtos {
         } else {
           sendDrawDataResponseBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000800;
         return this;
       }
       public Builder setSendDrawDataResponse(
@@ -7541,12 +7598,12 @@ public final class GameMessageProtos {
         } else {
           sendDrawDataResponseBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000800;
         return this;
       }
       public Builder mergeSendDrawDataResponse(com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse value) {
         if (sendDrawDataResponseBuilder_ == null) {
-          if (((bitField0_ & 0x00000400) == 0x00000400) &&
+          if (((bitField0_ & 0x00000800) == 0x00000800) &&
               sendDrawDataResponse_ != com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.getDefaultInstance()) {
             sendDrawDataResponse_ =
               com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.newBuilder(sendDrawDataResponse_).mergeFrom(value).buildPartial();
@@ -7557,7 +7614,7 @@ public final class GameMessageProtos {
         } else {
           sendDrawDataResponseBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000800;
         return this;
       }
       public Builder clearSendDrawDataResponse() {
@@ -7567,11 +7624,11 @@ public final class GameMessageProtos {
         } else {
           sendDrawDataResponseBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataResponse.Builder getSendDrawDataResponseBuilder() {
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000800;
         onChanged();
         return getSendDrawDataResponseFieldBuilder().getBuilder();
       }
@@ -7601,7 +7658,7 @@ public final class GameMessageProtos {
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest, com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest.Builder, com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequestOrBuilder> chatRequestBuilder_;
       public boolean hasChatRequest() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest getChatRequest() {
         if (chatRequestBuilder_ == null) {
@@ -7620,7 +7677,7 @@ public final class GameMessageProtos {
         } else {
           chatRequestBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00001000;
         return this;
       }
       public Builder setChatRequest(
@@ -7631,12 +7688,12 @@ public final class GameMessageProtos {
         } else {
           chatRequestBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00001000;
         return this;
       }
       public Builder mergeChatRequest(com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest value) {
         if (chatRequestBuilder_ == null) {
-          if (((bitField0_ & 0x00000800) == 0x00000800) &&
+          if (((bitField0_ & 0x00001000) == 0x00001000) &&
               chatRequest_ != com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest.getDefaultInstance()) {
             chatRequest_ =
               com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest.newBuilder(chatRequest_).mergeFrom(value).buildPartial();
@@ -7647,7 +7704,7 @@ public final class GameMessageProtos {
         } else {
           chatRequestBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00001000;
         return this;
       }
       public Builder clearChatRequest() {
@@ -7657,11 +7714,11 @@ public final class GameMessageProtos {
         } else {
           chatRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest.Builder getChatRequestBuilder() {
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00001000;
         onChanged();
         return getChatRequestFieldBuilder().getBuilder();
       }
@@ -7691,7 +7748,7 @@ public final class GameMessageProtos {
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse, com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse.Builder, com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponseOrBuilder> chatResponseBuilder_;
       public boolean hasChatResponse() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse getChatResponse() {
         if (chatResponseBuilder_ == null) {
@@ -7710,7 +7767,7 @@ public final class GameMessageProtos {
         } else {
           chatResponseBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00001000;
+        bitField0_ |= 0x00002000;
         return this;
       }
       public Builder setChatResponse(
@@ -7721,12 +7778,12 @@ public final class GameMessageProtos {
         } else {
           chatResponseBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00001000;
+        bitField0_ |= 0x00002000;
         return this;
       }
       public Builder mergeChatResponse(com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse value) {
         if (chatResponseBuilder_ == null) {
-          if (((bitField0_ & 0x00001000) == 0x00001000) &&
+          if (((bitField0_ & 0x00002000) == 0x00002000) &&
               chatResponse_ != com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse.getDefaultInstance()) {
             chatResponse_ =
               com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse.newBuilder(chatResponse_).mergeFrom(value).buildPartial();
@@ -7737,7 +7794,7 @@ public final class GameMessageProtos {
         } else {
           chatResponseBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00001000;
+        bitField0_ |= 0x00002000;
         return this;
       }
       public Builder clearChatResponse() {
@@ -7747,11 +7804,11 @@ public final class GameMessageProtos {
         } else {
           chatResponseBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.GameChatResponse.Builder getChatResponseBuilder() {
-        bitField0_ |= 0x00001000;
+        bitField0_ |= 0x00002000;
         onChanged();
         return getChatResponseFieldBuilder().getBuilder();
       }
@@ -7781,7 +7838,7 @@ public final class GameMessageProtos {
       private com.google.protobuf.SingleFieldBuilder<
           com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification, com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder, com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotificationOrBuilder> notificationBuilder_;
       public boolean hasNotification() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification getNotification() {
         if (notificationBuilder_ == null) {
@@ -7800,7 +7857,7 @@ public final class GameMessageProtos {
         } else {
           notificationBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         return this;
       }
       public Builder setNotification(
@@ -7811,12 +7868,12 @@ public final class GameMessageProtos {
         } else {
           notificationBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         return this;
       }
       public Builder mergeNotification(com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification value) {
         if (notificationBuilder_ == null) {
-          if (((bitField0_ & 0x00002000) == 0x00002000) &&
+          if (((bitField0_ & 0x00004000) == 0x00004000) &&
               notification_ != com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.getDefaultInstance()) {
             notification_ =
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.newBuilder(notification_).mergeFrom(value).buildPartial();
@@ -7827,7 +7884,7 @@ public final class GameMessageProtos {
         } else {
           notificationBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         return this;
       }
       public Builder clearNotification() {
@@ -7837,11 +7894,11 @@ public final class GameMessageProtos {
         } else {
           notificationBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
       public com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder getNotificationBuilder() {
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         onChanged();
         return getNotificationFieldBuilder().getBuilder();
       }
@@ -7961,24 +8018,25 @@ public final class GameMessageProtos {
       "\027 \001(\005\022\014\n\004word\030\037 \001(\t\022\r\n\005level\030  \001(\005\022\r\n\005ro" +
       "und\030! \001(\005\022\021\n\tguessWord\030) \001(\t\022\023\n\013guessUse" +
       "rId\030* \001(\t\022\024\n\014guessCorrect\030+ \001(\010\022\024\n\014chatT" +
-      "oUserId\0303 \003(\t\022\023\n\013chatContent\0304 \001(\t\"\346\004\n\013G" +
+      "oUserId\0303 \003(\t\022\023\n\013chatContent\0304 \001(\t\"\365\004\n\013G" +
       "ameMessage\022&\n\007command\030\001 \002(\0162\025.game.GameC" +
       "ommandType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nresultC" +
       "ode\030\003 \001(\0162\024.game.GameResultCode:\007SUCCESS" +
-      "\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022.",
-      "\n\017joinGameRequest\030\013 \001(\0132\025.game.JoinGameR" +
-      "equest\0220\n\020joinGameResponse\030\014 \001(\0132\026.game." +
-      "JoinGameResponse\0220\n\020startGameRequest\030\r \001" +
-      "(\0132\026.game.StartGameRequest\0222\n\021startGameR" +
-      "esponse\030\016 \001(\0132\027.game.StartGameResponse\0226" +
-      "\n\023sendDrawDataRequest\030\025 \001(\0132\031.game.SendD" +
-      "rawDataRequest\0228\n\024sendDrawDataResponse\030\026" +
-      " \001(\0132\032.game.SendDrawDataResponse\022*\n\013chat" +
-      "Request\030\027 \001(\0132\025.game.GameChatRequest\022,\n\014" +
-      "chatResponse\030\030 \001(\0132\026.game.GameChatRespon",
-      "se\022/\n\014notification\0303 \001(\0132\031.game.GeneralN" +
-      "otificationB=\n(com.orange.network.game.p" +
-      "rotocol.messageB\021GameMessageProtos"
+      "\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022\r",
+      "\n\005round\030\006 \001(\005\022.\n\017joinGameRequest\030\013 \001(\0132\025" +
+      ".game.JoinGameRequest\0220\n\020joinGameRespons" +
+      "e\030\014 \001(\0132\026.game.JoinGameResponse\0220\n\020start" +
+      "GameRequest\030\r \001(\0132\026.game.StartGameReques" +
+      "t\0222\n\021startGameResponse\030\016 \001(\0132\027.game.Star" +
+      "tGameResponse\0226\n\023sendDrawDataRequest\030\025 \001" +
+      "(\0132\031.game.SendDrawDataRequest\0228\n\024sendDra" +
+      "wDataResponse\030\026 \001(\0132\032.game.SendDrawDataR" +
+      "esponse\022*\n\013chatRequest\030\027 \001(\0132\025.game.Game" +
+      "ChatRequest\022,\n\014chatResponse\030\030 \001(\0132\026.game",
+      ".GameChatResponse\022/\n\014notification\0303 \001(\0132" +
+      "\031.game.GeneralNotificationB=\n(com.orange" +
+      ".network.game.protocol.messageB\021GameMess" +
+      "ageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8062,7 +8120,7 @@ public final class GameMessageProtos {
           internal_static_game_GameMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GameMessage_descriptor,
-              new java.lang.String[] { "Command", "MessageId", "ResultCode", "UserId", "SessionId", "JoinGameRequest", "JoinGameResponse", "StartGameRequest", "StartGameResponse", "SendDrawDataRequest", "SendDrawDataResponse", "ChatRequest", "ChatResponse", "Notification", },
+              new java.lang.String[] { "Command", "MessageId", "ResultCode", "UserId", "SessionId", "Round", "JoinGameRequest", "JoinGameResponse", "StartGameRequest", "StartGameResponse", "SendDrawDataRequest", "SendDrawDataResponse", "ChatRequest", "ChatResponse", "Notification", },
               com.orange.network.game.protocol.message.GameMessageProtos.GameMessage.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GameMessage.Builder.class);
           return null;
