@@ -155,11 +155,12 @@ public class GameSession {
 			addUser(userAtGame);	
 			
 			// update current play user and next play user
-			updatePlayUser();
+			// updatePlayUser();			
 			
 			// update host
 			if (userList.size() == 1){
 				this.host = userId;
+				this.currentPlayUser = userAtGame;
 			}
 							
 			return userList.size();
@@ -348,10 +349,10 @@ public class GameSession {
 					chooseNewHost(index);
 				}
 				
-				if (currentPlayUser != null && currentPlayUser.equals(userId)){
-					// set new current play user and next play user
-					this.chooseNewPlayUser();
-				}
+//				if (currentPlayUser != null && currentPlayUser.equals(userId)){
+//					// set new current play user and next play user
+//					// this.chooseNewPlayUser();
+//				}
 				
 			}
 		}
