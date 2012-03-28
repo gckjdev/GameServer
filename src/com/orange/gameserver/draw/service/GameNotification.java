@@ -50,6 +50,11 @@ public class GameNotification {
 	public static void broadcastUserJoinNotification(GameSession gameSession,
 			String newUserId, GameEvent gameEvent) {
 		
+		GameMessage request = gameEvent.getMessage();
+		
+		String newUserNickName = request.getJoinGameRequest().getNickName();
+		String newUserAvatar = request.getJoinGameRequest().getAvatar();
+		
 		List<UserAtGame> list = gameSession.getUserList();
 		for (UserAtGame user : list){
 			if (user.getUserId().equals(newUserId)){
@@ -59,8 +64,8 @@ public class GameNotification {
 			// send notification for the user
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
 				.setNewUserId(newUserId)
-				.setNickName(user.getNickName())
-				.setUserAvatar(user.getAvatar())
+				.setNickName(newUserNickName)
+				.setUserAvatar(newUserAvatar)
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
 				.setNextPlayUserId(gameSession.getNextPlayUserId())
 				.build();

@@ -29,7 +29,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orange</groupId>
-	<artifactId>GameServer</artifactId>
+	<artifactId>GameTrafficServer</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<!-- Shared version number properties -->
@@ -47,11 +47,13 @@
 			<artifactId>Common_Java</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>com.orange</groupId>
 			<artifactId>Common_Java_GroupBuy</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		-->
 		<!-- 3rd party -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
@@ -257,6 +259,7 @@
 	<build>
 
 		<plugins>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -267,12 +270,13 @@
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>./lib/</classpathPrefix>
 							<mainClass>
-								com.orange.groupbuy.api.GroupBuyConfigServer
+								com.orange.gameserver.draw.server.DrawGameServer
 							</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
+			
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

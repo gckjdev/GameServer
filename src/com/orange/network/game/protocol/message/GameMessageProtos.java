@@ -2869,6 +2869,10 @@ public final class GameMessageProtos {
     boolean hasLevel();
     int getLevel();
     
+    // optional int32 language = 12;
+    boolean hasLanguage();
+    int getLanguage();
+    
     // repeated int32 points = 1 [packed = true];
     java.util.List<java.lang.Integer> getPointsList();
     int getPointsCount();
@@ -2965,6 +2969,16 @@ public final class GameMessageProtos {
       return level_;
     }
     
+    // optional int32 language = 12;
+    public static final int LANGUAGE_FIELD_NUMBER = 12;
+    private int language_;
+    public boolean hasLanguage() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getLanguage() {
+      return language_;
+    }
+    
     // repeated int32 points = 1 [packed = true];
     public static final int POINTS_FIELD_NUMBER = 1;
     private java.util.List<java.lang.Integer> points_;
@@ -2984,7 +2998,7 @@ public final class GameMessageProtos {
     public static final int WIDTH_FIELD_NUMBER = 22;
     private float width_;
     public boolean hasWidth() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     public float getWidth() {
       return width_;
@@ -2994,7 +3008,7 @@ public final class GameMessageProtos {
     public static final int COLOR_FIELD_NUMBER = 23;
     private int color_;
     public boolean hasColor() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     public int getColor() {
       return color_;
@@ -3004,7 +3018,7 @@ public final class GameMessageProtos {
     public static final int GUESSWORD_FIELD_NUMBER = 41;
     private java.lang.Object guessWord_;
     public boolean hasGuessWord() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     public String getGuessWord() {
       java.lang.Object ref = guessWord_;
@@ -3036,7 +3050,7 @@ public final class GameMessageProtos {
     public static final int GUESSUSERID_FIELD_NUMBER = 42;
     private java.lang.Object guessUserId_;
     public boolean hasGuessUserId() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     public String getGuessUserId() {
       java.lang.Object ref = guessUserId_;
@@ -3068,7 +3082,7 @@ public final class GameMessageProtos {
     public static final int GUESSCORRECT_FIELD_NUMBER = 43;
     private boolean guessCorrect_;
     public boolean hasGuessCorrect() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     public boolean getGuessCorrect() {
       return guessCorrect_;
@@ -3077,6 +3091,7 @@ public final class GameMessageProtos {
     private void initFields() {
       word_ = "";
       level_ = 0;
+      language_ = 0;
       points_ = java.util.Collections.emptyList();;
       width_ = 0F;
       color_ = 0;
@@ -3110,18 +3125,21 @@ public final class GameMessageProtos {
         output.writeInt32(11, level_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeFloat(22, width_);
+        output.writeInt32(12, language_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(23, color_);
+        output.writeFloat(22, width_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(41, getGuessWordBytes());
+        output.writeInt32(23, color_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(42, getGuessUserIdBytes());
+        output.writeBytes(41, getGuessWordBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBytes(42, getGuessUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeBool(43, guessCorrect_);
       }
       getUnknownFields().writeTo(output);
@@ -3157,21 +3175,25 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(22, width_);
+          .computeInt32Size(12, language_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(23, color_);
+          .computeFloatSize(22, width_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(41, getGuessWordBytes());
+          .computeInt32Size(23, color_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(42, getGuessUserIdBytes());
+          .computeBytesSize(41, getGuessWordBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(42, getGuessUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(43, guessCorrect_);
       }
@@ -3303,18 +3325,20 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000001);
         level_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
-        points_ = java.util.Collections.emptyList();;
+        language_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        width_ = 0F;
+        points_ = java.util.Collections.emptyList();;
         bitField0_ = (bitField0_ & ~0x00000008);
-        color_ = 0;
+        width_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000010);
-        guessWord_ = "";
+        color_ = 0;
         bitField0_ = (bitField0_ & ~0x00000020);
-        guessUserId_ = "";
+        guessWord_ = "";
         bitField0_ = (bitField0_ & ~0x00000040);
-        guessCorrect_ = false;
+        guessUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000080);
+        guessCorrect_ = false;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       
@@ -3361,29 +3385,33 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000002;
         }
         result.level_ = level_;
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          points_ = java.util.Collections.unmodifiableList(points_);
-          bitField0_ = (bitField0_ & ~0x00000004);
-        }
-        result.points_ = points_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.width_ = width_;
+        result.language_ = language_;
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          points_ = java.util.Collections.unmodifiableList(points_);
+          bitField0_ = (bitField0_ & ~0x00000008);
+        }
+        result.points_ = points_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.color_ = color_;
+        result.width_ = width_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.guessWord_ = guessWord_;
+        result.color_ = color_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.guessUserId_ = guessUserId_;
+        result.guessWord_ = guessWord_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000040;
+        }
+        result.guessUserId_ = guessUserId_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000080;
         }
         result.guessCorrect_ = guessCorrect_;
         result.bitField0_ = to_bitField0_;
@@ -3408,10 +3436,13 @@ public final class GameMessageProtos {
         if (other.hasLevel()) {
           setLevel(other.getLevel());
         }
+        if (other.hasLanguage()) {
+          setLanguage(other.getLanguage());
+        }
         if (!other.points_.isEmpty()) {
           if (points_.isEmpty()) {
             points_ = other.points_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
           } else {
             ensurePointsIsMutable();
             points_.addAll(other.points_);
@@ -3488,28 +3519,33 @@ public final class GameMessageProtos {
               level_ = input.readInt32();
               break;
             }
+            case 96: {
+              bitField0_ |= 0x00000004;
+              language_ = input.readInt32();
+              break;
+            }
             case 181: {
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000010;
               width_ = input.readFloat();
               break;
             }
             case 184: {
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000020;
               color_ = input.readInt32();
               break;
             }
             case 330: {
-              bitField0_ |= 0x00000020;
+              bitField0_ |= 0x00000040;
               guessWord_ = input.readBytes();
               break;
             }
             case 338: {
-              bitField0_ |= 0x00000040;
+              bitField0_ |= 0x00000080;
               guessUserId_ = input.readBytes();
               break;
             }
             case 344: {
-              bitField0_ |= 0x00000080;
+              bitField0_ |= 0x00000100;
               guessCorrect_ = input.readBool();
               break;
             }
@@ -3576,12 +3612,33 @@ public final class GameMessageProtos {
         return this;
       }
       
+      // optional int32 language = 12;
+      private int language_ ;
+      public boolean hasLanguage() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public int getLanguage() {
+        return language_;
+      }
+      public Builder setLanguage(int value) {
+        bitField0_ |= 0x00000004;
+        language_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLanguage() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        language_ = 0;
+        onChanged();
+        return this;
+      }
+      
       // repeated int32 points = 1 [packed = true];
       private java.util.List<java.lang.Integer> points_ = java.util.Collections.emptyList();;
       private void ensurePointsIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
           points_ = new java.util.ArrayList<java.lang.Integer>(points_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
          }
       }
       public java.util.List<java.lang.Integer>
@@ -3616,7 +3673,7 @@ public final class GameMessageProtos {
       }
       public Builder clearPoints() {
         points_ = java.util.Collections.emptyList();;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
@@ -3624,19 +3681,19 @@ public final class GameMessageProtos {
       // optional float width = 22;
       private float width_ ;
       public boolean hasWidth() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public float getWidth() {
         return width_;
       }
       public Builder setWidth(float value) {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         width_ = value;
         onChanged();
         return this;
       }
       public Builder clearWidth() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         width_ = 0F;
         onChanged();
         return this;
@@ -3645,19 +3702,19 @@ public final class GameMessageProtos {
       // optional int32 color = 23;
       private int color_ ;
       public boolean hasColor() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       public int getColor() {
         return color_;
       }
       public Builder setColor(int value) {
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000020;
         color_ = value;
         onChanged();
         return this;
       }
       public Builder clearColor() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000020);
         color_ = 0;
         onChanged();
         return this;
@@ -3666,7 +3723,7 @@ public final class GameMessageProtos {
       // optional string guessWord = 41;
       private java.lang.Object guessWord_ = "";
       public boolean hasGuessWord() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       public String getGuessWord() {
         java.lang.Object ref = guessWord_;
@@ -3682,19 +3739,19 @@ public final class GameMessageProtos {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000040;
         guessWord_ = value;
         onChanged();
         return this;
       }
       public Builder clearGuessWord() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         guessWord_ = getDefaultInstance().getGuessWord();
         onChanged();
         return this;
       }
       void setGuessWord(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         guessWord_ = value;
         onChanged();
       }
@@ -3702,7 +3759,7 @@ public final class GameMessageProtos {
       // optional string guessUserId = 42;
       private java.lang.Object guessUserId_ = "";
       public boolean hasGuessUserId() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       public String getGuessUserId() {
         java.lang.Object ref = guessUserId_;
@@ -3718,19 +3775,19 @@ public final class GameMessageProtos {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000040;
+  bitField0_ |= 0x00000080;
         guessUserId_ = value;
         onChanged();
         return this;
       }
       public Builder clearGuessUserId() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000080);
         guessUserId_ = getDefaultInstance().getGuessUserId();
         onChanged();
         return this;
       }
       void setGuessUserId(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         guessUserId_ = value;
         onChanged();
       }
@@ -3738,19 +3795,19 @@ public final class GameMessageProtos {
       // optional bool guessCorrect = 43;
       private boolean guessCorrect_ ;
       public boolean hasGuessCorrect() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       public boolean getGuessCorrect() {
         return guessCorrect_;
       }
       public Builder setGuessCorrect(boolean value) {
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000100;
         guessCorrect_ = value;
         onChanged();
         return this;
       }
       public Builder clearGuessCorrect() {
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000100);
         guessCorrect_ = false;
         onChanged();
         return this;
@@ -4102,6 +4159,10 @@ public final class GameMessageProtos {
     // optional int32 round = 33;
     boolean hasRound();
     int getRound();
+    
+    // optional int32 language = 34;
+    boolean hasLanguage();
+    int getLanguage();
     
     // optional string guessWord = 41;
     boolean hasGuessWord();
@@ -4474,11 +4535,21 @@ public final class GameMessageProtos {
       return round_;
     }
     
+    // optional int32 language = 34;
+    public static final int LANGUAGE_FIELD_NUMBER = 34;
+    private int language_;
+    public boolean hasLanguage() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    public int getLanguage() {
+      return language_;
+    }
+    
     // optional string guessWord = 41;
     public static final int GUESSWORD_FIELD_NUMBER = 41;
     private java.lang.Object guessWord_;
     public boolean hasGuessWord() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     public String getGuessWord() {
       java.lang.Object ref = guessWord_;
@@ -4510,7 +4581,7 @@ public final class GameMessageProtos {
     public static final int GUESSUSERID_FIELD_NUMBER = 42;
     private java.lang.Object guessUserId_;
     public boolean hasGuessUserId() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
+      return ((bitField0_ & 0x00008000) == 0x00008000);
     }
     public String getGuessUserId() {
       java.lang.Object ref = guessUserId_;
@@ -4542,7 +4613,7 @@ public final class GameMessageProtos {
     public static final int GUESSCORRECT_FIELD_NUMBER = 43;
     private boolean guessCorrect_;
     public boolean hasGuessCorrect() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
+      return ((bitField0_ & 0x00010000) == 0x00010000);
     }
     public boolean getGuessCorrect() {
       return guessCorrect_;
@@ -4566,7 +4637,7 @@ public final class GameMessageProtos {
     public static final int CHATCONTENT_FIELD_NUMBER = 52;
     private java.lang.Object chatContent_;
     public boolean hasChatContent() {
-      return ((bitField0_ & 0x00010000) == 0x00010000);
+      return ((bitField0_ & 0x00020000) == 0x00020000);
     }
     public String getChatContent() {
       java.lang.Object ref = chatContent_;
@@ -4609,6 +4680,7 @@ public final class GameMessageProtos {
       word_ = "";
       level_ = 0;
       round_ = 0;
+      language_ = 0;
       guessWord_ = "";
       guessUserId_ = "";
       guessCorrect_ = false;
@@ -4674,18 +4746,21 @@ public final class GameMessageProtos {
         output.writeInt32(33, round_);
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        output.writeBytes(41, getGuessWordBytes());
+        output.writeInt32(34, language_);
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        output.writeBytes(42, getGuessUserIdBytes());
+        output.writeBytes(41, getGuessWordBytes());
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeBytes(42, getGuessUserIdBytes());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
         output.writeBool(43, guessCorrect_);
       }
       for (int i = 0; i < chatToUserId_.size(); i++) {
         output.writeBytes(51, chatToUserId_.getByteString(i));
       }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
         output.writeBytes(52, getChatContentBytes());
       }
       getUnknownFields().writeTo(output);
@@ -4765,13 +4840,17 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(41, getGuessWordBytes());
+          .computeInt32Size(34, language_);
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(42, getGuessUserIdBytes());
+          .computeBytesSize(41, getGuessWordBytes());
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(42, getGuessUserIdBytes());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(43, guessCorrect_);
       }
@@ -4784,7 +4863,7 @@ public final class GameMessageProtos {
         size += dataSize;
         size += 2 * getChatToUserIdList().size();
       }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(52, getChatContentBytes());
       }
@@ -4940,16 +5019,18 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00001000);
         round_ = 0;
         bitField0_ = (bitField0_ & ~0x00002000);
-        guessWord_ = "";
+        language_ = 0;
         bitField0_ = (bitField0_ & ~0x00004000);
-        guessUserId_ = "";
+        guessWord_ = "";
         bitField0_ = (bitField0_ & ~0x00008000);
-        guessCorrect_ = false;
+        guessUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00010000);
-        chatToUserId_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        guessCorrect_ = false;
         bitField0_ = (bitField0_ & ~0x00020000);
-        chatContent_ = "";
+        chatToUserId_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00040000);
+        chatContent_ = "";
+        bitField0_ = (bitField0_ & ~0x00080000);
         return this;
       }
       
@@ -5048,23 +5129,27 @@ public final class GameMessageProtos {
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00002000;
         }
-        result.guessWord_ = guessWord_;
+        result.language_ = language_;
         if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
           to_bitField0_ |= 0x00004000;
         }
-        result.guessUserId_ = guessUserId_;
+        result.guessWord_ = guessWord_;
         if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
           to_bitField0_ |= 0x00008000;
         }
+        result.guessUserId_ = guessUserId_;
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+          to_bitField0_ |= 0x00010000;
+        }
         result.guessCorrect_ = guessCorrect_;
-        if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        if (((bitField0_ & 0x00040000) == 0x00040000)) {
           chatToUserId_ = new com.google.protobuf.UnmodifiableLazyStringList(
               chatToUserId_);
-          bitField0_ = (bitField0_ & ~0x00020000);
+          bitField0_ = (bitField0_ & ~0x00040000);
         }
         result.chatToUserId_ = chatToUserId_;
-        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
-          to_bitField0_ |= 0x00010000;
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
+          to_bitField0_ |= 0x00020000;
         }
         result.chatContent_ = chatContent_;
         result.bitField0_ = to_bitField0_;
@@ -5132,6 +5217,9 @@ public final class GameMessageProtos {
         if (other.hasRound()) {
           setRound(other.getRound());
         }
+        if (other.hasLanguage()) {
+          setLanguage(other.getLanguage());
+        }
         if (other.hasGuessWord()) {
           setGuessWord(other.getGuessWord());
         }
@@ -5144,7 +5232,7 @@ public final class GameMessageProtos {
         if (!other.chatToUserId_.isEmpty()) {
           if (chatToUserId_.isEmpty()) {
             chatToUserId_ = other.chatToUserId_;
-            bitField0_ = (bitField0_ & ~0x00020000);
+            bitField0_ = (bitField0_ & ~0x00040000);
           } else {
             ensureChatToUserIdIsMutable();
             chatToUserId_.addAll(other.chatToUserId_);
@@ -5264,18 +5352,23 @@ public final class GameMessageProtos {
               round_ = input.readInt32();
               break;
             }
-            case 330: {
+            case 272: {
               bitField0_ |= 0x00004000;
+              language_ = input.readInt32();
+              break;
+            }
+            case 330: {
+              bitField0_ |= 0x00008000;
               guessWord_ = input.readBytes();
               break;
             }
             case 338: {
-              bitField0_ |= 0x00008000;
+              bitField0_ |= 0x00010000;
               guessUserId_ = input.readBytes();
               break;
             }
             case 344: {
-              bitField0_ |= 0x00010000;
+              bitField0_ |= 0x00020000;
               guessCorrect_ = input.readBool();
               break;
             }
@@ -5285,7 +5378,7 @@ public final class GameMessageProtos {
               break;
             }
             case 418: {
-              bitField0_ |= 0x00040000;
+              bitField0_ |= 0x00080000;
               chatContent_ = input.readBytes();
               break;
             }
@@ -5733,10 +5826,31 @@ public final class GameMessageProtos {
         return this;
       }
       
+      // optional int32 language = 34;
+      private int language_ ;
+      public boolean hasLanguage() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      public int getLanguage() {
+        return language_;
+      }
+      public Builder setLanguage(int value) {
+        bitField0_ |= 0x00004000;
+        language_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLanguage() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        language_ = 0;
+        onChanged();
+        return this;
+      }
+      
       // optional string guessWord = 41;
       private java.lang.Object guessWord_ = "";
       public boolean hasGuessWord() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       public String getGuessWord() {
         java.lang.Object ref = guessWord_;
@@ -5752,19 +5866,19 @@ public final class GameMessageProtos {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00004000;
+  bitField0_ |= 0x00008000;
         guessWord_ = value;
         onChanged();
         return this;
       }
       public Builder clearGuessWord() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         guessWord_ = getDefaultInstance().getGuessWord();
         onChanged();
         return this;
       }
       void setGuessWord(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00008000;
         guessWord_ = value;
         onChanged();
       }
@@ -5772,7 +5886,7 @@ public final class GameMessageProtos {
       // optional string guessUserId = 42;
       private java.lang.Object guessUserId_ = "";
       public boolean hasGuessUserId() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
+        return ((bitField0_ & 0x00010000) == 0x00010000);
       }
       public String getGuessUserId() {
         java.lang.Object ref = guessUserId_;
@@ -5788,19 +5902,19 @@ public final class GameMessageProtos {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00008000;
+  bitField0_ |= 0x00010000;
         guessUserId_ = value;
         onChanged();
         return this;
       }
       public Builder clearGuessUserId() {
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         guessUserId_ = getDefaultInstance().getGuessUserId();
         onChanged();
         return this;
       }
       void setGuessUserId(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00010000;
         guessUserId_ = value;
         onChanged();
       }
@@ -5808,19 +5922,19 @@ public final class GameMessageProtos {
       // optional bool guessCorrect = 43;
       private boolean guessCorrect_ ;
       public boolean hasGuessCorrect() {
-        return ((bitField0_ & 0x00010000) == 0x00010000);
+        return ((bitField0_ & 0x00020000) == 0x00020000);
       }
       public boolean getGuessCorrect() {
         return guessCorrect_;
       }
       public Builder setGuessCorrect(boolean value) {
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         guessCorrect_ = value;
         onChanged();
         return this;
       }
       public Builder clearGuessCorrect() {
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         guessCorrect_ = false;
         onChanged();
         return this;
@@ -5829,9 +5943,9 @@ public final class GameMessageProtos {
       // repeated string chatToUserId = 51;
       private com.google.protobuf.LazyStringList chatToUserId_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureChatToUserIdIsMutable() {
-        if (!((bitField0_ & 0x00020000) == 0x00020000)) {
+        if (!((bitField0_ & 0x00040000) == 0x00040000)) {
           chatToUserId_ = new com.google.protobuf.LazyStringArrayList(chatToUserId_);
-          bitField0_ |= 0x00020000;
+          bitField0_ |= 0x00040000;
          }
       }
       public java.util.List<String>
@@ -5872,7 +5986,7 @@ public final class GameMessageProtos {
       }
       public Builder clearChatToUserId() {
         chatToUserId_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         onChanged();
         return this;
       }
@@ -5885,7 +5999,7 @@ public final class GameMessageProtos {
       // optional string chatContent = 52;
       private java.lang.Object chatContent_ = "";
       public boolean hasChatContent() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
+        return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       public String getChatContent() {
         java.lang.Object ref = chatContent_;
@@ -5901,19 +6015,19 @@ public final class GameMessageProtos {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00040000;
+  bitField0_ |= 0x00080000;
         chatContent_ = value;
         onChanged();
         return this;
       }
       public Builder clearChatContent() {
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         chatContent_ = getDefaultInstance().getChatContent();
         onChanged();
         return this;
       }
       void setChatContent(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00040000;
+        bitField0_ |= 0x00080000;
         chatContent_ = value;
         onChanged();
       }
@@ -8004,39 +8118,40 @@ public final class GameMessageProtos {
       "ponse\022\031\n\021currentPlayUserId\030\005 \001(\t\022\026\n\016next" +
       "PlayUserId\030\006 \001(\t\"4\n\017GameChatRequest\022\020\n\010t",
       "oUserId\030\001 \003(\t\022\017\n\007content\030\002 \001(\t\"\022\n\020GameCh" +
-      "atResponse\"\242\001\n\023SendDrawDataRequest\022\014\n\004wo" +
-      "rd\030\n \001(\t\022\r\n\005level\030\013 \001(\005\022\022\n\006points\030\001 \003(\005B" +
-      "\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\022\021\n\tgue" +
-      "ssWord\030) \001(\t\022\023\n\013guessUserId\030* \001(\t\022\024\n\014gue" +
-      "ssCorrect\030+ \001(\010\"\026\n\024SendDrawDataResponse\"" +
-      "\210\003\n\023GeneralNotification\022\023\n\013sessionHost\030\003" +
-      " \001(\t\022\025\n\rsessionStatus\030\004 \001(\005\022\031\n\021currentPl" +
-      "ayUserId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021" +
-      "\n\tnewUserId\030\007 \001(\t\022\022\n\nquitUserId\030\010 \001(\t\022\020\n",
-      "\010nickName\030\t \001(\t\022\022\n\nuserAvatar\030\n \001(\t\022\022\n\006p" +
-      "oints\030\025 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030" +
-      "\027 \001(\005\022\014\n\004word\030\037 \001(\t\022\r\n\005level\030  \001(\005\022\r\n\005ro" +
-      "und\030! \001(\005\022\021\n\tguessWord\030) \001(\t\022\023\n\013guessUse" +
-      "rId\030* \001(\t\022\024\n\014guessCorrect\030+ \001(\010\022\024\n\014chatT" +
-      "oUserId\0303 \003(\t\022\023\n\013chatContent\0304 \001(\t\"\365\004\n\013G" +
-      "ameMessage\022&\n\007command\030\001 \002(\0162\025.game.GameC" +
-      "ommandType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nresultC" +
-      "ode\030\003 \001(\0162\024.game.GameResultCode:\007SUCCESS" +
-      "\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022\r",
-      "\n\005round\030\006 \001(\005\022.\n\017joinGameRequest\030\013 \001(\0132\025" +
-      ".game.JoinGameRequest\0220\n\020joinGameRespons" +
-      "e\030\014 \001(\0132\026.game.JoinGameResponse\0220\n\020start" +
-      "GameRequest\030\r \001(\0132\026.game.StartGameReques" +
-      "t\0222\n\021startGameResponse\030\016 \001(\0132\027.game.Star" +
-      "tGameResponse\0226\n\023sendDrawDataRequest\030\025 \001" +
-      "(\0132\031.game.SendDrawDataRequest\0228\n\024sendDra" +
-      "wDataResponse\030\026 \001(\0132\032.game.SendDrawDataR" +
-      "esponse\022*\n\013chatRequest\030\027 \001(\0132\025.game.Game" +
-      "ChatRequest\022,\n\014chatResponse\030\030 \001(\0132\026.game",
-      ".GameChatResponse\022/\n\014notification\0303 \001(\0132" +
-      "\031.game.GeneralNotificationB=\n(com.orange" +
-      ".network.game.protocol.messageB\021GameMess" +
-      "ageProtos"
+      "atResponse\"\264\001\n\023SendDrawDataRequest\022\014\n\004wo" +
+      "rd\030\n \001(\t\022\r\n\005level\030\013 \001(\005\022\020\n\010language\030\014 \001(" +
+      "\005\022\022\n\006points\030\001 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005" +
+      "color\030\027 \001(\005\022\021\n\tguessWord\030) \001(\t\022\023\n\013guessU" +
+      "serId\030* \001(\t\022\024\n\014guessCorrect\030+ \001(\010\"\026\n\024Sen" +
+      "dDrawDataResponse\"\232\003\n\023GeneralNotificatio" +
+      "n\022\023\n\013sessionHost\030\003 \001(\t\022\025\n\rsessionStatus\030" +
+      "\004 \001(\005\022\031\n\021currentPlayUserId\030\005 \001(\t\022\026\n\016next" +
+      "PlayUserId\030\006 \001(\t\022\021\n\tnewUserId\030\007 \001(\t\022\022\n\nq",
+      "uitUserId\030\010 \001(\t\022\020\n\010nickName\030\t \001(\t\022\022\n\nuse" +
+      "rAvatar\030\n \001(\t\022\022\n\006points\030\025 \003(\005B\002\020\001\022\r\n\005wid" +
+      "th\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\022\014\n\004word\030\037 \001(\t\022\r\n" +
+      "\005level\030  \001(\005\022\r\n\005round\030! \001(\005\022\020\n\010language\030" +
+      "\" \001(\005\022\021\n\tguessWord\030) \001(\t\022\023\n\013guessUserId\030" +
+      "* \001(\t\022\024\n\014guessCorrect\030+ \001(\010\022\024\n\014chatToUse" +
+      "rId\0303 \003(\t\022\023\n\013chatContent\0304 \001(\t\"\365\004\n\013GameM" +
+      "essage\022&\n\007command\030\001 \002(\0162\025.game.GameComma" +
+      "ndType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nresultCode\030" +
+      "\003 \001(\0162\024.game.GameResultCode:\007SUCCESS\022\016\n\006",
+      "userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022\r\n\005ro" +
+      "und\030\006 \001(\005\022.\n\017joinGameRequest\030\013 \001(\0132\025.gam" +
+      "e.JoinGameRequest\0220\n\020joinGameResponse\030\014 " +
+      "\001(\0132\026.game.JoinGameResponse\0220\n\020startGame" +
+      "Request\030\r \001(\0132\026.game.StartGameRequest\0222\n" +
+      "\021startGameResponse\030\016 \001(\0132\027.game.StartGam" +
+      "eResponse\0226\n\023sendDrawDataRequest\030\025 \001(\0132\031" +
+      ".game.SendDrawDataRequest\0228\n\024sendDrawDat" +
+      "aResponse\030\026 \001(\0132\032.game.SendDrawDataRespo" +
+      "nse\022*\n\013chatRequest\030\027 \001(\0132\025.game.GameChat",
+      "Request\022,\n\014chatResponse\030\030 \001(\0132\026.game.Gam" +
+      "eChatResponse\022/\n\014notification\0303 \001(\0132\031.ga" +
+      "me.GeneralNotificationB=\n(com.orange.net" +
+      "work.game.protocol.messageB\021GameMessageP" +
+      "rotos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8096,7 +8211,7 @@ public final class GameMessageProtos {
           internal_static_game_SendDrawDataRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_SendDrawDataRequest_descriptor,
-              new java.lang.String[] { "Word", "Level", "Points", "Width", "Color", "GuessWord", "GuessUserId", "GuessCorrect", },
+              new java.lang.String[] { "Word", "Level", "Language", "Points", "Width", "Color", "GuessWord", "GuessUserId", "GuessCorrect", },
               com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.class,
               com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest.Builder.class);
           internal_static_game_SendDrawDataResponse_descriptor =
@@ -8112,7 +8227,7 @@ public final class GameMessageProtos {
           internal_static_game_GeneralNotification_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GeneralNotification_descriptor,
-              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "QuitUserId", "NickName", "UserAvatar", "Points", "Width", "Color", "Word", "Level", "Round", "GuessWord", "GuessUserId", "GuessCorrect", "ChatToUserId", "ChatContent", },
+              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "QuitUserId", "NickName", "UserAvatar", "Points", "Width", "Color", "Word", "Level", "Round", "Language", "GuessWord", "GuessUserId", "GuessCorrect", "ChatToUserId", "ChatContent", },
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder.class);
           internal_static_game_GameMessage_descriptor =

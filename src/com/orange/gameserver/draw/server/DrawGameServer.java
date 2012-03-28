@@ -13,6 +13,15 @@ public class DrawGameServer {
 	private static final Logger logger = Logger.getLogger(DrawGameServer.class
 			.getName());
 	
+	
+	public static int getPort() {
+		String port = System.getProperty("server.port");
+		if (port != null && !port.isEmpty()){
+			return Integer.parseInt(port);
+		}
+		return 8080; // default
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -28,8 +37,8 @@ public class DrawGameServer {
 		
 		bootstrap.setPipelineFactory(new GameServerPipelineFactory());
 		
-		bootstrap.bind(new InetSocketAddress(8080));
-		logger.info("Start server at 8080");
+		bootstrap.bind(new InetSocketAddress(getPort()));
+		logger.info("Start traffic server at "+getPort());
 	}
 
 }
