@@ -60,7 +60,7 @@ public class GameTurn {
 			userGuessWordMap.put(userId, guess);
 		}
 		
-		guess.guess(guessWord, guessWord.equals(wordText));
+		guess.guess(guessWord, guessWord.equalsIgnoreCase(wordText));
 	}
 
 	public boolean isAllUserGuessWord(int userCount) {
