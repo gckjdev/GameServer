@@ -4,10 +4,10 @@ import org.jboss.netty.channel.Channel;
 
 public class UserAtGame {
 
-	String userId;
-	String nickName;
-	Channel channel;
-	String avatar;
+	final String userId;
+	final String nickName;
+	final Channel channel;
+	final String avatar;
 	
 	GameSession gameSession;
 	
@@ -28,28 +28,12 @@ public class UserAtGame {
 		return avatar;
 	}
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
 	public String getNickName() {
 		return nickName;
 	}
 
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
-
 	public Channel getChannel() {
 		return channel;
-	}
-
-	public void setChannel(Channel channel) {
-		this.channel = channel;
 	}
 
 	public GameSession getGameSession() {

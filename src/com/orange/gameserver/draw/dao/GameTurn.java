@@ -8,8 +8,7 @@ import java.util.Map;
 public class GameTurn {
 
 	String	wordText;
-	int		wordLevel;		
-	
+	int		wordLevel;			
 	int		round;
 	
 	Map<String, UserGuessWord> userGuessWordMap = new HashMap<String, UserGuessWord>();
