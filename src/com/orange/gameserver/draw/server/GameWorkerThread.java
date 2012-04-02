@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.orange.common.statemachine.StateMachine;
 import com.orange.gameserver.draw.dao.GameSession;
-import com.orange.gameserver.draw.manager.GameManager;
+import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.service.HandlerUtils;
 import com.orange.gameserver.draw.statemachine.GameStateMachineBuilder;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
@@ -22,7 +22,7 @@ public class GameWorkerThread extends Thread {
 	protected static final Logger logger = Logger.getLogger(GameWorkerThread.class.getName());
 	
 	static final StateMachine stateMachine = GameStateMachineBuilder.getInstance().buildStateMachine();
-	GameManager gameManager = GameManager.getInstance();
+	GameSessionManager gameManager = GameSessionManager.getInstance();
 	GameService gameService = GameService.getInstance();
 	PriorityBlockingQueue<GameEvent> queue = new PriorityBlockingQueue<GameEvent>(4096);
 	AtomicInteger stopFlag = new AtomicInteger(0);

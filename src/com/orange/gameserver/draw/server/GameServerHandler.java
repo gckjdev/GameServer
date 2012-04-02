@@ -14,7 +14,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.orange.gameserver.draw.manager.ChannelUserManager;
-import com.orange.gameserver.draw.manager.GameManager;
+import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.service.AbstractRequestHandler;
 import com.orange.gameserver.draw.service.GameSessionRequestHandler;
@@ -34,7 +34,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 			.getName()); 
 	
 	private GameService gameService = GameService.getInstance();
-	private GameManager gameManager = GameManager.getInstance();
+	private GameSessionManager gameManager = GameSessionManager.getInstance();
 
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e)

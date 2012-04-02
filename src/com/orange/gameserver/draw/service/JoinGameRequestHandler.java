@@ -8,7 +8,9 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.draw.dao.GameSession;
-import com.orange.gameserver.draw.manager.GameManager;
+import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.manager.GameSessionManager;
+import com.orange.gameserver.draw.manager.GameSessionUserManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
@@ -21,6 +23,11 @@ import com.orange.network.game.protocol.model.GameBasicProtos;
 
 public class JoinGameRequestHandler extends AbstractRequestHandler {
 
+	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
+	private static final GameSessionManager sessionManager = GameSessionManager.getInstance();
+	private static final GameService gameService = GameService.getInstance();
+	private static final UserManager userManager = UserManager.getInstance();
+	
 	public JoinGameRequestHandler(MessageEvent messageEvent) {
 		super(messageEvent);
 	}
@@ -63,16 +70,16 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		}
 		
 		// add user
-		gameSession.addUser(userId, nickName, avatar, gameEvent.getChannel());		
+		int sessionId = gameSession.getSessionId();
+		User user = new User(userId, nickName, avatar, gameEvent.getChannel(), sessionId);
+		sessionUserManager.addUserIntoSession(user, gameSession);
 		
 		// send back response
-		List<GameBasicProtos.PBGameUser> pbGameUserList = gameSession.usersToPBUsers();		
+		List<GameBasicProtos.PBGameUser> pbGameUserList = sessionUserManager.usersToPBUsers(sessionId);	
 		GameBasicProtos.PBGameSession gameSessionData = GameBasicProtos.PBGameSession.newBuilder()		
-//										.setCreateBy(gameSession.getCreateBy())
-//										.setCreateTime((int)gameSession.getCreateDate().getTime()/1000)
 										.setGameId("DrawGame")
 										.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
-										.setNextPlayUserId(gameSession.getNextPlayUserId())
+										.setNextPlayUserId("")
 										.setHost(gameSession.getHost())
 										.setName(gameSession.getName())
 										.setSessionId(gameSession.getSessionId())

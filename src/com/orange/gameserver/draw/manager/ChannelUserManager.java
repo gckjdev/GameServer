@@ -18,8 +18,6 @@ public class ChannelUserManager {
 	ConcurrentMap<Channel, CopyOnWriteArrayList<String>> channelUserMap 
 		= new ConcurrentHashMap<Channel, CopyOnWriteArrayList<String>>();
 	
-	Object transactionLock = new Object();
-	
 	// thread-safe singleton implementation
     private static ChannelUserManager manager = new ChannelUserManager();     
     private ChannelUserManager(){		

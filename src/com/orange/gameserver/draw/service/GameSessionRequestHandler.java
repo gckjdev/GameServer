@@ -10,8 +10,9 @@ import sun.tools.tree.ThisExpression;
 
 import com.orange.common.statemachine.Event;
 import com.orange.gameserver.draw.dao.GameSession;
-import com.orange.gameserver.draw.dao.UserAtGame;
-import com.orange.gameserver.draw.manager.GameManager;
+import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.manager.GameSessionManager;
+import com.orange.gameserver.draw.manager.GameSessionUserManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
@@ -25,6 +26,11 @@ import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRe
 
 public class GameSessionRequestHandler extends AbstractRequestHandler {
 
+	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
+	private static final GameSessionManager sessionManager = GameSessionManager.getInstance();
+	private static final GameService gameService = GameService.getInstance();
+	private static final UserManager userManager = UserManager.getInstance();
+	
 	public GameSessionRequestHandler(MessageEvent messageEvent) {
 		super(messageEvent);
 	}
@@ -46,8 +52,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		if (session.isStart())
 			return GameResultCode.ERROR_SESSION_ALREADY_START;
 		
-		if (!session.canUserStartGame(userId))
-			return GameResultCode.ERROR_USER_CANNOT_START_GAME;		
+//		if (!session.canUserStartGame(userId))
+//			return GameResultCode.ERROR_USER_CANNOT_START_GAME;		
 		
 		return GameResultCode.SUCCESS;
 	}
@@ -60,12 +66,12 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// start game
 		session.startGame();
-		GameManager.getInstance().adjustSessionSetForPlaying(session); // adjust set so that it's not allowed to join
+		GameSessionManager.getInstance().adjustSessionSetForPlaying(session); // adjust set so that it's not allowed to join
 				
 		// send reponse
 		GameMessageProtos.StartGameResponse gameResponse = GameMessageProtos.StartGameResponse.newBuilder()
 			.setCurrentPlayUserId(session.getCurrentPlayUserId())
-			.setNextPlayUserId(session.getNextPlayUserId())
+			.setNextPlayUserId("")
 			.build();
 		GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
 			.setCommand(GameCommandType.START_GAME_RESPONSE)
@@ -126,7 +132,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		// broast draw data to all other users in the session
 		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 		
-		if (session.isTurnFinish()){
+		if (sessionManager.isSessionTurnFinish(session)){
 			GameService.getInstance().fireTurnFinishEvent(session);
 		}
 	}
@@ -164,14 +170,16 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		if (session.isCurrentPlayUser(userId)){
 			completeGameTurn = true;
 		}
+		
+		int sessionId = session.getSessionId();
 
-		GameManager.getInstance().removeUserFromSession(message.getUserId(), session);
-		if (session.getUserCount() <= 1){
+		GameSessionManager.getInstance().removeUserFromSession(message.getUserId(), session);
+		if (sessionUserManager.getSessionUserCount(sessionId) <= 1){
 			completeGameTurn = true;			
 		}
 		
 		boolean completeGame = false;
-		if (session.isRoomEmpty()){
+		if (sessionUserManager.getSessionUserCount(sessionId) == 0){
 			completeGame = true;
 		}
 		
@@ -204,10 +212,11 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 	public static void handleChangeRoomRequest(GameEvent gameEvent,
 			GameSession session) {
 
-		UserAtGame user = session.findUserById(gameEvent.getMessage().getUserId());
+		User user = userManager.findUserById(gameEvent.getMessage().getUserId());
 		if (user == null){
 			logger.info("<handleChangeRoomRequest> but user id "+gameEvent.getMessage().getUserId()
 					+" not found at session "+session.getSessionId());
+			HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.ERROR_USER_NOT_IN_SESSION);
 			return;
 		}
 
@@ -229,7 +238,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		}
 		
 		// alloc user to new room
-		int sessionId = GameManager.getInstance().allocGameSessionForUser(message.getUserId(), 
+		int sessionId = GameSessionManager.getInstance().allocGameSessionForUser(message.getUserId(), 
 				nickName, avatar, gameEvent.getChannel(), excludeSessionSet);
 		if (sessionId != -1){
 						
@@ -259,7 +268,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameSession session) {
 		
 		// turn complete, select next user and start new turn
-		session.chooseNewPlayUser();
+		sessionUserManager.chooseNewPlayUser(session);
+//		session.chooseNewPlayUser();
 		
 		GameNotification.broadcastNotification(session, gameEvent, "", 
 				GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST);

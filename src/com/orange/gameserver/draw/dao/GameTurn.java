@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class GameTurn {
 
-	String	wordText;
-	int		wordLevel;			
-	int		round;
+	final String	wordText;
+	final int		wordLevel;			
+	final int		round;
 	
-	Map<String, UserGuessWord> userGuessWordMap = new HashMap<String, UserGuessWord>();
+	ConcurrentMap<String, UserGuessWord> userGuessWordMap = new ConcurrentHashMap<String, UserGuessWord>();
 	List<DrawAction>	drawActionList = new ArrayList<DrawAction>();
 	
-	public GameTurn(int round){
+	public GameTurn(int round, String word, int level) {
 		this.round = round;
+		this.wordLevel = level;
+		this.wordText = word;
 	}
-	
+
 	public void addDrawAction(DrawAction action){
 		if (action == null)
 			return;
@@ -29,26 +33,14 @@ public class GameTurn {
 		return wordText;
 	}
 
-	public void setWordText(String wordText) {
-		this.wordText = wordText;
-	}
-
 	public int getWordLevel() {
 		return wordLevel;
-	}
-
-	public void setWordLevel(int wordLevel) {
-		this.wordLevel = wordLevel;
 	}
 
 	public int getRound() {
 		return round;
 	}
 
-	public void setRound(int round) {
-		this.round = round;
-	}
-	
 	public void userGuessWord(String userId, String guessWord){
 		if (userId == null || guessWord == null)
 			return;

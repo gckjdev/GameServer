@@ -5,7 +5,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.orange.gameserver.draw.dao.GameSession;
-import com.orange.gameserver.draw.dao.UserAtGame;
+import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.manager.GameSessionManager;
+import com.orange.gameserver.draw.manager.GameSessionUserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
@@ -19,18 +21,21 @@ import com.orange.network.game.protocol.model.GameBasicProtos;
 public class GameNotification {
 
 	protected static final Logger logger = Logger.getLogger(GameNotification.class.getName());
+	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
+	private static final GameSessionManager sessionManager = GameSessionManager.getInstance();
+	private static final GameService gameService = GameService.getInstance();
 	
 	public static void broadcastNotification(GameSession gameSession,
 			GameEvent gameEvent, String excludeUserId, GameCommandType command) {
 		
-		List<UserAtGame> list = gameSession.getUserList();
-		for (UserAtGame user : list){		
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		for (User user : list){		
 			if (excludeUserId != null && user.getUserId().equals(excludeUserId))
 				continue;
 			
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
-				.setNextPlayUserId(gameSession.getNextPlayUserId())
+				.setNextPlayUserId("")
 				.build();
 
 			// send notification for the user			
@@ -55,8 +60,8 @@ public class GameNotification {
 		String newUserNickName = request.getJoinGameRequest().getNickName();
 		String newUserAvatar = request.getJoinGameRequest().getAvatar();
 		
-		List<UserAtGame> list = gameSession.getUserList();
-		for (UserAtGame user : list){
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		for (User user : list){
 			if (user.getUserId().equals(newUserId)){
 				continue;
 			}
@@ -67,7 +72,7 @@ public class GameNotification {
 				.setNickName(newUserNickName)
 				.setUserAvatar(newUserAvatar)
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
-				.setNextPlayUserId(gameSession.getNextPlayUserId())
+				.setNextPlayUserId("")
 				.build();
 			
 			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
@@ -85,8 +90,8 @@ public class GameNotification {
 	public static void broadcastUserQuitNotification(GameSession gameSession, String quitUserId,
 			GameEvent gameEvent) {
 		
-		List<UserAtGame> list = gameSession.getUserList();
-		for (UserAtGame user : list){
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		for (User user : list){
 			if (user.getUserId().equals(quitUserId)){
 				continue;
 			}
@@ -94,7 +99,7 @@ public class GameNotification {
 			// send notification for the user
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
 				.setQuitUserId(quitUserId)
-				.setNextPlayUserId(gameSession.getNextPlayUserId())
+				.setNextPlayUserId("")
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
 				.setSessionHost(gameSession.getHost())
 				.build();
@@ -114,12 +119,12 @@ public class GameNotification {
 
 	public static void broadcastGameStartNotification(GameSession gameSession, GameEvent gameEvent) {
 		
-		List<UserAtGame> list = gameSession.getUserList();
-		for (UserAtGame user : list){			
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		for (User user : list){			
 			// send notification for the user
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
-				.setNextPlayUserId(gameSession.getNextPlayUserId())
+				.setNextPlayUserId("")
 				.build();
 			
 			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
@@ -149,8 +154,8 @@ public class GameNotification {
 				guessCorrect = drawData.getGuessWord().equals(currentWord);
 		}
 		
-		List<UserAtGame> list = gameSession.getUserList();
-		for (UserAtGame user : list){		
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		for (User user : list){		
 			if (user.getUserId().equals(userId))
 				continue;
 			
@@ -183,8 +188,8 @@ public class GameNotification {
 	public static void broadcastCleanDrawNotification(GameSession gameSession,
 			GameEvent gameEvent, String userId) {
 		
-		List<UserAtGame> list = gameSession.getUserList();
-		for (UserAtGame user : list){		
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		for (User user : list){		
 			if (user.getUserId().equals(userId))
 				continue;
 			
@@ -209,8 +214,8 @@ public class GameNotification {
 		
 		GameChatRequest chatRequest = message.getChatRequest();
 
-		List<UserAtGame> list = session.getUserList();		
-		for (UserAtGame user : list){		
+		List<User> list = sessionUserManager.getUserListBySession(session.getSessionId());	
+		for (User user : list){		
 			// don't send to request user, he knows it!
 			if (user.getUserId().equals(userId))
 				continue;

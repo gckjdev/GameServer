@@ -17,10 +17,8 @@ import org.jboss.netty.channel.Channel;
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
-import com.orange.gameserver.draw.dao.UserAtGame;
 import com.orange.gameserver.draw.manager.ChannelUserManager;
-import com.orange.gameserver.draw.manager.GameManager;
-import com.orange.gameserver.draw.manager.UserAtGameManager;
+import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
@@ -39,8 +37,7 @@ public class GameService {
 
 	AtomicInteger messageIdIndex = new AtomicInteger(0);
 
-	GameManager gameManager = GameManager.getInstance();
-	UserAtGameManager userManager = UserAtGameManager.getInstance();
+	GameSessionManager gameManager = GameSessionManager.getInstance();
 
 	// thread-safe singleton implementation
 	private static GameService defaultService = new GameService();

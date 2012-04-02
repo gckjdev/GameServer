@@ -3,7 +3,7 @@ package com.orange.gameserver.draw.service;
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.MessageEvent;
 
-import com.orange.gameserver.draw.manager.GameManager;
+import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.gameserver.draw.statemachine.game.GameEventKey;
@@ -15,7 +15,7 @@ public abstract class AbstractRequestHandler {
 	
 	protected static final Logger logger = Logger.getLogger(AbstractRequestHandler.class.getName());
 	
-	GameManager gameManager = GameManager.getInstance();	// use for game session management
+	GameSessionManager gameManager = GameSessionManager.getInstance();	// use for game session management
 	MessageEvent messageEvent;	// use to get channel and send back response
 	GameMessage gameMessage;
 	GameService gameService = GameService.getInstance();

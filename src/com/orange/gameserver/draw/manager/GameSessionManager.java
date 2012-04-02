@@ -12,9 +12,10 @@ import org.jboss.netty.channel.Channel;
 
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
+import com.orange.gameserver.draw.dao.User;
 
 
-public class GameManager {
+public class GameSessionManager {
 		
 	protected static final Logger logger = Logger.getLogger("GameManager");
 
@@ -22,6 +23,8 @@ public class GameManager {
 	public static final int GAME_SESSION_COUNT = 1000;
 	public static final int MAX_USER_PER_GAME_SESSION = 6;
 
+	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
+	
 	//use three sets to classify the game sessions
 	ConcurrentHashSet<Integer> candidateSet = new ConcurrentHashSet<Integer>();
 	ConcurrentHashSet<Integer> freeSet = new ConcurrentHashSet<Integer>();
@@ -34,13 +37,13 @@ public class GameManager {
 	ConcurrentMap<Integer, GameSession> gameCollection = new ConcurrentHashMap<Integer, GameSession>();
 	
 	// thread-safe singleton implementation
-    private static GameManager manager = new GameManager();     
-    private GameManager(){		
+    private static GameSessionManager manager = new GameSessionManager();     
+    private GameSessionManager(){		
     	initAllGameSession(GAME_SESSION_COUNT);
     	logger.info("<GameManager> init");
 //    	logger.info("hashMap:"+gameCollection);
 	} 	    
-    public static GameManager getInstance() { 
+    public static GameSessionManager getInstance() { 
     	return manager; 
     } 
 	
@@ -153,7 +156,7 @@ public class GameManager {
 	public void adjustSessionSetForWaiting(GameSession session){
 		synchronized(sessionUserLock){
 			int sessionId = session.getSessionId();
-			int userCount = session.getUserCount();
+			int userCount = sessionUserManager.getSessionUserCount(sessionId);
 			
 			// adjust candidate and full set, also add user
 			if (userCount >= MAX_USER_PER_GAME_SESSION){
@@ -172,7 +175,7 @@ public class GameManager {
 		synchronized(sessionUserLock){
 			
 			int sessionId = session.getSessionId();
-			int userCount = session.getUserCount();
+			int userCount = sessionUserManager.getSessionUserCount(sessionId);
 			
 			if (userCount >= MAX_USER_PER_GAME_SESSION){
 				candidateSet.remove(sessionId);
@@ -193,19 +196,30 @@ public class GameManager {
 	}
 	
 	public void removeUserFromSession(String userId, GameSession session){
-			session.removeUser(userId); 			
+//			session.removeUser(userId); 			
+			sessionUserManager.removeUserFromSession(userId, session.getSessionId());
 			adjustSessionSet(session);
 			UserManager.getInstance().removeOnlineUserById(userId);
 	}
 	
 	private int addUserIntoSession(String userId, String nickName, String avatar, Channel channel, GameSession session){
-			return session.addUser(userId, nickName, avatar, channel);
+			User user = new User(userId, nickName, avatar, channel, session.getSessionId());
+			sessionUserManager.addUserIntoSession(user, session);
+			return 0;
 	}		
 	
 	public void printSets() {		
 		logger.info("<Free Set> : " + freeSet);
 		logger.info("<Candidate Set> : " + candidateSet);
 		logger.info("<Full Set> : " + fullSet);		
+	}
+	
+	public boolean isSessionTurnFinish(GameSession session) {
+		int userCount = sessionUserManager.getSessionUserCount(session.getSessionId());
+		if (userCount == 1)
+			return true; 
+		
+		return (session.isAllUserGuessWord(userCount));
 	}
 	
 
