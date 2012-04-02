@@ -92,7 +92,7 @@ public class GameNotification {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){
-			if (user.getUserId().equals(quitUserId)){
+			if (user.getUserId().equalsIgnoreCase(quitUserId)){
 				continue;
 			}
 			

@@ -45,16 +45,17 @@ public class GameSessionUserManager {
     	}
 
     	// add user and set user data
-		users.addIfAbsent(user);
-		user.setCurrentSessionId(sessionId);
-    	logger.info("<addUserIntoSession> user="+user.getNickName()+", sessionId="+sessionId);
-    	
-    	if (users.size() == 1){
-    		User firstUser = users.get(0);
-    		session.setCurrentPlayUser(firstUser);
-    		logger.info("<addUserIntoSession> init first user as current, user = " + firstUser);
-    	}
-    	
+		if (users.addIfAbsent(user)){
+			user.setCurrentSessionId(sessionId);
+    		logger.info("<addUserIntoSession> user="+user.getNickName()+", sessionId="+sessionId);
+
+        	if (users.size() == 1){
+        		User firstUser = users.get(0);
+        		session.setCurrentPlayUser(firstUser);
+        		logger.info("<addUserIntoSession> init first user as current, user = " + firstUser);
+        	}
+		}
+    	    	
     	return;
     }
     
