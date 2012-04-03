@@ -9,13 +9,14 @@ public class UserGuessWord {
 	boolean isCorrect = false;
 	int guessTimes = 0;
 	Date lastDate;
+	int finalCoins = 0;
 	
 	public UserGuessWord(String userId){
 		super();
 		this.userId = userId;
 	}
 	
-	public void guess(String newWord, boolean isCorrect){
+	public void guess(String newWord, boolean isCorrect, int coins){
 		
 		if (this.isCorrect){
 			// no need to update data again
@@ -26,6 +27,7 @@ public class UserGuessWord {
 		this.lastDate = new Date();
 		this.isCorrect = isCorrect;
 		this.lastWord = newWord;
+		this.finalCoins = coins;
 	}
 	
 }

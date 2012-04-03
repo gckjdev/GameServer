@@ -269,6 +269,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// turn complete, select next user and start new turn
 		sessionUserManager.chooseNewPlayUser(session);
+		session.calculateDrawUserCoins();
 //		session.chooseNewPlayUser();
 		
 		GameNotification.broadcastNotification(session, gameEvent, "", 

@@ -418,5 +418,39 @@ public class GameSession {
 		
 		return currentTurn.isAllUserGuessWord(userCount);
 	}
+
+	public int getCurrentGuessUserCoins(String userId) {
+		if (currentTurn == null)
+			return 0;
+		
+		UserGuessWord uw = currentTurn.userGuessWordMap.get(userId);
+		if (uw == null)
+			return 0;
+		
+		return uw.finalCoins;
+	}
+
+	public void calculateDrawUserCoins() {
+		if (currentTurn == null){
+			return;
+		}
+		
+		currentTurn.calculateDrawUserCoins(this.currentPlayUser.userId);
+	}
+	
+	public int getDrawUserCoins(){
+		if (currentTurn == null){
+			return 0;
+		}
+
+		return currentTurn.drawUserCoins;
+	}
+
+	public int getCurrentUserGainCoins(String userId) {
+		if (currentTurn == null)
+			return 0;
+				
+		return currentTurn.getUserFinalCoins(userId);
+	}
 	
 }

@@ -30,21 +30,30 @@ public class GameNotification {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){		
-			if (excludeUserId != null && user.getUserId().equals(excludeUserId))
+			if (excludeUserId != null && user.getUserId().equalsIgnoreCase(excludeUserId))
 				continue;
 			
-			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
-				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
-				.setNextPlayUserId("")
-				.build();
-
+			GameMessageProtos.GeneralNotification notification;
+			
+			if (command == GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST){
+				notification = GameMessageProtos.GeneralNotification.newBuilder()		
+					.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+					.setTurnGainCoins(gameSession.getCurrentUserGainCoins(user.getUserId()))
+					.build();				
+			}
+			else{
+				notification = GameMessageProtos.GeneralNotification.newBuilder()		
+					.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+					.build();
+			}
+			
 			// send notification for the user			
 			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
 				.setCommand(command)
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
-				.setNotification(notification)
+				.setNotification(notification)				
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
@@ -62,7 +71,7 @@ public class GameNotification {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){
-			if (user.getUserId().equals(newUserId)){
+			if (user.getUserId().equalsIgnoreCase(newUserId)){
 				continue;
 			}
 			
@@ -148,15 +157,21 @@ public class GameNotification {
 		}
 		
 		boolean guessCorrect = false;
+		int guessGainCoins = 0;
 		if (drawData.hasGuessWord()){
 			String currentWord = gameSession.getCurrentGuessWord();
-			if (currentWord != null)
-				guessCorrect = drawData.getGuessWord().equals(currentWord);
+			if (currentWord != null){
+				guessCorrect = drawData.getGuessWord().equalsIgnoreCase(currentWord);
+			}
+			
+			if (guessCorrect){
+				guessGainCoins = gameSession.getCurrentGuessUserCoins(userId);
+			}
 		}
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){		
-			if (user.getUserId().equals(userId))
+			if (user.getUserId().equalsIgnoreCase(userId))
 				continue;
 			
 			// send notification for the user
@@ -171,6 +186,7 @@ public class GameNotification {
 				.setGuessWord(drawData.getGuessWord())
 				.setGuessUserId(drawData.getGuessUserId())
 				.setGuessCorrect(guessCorrect)
+				.setGuessGainCoins(guessGainCoins)
 				.build();
 			
 			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
@@ -190,7 +206,7 @@ public class GameNotification {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){		
-			if (user.getUserId().equals(userId))
+			if (user.getUserId().equalsIgnoreCase(userId))
 				continue;
 			
 			// send notification for the user			
@@ -217,7 +233,7 @@ public class GameNotification {
 		List<User> list = sessionUserManager.getUserListBySession(session.getSessionId());	
 		for (User user : list){		
 			// don't send to request user, he knows it!
-			if (user.getUserId().equals(userId))
+			if (user.getUserId().equalsIgnoreCase(userId))
 				continue;
 			
 			// send notification for the user
