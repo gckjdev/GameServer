@@ -174,8 +174,11 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		int sessionId = session.getSessionId();
 
 		GameSessionManager.getInstance().removeUserFromSession(message.getUserId(), session);
-		if (sessionUserManager.getSessionUserCount(sessionId) <= 1){
-			completeGameTurn = true;			
+		if (!completeGameTurn){
+			int sessionUserCount = sessionUserManager.getSessionUserCount(sessionId);
+			if (sessionUserCount <= 1 || session.isAllUserGuessWord(sessionUserCount)){
+				completeGameTurn = true;			
+			}
 		}
 		
 		boolean completeGame = false;
