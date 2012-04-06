@@ -239,7 +239,7 @@ public class GameService {
 		dispatchEvent(event);
 	}
 
-	private static int EXPIRE_TIME_SECONDS = 20;
+	private static int EXPIRE_TIME_SECONDS = 60;
 	
 	public void scheduleGameSessionExpireTimer(final GameSession session) {
 		if (session == null)
