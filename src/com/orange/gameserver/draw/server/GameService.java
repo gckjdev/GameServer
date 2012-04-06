@@ -22,6 +22,7 @@ import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 
@@ -238,7 +239,7 @@ public class GameService {
 		dispatchEvent(event);
 	}
 
-	private static int EXPIRE_TIME_SECONDS = 120;
+	private static int EXPIRE_TIME_SECONDS = 20;
 	
 	public void scheduleGameSessionExpireTimer(final GameSession session) {
 		if (session == null)
@@ -249,7 +250,8 @@ public class GameService {
 
 			@Override
 			public void run() {
-				fireTurnFinishEvent(session);
+				logger.info("<scheduleGameSessionExpireTimer> timer fired");
+				fireTurnFinishEvent(session, GameCompleteReason.REASON_EXPIRED);
 			}
 			
 		}, EXPIRE_TIME_SECONDS*1000);
@@ -257,12 +259,12 @@ public class GameService {
 		session.setExpireTimer(timer);
 	}
 
-	public void fireTurnFinishEvent(GameSession session) {
+	public void fireTurnFinishEvent(GameSession session, GameCompleteReason reason) {
 		GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
 			.setCommand(GameCommandType.LOCAL_GAME_TURN_COMPLETE)
 			.setSessionId(session.getSessionId())
-			.setUserId("")
 			.setMessageId(0)
+			.setCompleteReason(reason)
 			.build();
 
 		GameEvent event = new GameEvent(GameCommandType.LOCAL_GAME_TURN_COMPLETE, 

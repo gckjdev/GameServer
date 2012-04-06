@@ -53,7 +53,9 @@ public class GameNotification {
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
-				.setNotification(notification)				
+				.setCompleteReason(gameSession.getCompleteReason())
+				.setNotification(notification)			
+				.setRound(gameSession.getCurrentRound())
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());

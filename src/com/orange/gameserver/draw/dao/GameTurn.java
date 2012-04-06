@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentMap;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.log.Log;
 
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
+
 public class GameTurn {
 	
 	protected static final Logger logger = Logger.getLogger("GameTurn");
@@ -18,6 +20,8 @@ public class GameTurn {
 	final String	wordText;
 	final int		wordLevel;			
 	final int		round;
+	
+	GameCompleteReason completeReason = GameCompleteReason.REASON_NOT_COMPLETE;
 	
 	String drawUserId = null;
 	int drawUserCoins = 0;
@@ -151,5 +155,13 @@ public class GameTurn {
 		else
 			return uw.finalCoins;
 				
+	}
+	
+	public void completeTurn(GameCompleteReason reason){
+		this.completeReason = reason;
+	}
+	
+	public GameCompleteReason getCompleteReason(){
+		return this.completeReason;
 	}
 }

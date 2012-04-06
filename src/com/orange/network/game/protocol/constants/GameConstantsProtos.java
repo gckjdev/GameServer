@@ -278,6 +278,87 @@ public final class GameConstantsProtos {
     // @@protoc_insertion_point(enum_scope:game.GameResultCode)
   }
   
+  public enum GameCompleteReason
+      implements com.google.protobuf.ProtocolMessageEnum {
+    REASON_NOT_COMPLETE(0, 0),
+    REASON_ALL_USER_GUESS(1, 1),
+    REASON_ALL_USER_QUIT(2, 11),
+    REASON_DRAW_USER_QUIT(3, 12),
+    REASON_ONLY_ONE_USER(4, 13),
+    REASON_EXPIRED(5, 21),
+    ;
+    
+    public static final int REASON_NOT_COMPLETE_VALUE = 0;
+    public static final int REASON_ALL_USER_GUESS_VALUE = 1;
+    public static final int REASON_ALL_USER_QUIT_VALUE = 11;
+    public static final int REASON_DRAW_USER_QUIT_VALUE = 12;
+    public static final int REASON_ONLY_ONE_USER_VALUE = 13;
+    public static final int REASON_EXPIRED_VALUE = 21;
+    
+    
+    public final int getNumber() { return value; }
+    
+    public static GameCompleteReason valueOf(int value) {
+      switch (value) {
+        case 0: return REASON_NOT_COMPLETE;
+        case 1: return REASON_ALL_USER_GUESS;
+        case 11: return REASON_ALL_USER_QUIT;
+        case 12: return REASON_DRAW_USER_QUIT;
+        case 13: return REASON_ONLY_ONE_USER;
+        case 21: return REASON_EXPIRED;
+        default: return null;
+      }
+    }
+    
+    public static com.google.protobuf.Internal.EnumLiteMap<GameCompleteReason>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<GameCompleteReason>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<GameCompleteReason>() {
+            public GameCompleteReason findValueByNumber(int number) {
+              return GameCompleteReason.valueOf(number);
+            }
+          };
+    
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return com.orange.network.game.protocol.constants.GameConstantsProtos.getDescriptor().getEnumTypes().get(2);
+    }
+    
+    private static final GameCompleteReason[] VALUES = {
+      REASON_NOT_COMPLETE, REASON_ALL_USER_GUESS, REASON_ALL_USER_QUIT, REASON_DRAW_USER_QUIT, REASON_ONLY_ONE_USER, REASON_EXPIRED, 
+    };
+    
+    public static GameCompleteReason valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+    
+    private final int index;
+    private final int value;
+    
+    private GameCompleteReason(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+    
+    // @@protoc_insertion_point(enum_scope:game.GameCompleteReason)
+  }
+  
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -324,9 +405,13 @@ public final class GameConstantsProtos {
       "RT\020\313\001\022\034\n\027ERROR_SESSION_NOT_START\020\314\001\022\037\n\032E" +
       "RROR_NO_SESSION_AVAILABLE\020\315\001\022\027\n\022ERROR_NO" +
       "_DRAW_DATA\020\255\002\022#\n\036ERROR_SYSTEM_HANDLER_NO" +
-      "T_FOUND\020\216\007\022\033\n\026ERROR_SYSTEM_EXCEPTION\020\217\007B" +
-      "A\n*com.orange.network.game.protocol.cons" +
-      "tantsB\023GameConstantsProtos"
+      "T_FOUND\020\216\007\022\033\n\026ERROR_SYSTEM_EXCEPTION\020\217\007*" +
+      "\253\001\n\022GameCompleteReason\022\027\n\023REASON_NOT_COM" +
+      "PLETE\020\000\022\031\n\025REASON_ALL_USER_GUESS\020\001\022\030\n\024RE",
+      "ASON_ALL_USER_QUIT\020\013\022\031\n\025REASON_DRAW_USER" +
+      "_QUIT\020\014\022\030\n\024REASON_ONLY_ONE_USER\020\r\022\022\n\016REA" +
+      "SON_EXPIRED\020\025BA\n*com.orange.network.game" +
+      ".protocol.constantsB\023GameConstantsProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

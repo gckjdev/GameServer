@@ -12,6 +12,7 @@ import org.jboss.netty.channel.Channel;
 import com.orange.common.statemachine.State;
 import com.orange.gameserver.draw.statemachine.game.GameStartState;
 import com.orange.gameserver.draw.statemachine.game.GameStateKey;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 import com.orange.network.game.protocol.model.GameBasicProtos;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
@@ -451,6 +452,21 @@ public class GameSession {
 			return 0;
 				
 		return currentTurn.getUserFinalCoins(userId);
+	}
+
+	public void completeTurn(GameCompleteReason completeReason) {
+		if (this.currentTurn == null)
+			return;
+		
+		logger.info("<completeTurn> on session " + sessionId + " reason=" + completeReason);
+		currentTurn.completeTurn(completeReason);
+	}
+
+	public GameCompleteReason getCompleteReason() {
+		if (this.currentTurn == null)
+			return GameCompleteReason.REASON_NOT_COMPLETE;
+
+		return currentTurn.completeReason;
 	}
 	
 }

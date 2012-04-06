@@ -13,6 +13,7 @@ import org.jboss.netty.channel.Channel;
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 
 
 public class GameSessionManager {
@@ -214,12 +215,16 @@ public class GameSessionManager {
 		logger.info("<Full Set> : " + fullSet);		
 	}
 	
-	public boolean isSessionTurnFinish(GameSession session) {
+	public GameCompleteReason isSessionTurnFinish(GameSession session) {
 		int userCount = sessionUserManager.getSessionUserCount(session.getSessionId());
 		if (userCount == 1)
-			return true; 
+			return GameCompleteReason.REASON_ONLY_ONE_USER; 
 		
-		return (session.isAllUserGuessWord(userCount));
+		if (session.isAllUserGuessWord(userCount)){
+			return GameCompleteReason.REASON_ALL_USER_GUESS;
+		}
+		
+		return GameCompleteReason.REASON_NOT_COMPLETE;
 	}
 	
 

@@ -43,6 +43,7 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 			.addTransition(GameCommandType.CHAT_REQUEST, GameStateKey.WAITING)
 
 			// make transition
+			.addTransition(GameCommandType.LOCAL_GAME_TURN_COMPLETE, GameStateKey.WAITING)
 			.addTransition(GameCommandType.START_GAME_REQUEST, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.LOCAL_FINISH_GAME, GameStateKey.CREATE);
 		

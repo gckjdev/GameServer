@@ -17,6 +17,7 @@ import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest;
@@ -108,6 +109,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 	public static void handleSendDrawDataRequest(GameEvent gameEvent,
 			GameSession session) {
 		
+		GameCompleteReason reason = GameCompleteReason.REASON_NOT_COMPLETE;
+		
 		GameMessage message = gameEvent.getMessage();
 		SendDrawDataRequest drawRequest = message.getSendDrawDataRequest();
 		if (drawRequest == null){
@@ -132,8 +135,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		// broast draw data to all other users in the session
 		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 		
-		if (sessionManager.isSessionTurnFinish(session)){
-			GameService.getInstance().fireTurnFinishEvent(session);
+		if ((reason = sessionManager.isSessionTurnFinish(session)) != GameCompleteReason.REASON_NOT_COMPLETE){
+			GameService.getInstance().fireTurnFinishEvent(session, reason);
 		}
 	}
 
@@ -162,6 +165,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 	public static void userQuitSession(GameEvent gameEvent,
 			GameSession session) {
 		
+		GameCompleteReason reason = GameCompleteReason.REASON_NOT_COMPLETE;
 		GameMessage message = gameEvent.getMessage();
 
 		// if draw user quit, then game also completed
@@ -169,6 +173,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		String userId = gameEvent.getMessage().getUserId();
 		if (session.isCurrentPlayUser(userId)){
 			completeGameTurn = true;
+			reason = GameCompleteReason.REASON_DRAW_USER_QUIT;
 		}
 		
 		int sessionId = session.getSessionId();
@@ -176,7 +181,12 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		GameSessionManager.getInstance().removeUserFromSession(message.getUserId(), session);
 		if (!completeGameTurn){
 			int sessionUserCount = sessionUserManager.getSessionUserCount(sessionId);
-			if (sessionUserCount <= 1 || session.isAllUserGuessWord(sessionUserCount)){
+			if (sessionUserCount <= 1){
+				reason = GameCompleteReason.REASON_ONLY_ONE_USER;
+				completeGameTurn = true;			
+			}
+			else if (session.isAllUserGuessWord(sessionUserCount)){
+				reason = GameCompleteReason.REASON_ALL_USER_GUESS;
 				completeGameTurn = true;			
 			}
 		}
@@ -186,9 +196,13 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			completeGame = true;
 		}
 		
+		if (completeGameTurn){
+			GameService.getInstance().fireTurnFinishEvent(session, reason);
+		}		
+
 		if (completeGame){
 			// if there is no user, fire a finish message
-			GameService.getInstance().fireAndDispatchEventHead(GameCommandType.LOCAL_FINISH_GAME, 
+			GameService.getInstance().fireAndDispatchEvent(GameCommandType.LOCAL_FINISH_GAME, 
 					session.getSessionId(), null);
 		}
 		else{
@@ -196,9 +210,6 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameNotification.broadcastUserQuitNotification(session, message.getUserId(), gameEvent);			
 		}	
 		
-		if (completeGameTurn){
-			GameService.getInstance().fireTurnFinishEvent(session);
-		}		
 	}
 	
 	public static void hanndleChannelDisconnect(GameEvent gameEvent,
@@ -271,8 +282,10 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameSession session) {
 		
 		// turn complete, select next user and start new turn
+		session.completeTurn(gameEvent.getMessage().getCompleteReason());
+		session.resetExpireTimer();
 		session.calculateDrawUserCoins();
-		sessionUserManager.chooseNewPlayUser(session);
+		sessionUserManager.chooseNewPlayUser(session);		
 //		session.chooseNewPlayUser();
 		
 		GameNotification.broadcastNotification(session, gameEvent, "", 
