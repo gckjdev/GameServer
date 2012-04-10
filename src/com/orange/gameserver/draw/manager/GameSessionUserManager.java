@@ -49,7 +49,8 @@ public class GameSessionUserManager {
 			user.setCurrentSessionId(sessionId);
     		logger.info("<addUserIntoSession> user="+user.getNickName()+", sessionId="+sessionId);
 
-        	if (users.size() == 1){
+    		int size = users.size();
+        	if (size == 1 || (size > 0 && session.getCurrentPlayUser() == null)){
         		User firstUser = users.get(0);
         		session.setCurrentPlayUser(firstUser);
         		logger.info("<addUserIntoSession> init first user as current, user = " + firstUser);

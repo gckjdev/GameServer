@@ -39,8 +39,9 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String gameId = request.getJoinGameRequest().getGameId();
 		String nickName = request.getJoinGameRequest().getNickName();			
 		String avatar = request.getJoinGameRequest().getAvatar();
+		boolean gender = request.getJoinGameRequest().getGender();
 		
-		int gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, messageEvent.getChannel(), null);
+		int gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender, messageEvent.getChannel(), null);
 		if (gameSessionId == -1){
 			HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
 			return;
@@ -63,6 +64,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String userId = request.getJoinGameRequest().getUserId();
 		String nickName = request.getJoinGameRequest().getNickName();
 		String avatar = request.getJoinGameRequest().getAvatar();
+		boolean gender = request.getJoinGameRequest().getGender();
 		
 		if (request.getJoinGameRequest().hasSessionToBeChange()){
 			GameSessionRequestHandler.handleChangeRoomRequest(gameEvent, gameSession);
@@ -71,7 +73,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		
 		// add user
 		int sessionId = gameSession.getSessionId();
-		User user = new User(userId, nickName, avatar, gameEvent.getChannel(), sessionId);
+		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId);
 		sessionUserManager.addUserIntoSession(user, gameSession);
 		
 		// send back response

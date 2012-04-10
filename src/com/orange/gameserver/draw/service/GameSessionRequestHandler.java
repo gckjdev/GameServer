@@ -121,7 +121,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			session.startNewTurn(drawRequest.getWord(), drawRequest.getLevel());
 
 			// schedule timer for finishing this turn
-			GameService.getInstance().scheduleGameSessionExpireTimer(session);
+			gameService.scheduleGameSessionExpireTimer(session);
 		}
 		
 		if (drawRequest.getPointsCount() > 0){
@@ -136,7 +136,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 		
 		if ((reason = sessionManager.isSessionTurnFinish(session)) != GameCompleteReason.REASON_NOT_COMPLETE){
-			GameService.getInstance().fireTurnFinishEvent(session, reason);
+			gameService.fireTurnFinishEvent(session, reason);
 		}
 	}
 
@@ -165,13 +165,16 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 	public static void userQuitSession(GameEvent gameEvent,
 			GameSession session) {
 		
+		
 		GameCompleteReason reason = GameCompleteReason.REASON_NOT_COMPLETE;
 		GameMessage message = gameEvent.getMessage();
 
 		// if draw user quit, then game also completed
 		boolean completeGameTurn = false;
 		String userId = gameEvent.getMessage().getUserId();
+
 		if (session.isCurrentPlayUser(userId)){
+			sessionManager.adjustCurrentPlayerForUserQuit(session, userId);
 			completeGameTurn = true;
 			reason = GameCompleteReason.REASON_DRAW_USER_QUIT;
 		}
@@ -197,12 +200,12 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		}
 		
 		if (completeGameTurn){
-			GameService.getInstance().fireTurnFinishEvent(session, reason);
+			gameService.fireTurnFinishEvent(session, reason);
 		}		
 
 		if (completeGame){
 			// if there is no user, fire a finish message
-			GameService.getInstance().fireAndDispatchEvent(GameCommandType.LOCAL_FINISH_GAME, 
+			gameService.fireAndDispatchEvent(GameCommandType.LOCAL_FINISH_GAME, 
 					session.getSessionId(), null);
 		}
 		else{
@@ -236,6 +239,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 		String nickName = user.getNickName();
 		String avatar = user.getAvatar();
+		boolean gender = user.getGender();
 
 		// user quit session
 		userQuitSession(gameEvent, session);
@@ -253,7 +257,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// alloc user to new room
 		int sessionId = GameSessionManager.getInstance().allocGameSessionForUser(message.getUserId(), 
-				nickName, avatar, gameEvent.getChannel(), excludeSessionSet);
+				nickName, avatar, gender, gameEvent.getChannel(), excludeSessionSet);
 		if (sessionId != -1){
 						
 			JoinGameRequest joinRequest = GameMessageProtos.JoinGameRequest.newBuilder(message.getJoinGameRequest())
@@ -270,7 +274,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 					newMessage, 
 					gameEvent.getChannel());
 			
-			GameService.getInstance().dispatchEvent(event);				
+			gameService.dispatchEvent(event);				
 		}
 		else{
 			// no session available, send back error response

@@ -28,8 +28,6 @@ public class GameSession {
 
 	protected static final Logger logger = Logger.getLogger("GameSession");
 	
-	public static final int MAX_USER_PER_GAME_SESSION = 7;
-	
 	final int   sessionId;
 	final String name;
 	final String createBy;
@@ -436,6 +434,10 @@ public class GameSession {
 			return;
 		}
 		
+		if (currentPlayUser == null){
+			return;
+		}
+		
 		currentTurn.calculateDrawUserCoins(this.currentPlayUser.userId);
 	}
 	
@@ -468,5 +470,11 @@ public class GameSession {
 
 		return currentTurn.completeReason;
 	}
+
+	public Object getCurrentPlayUser() {
+		return this.currentPlayUser;
+	}
+
+	
 	
 }

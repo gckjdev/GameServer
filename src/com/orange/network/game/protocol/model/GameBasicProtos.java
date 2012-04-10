@@ -22,6 +22,10 @@ public final class GameBasicProtos {
     // optional string avatar = 3;
     boolean hasAvatar();
     String getAvatar();
+    
+    // optional bool gender = 4;
+    boolean hasGender();
+    boolean getGender();
   }
   public static final class PBGameUser extends
       com.google.protobuf.GeneratedMessage
@@ -148,10 +152,21 @@ public final class GameBasicProtos {
       }
     }
     
+    // optional bool gender = 4;
+    public static final int GENDER_FIELD_NUMBER = 4;
+    private boolean gender_;
+    public boolean hasGender() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public boolean getGender() {
+      return gender_;
+    }
+    
     private void initFields() {
       userId_ = "";
       nickName_ = "";
       avatar_ = "";
+      gender_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -182,6 +197,9 @@ public final class GameBasicProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getAvatarBytes());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBool(4, gender_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -202,6 +220,10 @@ public final class GameBasicProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, getAvatarBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, gender_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -333,6 +355,8 @@ public final class GameBasicProtos {
         bitField0_ = (bitField0_ & ~0x00000002);
         avatar_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
+        gender_ = false;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       
@@ -383,6 +407,10 @@ public final class GameBasicProtos {
           to_bitField0_ |= 0x00000004;
         }
         result.avatar_ = avatar_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.gender_ = gender_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -407,6 +435,9 @@ public final class GameBasicProtos {
         }
         if (other.hasAvatar()) {
           setAvatar(other.getAvatar());
+        }
+        if (other.hasGender()) {
+          setGender(other.getGender());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -460,6 +491,11 @@ public final class GameBasicProtos {
             case 26: {
               bitField0_ |= 0x00000004;
               avatar_ = input.readBytes();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              gender_ = input.readBool();
               break;
             }
           }
@@ -574,6 +610,27 @@ public final class GameBasicProtos {
         bitField0_ |= 0x00000004;
         avatar_ = value;
         onChanged();
+      }
+      
+      // optional bool gender = 4;
+      private boolean gender_ ;
+      public boolean hasGender() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public boolean getGender() {
+        return gender_;
+      }
+      public Builder setGender(boolean value) {
+        bitField0_ |= 0x00000008;
+        gender_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearGender() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        gender_ = false;
+        onChanged();
+        return this;
       }
       
       // @@protoc_insertion_point(builder_scope:game.PBGameUser)
@@ -1923,16 +1980,16 @@ public final class GameBasicProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017GameBasic.proto\022\004game\">\n\nPBGameUser\022\016\n" +
+      "\n\017GameBasic.proto\022\004game\"N\n\nPBGameUser\022\016\n" +
       "\006userId\030\001 \002(\t\022\020\n\010nickName\030\002 \002(\t\022\016\n\006avata" +
-      "r\030\003 \001(\t\"\330\001\n\rPBGameSession\022\016\n\006gameId\030\001 \001(" +
-      "\t\022\021\n\tsessionId\030\002 \002(\003\022\014\n\004name\030\003 \002(\t\022\020\n\010cr" +
-      "eateBy\030\004 \001(\t\022\022\n\ncreateTime\030\005 \001(\005\022\014\n\004host" +
-      "\030\006 \001(\t\022\016\n\006status\030\007 \001(\005\022\031\n\021currentPlayUse" +
-      "rId\030\010 \001(\t\022\026\n\016nextPlayUserId\030\t \001(\t\022\037\n\005use" +
-      "rs\0302 \003(\0132\020.game.PBGameUserB9\n&com.orange" +
-      ".network.game.protocol.modelB\017GameBasicP" +
-      "rotos"
+      "r\030\003 \001(\t\022\016\n\006gender\030\004 \001(\010\"\330\001\n\rPBGameSessio" +
+      "n\022\016\n\006gameId\030\001 \001(\t\022\021\n\tsessionId\030\002 \002(\003\022\014\n\004" +
+      "name\030\003 \002(\t\022\020\n\010createBy\030\004 \001(\t\022\022\n\ncreateTi" +
+      "me\030\005 \001(\005\022\014\n\004host\030\006 \001(\t\022\016\n\006status\030\007 \001(\005\022\031" +
+      "\n\021currentPlayUserId\030\010 \001(\t\022\026\n\016nextPlayUse" +
+      "rId\030\t \001(\t\022\037\n\005users\0302 \003(\0132\020.game.PBGameUs" +
+      "erB9\n&com.orange.network.game.protocol.m" +
+      "odelB\017GameBasicProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1944,7 +2001,7 @@ public final class GameBasicProtos {
           internal_static_game_PBGameUser_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_PBGameUser_descriptor,
-              new java.lang.String[] { "UserId", "NickName", "Avatar", },
+              new java.lang.String[] { "UserId", "NickName", "Avatar", "Gender", },
               com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser.class,
               com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser.Builder.class);
           internal_static_game_PBGameSession_descriptor =

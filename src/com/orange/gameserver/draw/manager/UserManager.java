@@ -34,13 +34,13 @@ public class UserManager {
 		return onlineUserMap.get(userId);
 	}
 	
-	public void addOnlineUser(String userId, String nickName, String avatar, Channel channel,
+	public void addOnlineUser(String userId, String nickName, String avatar, boolean gender, Channel channel,
 			int sessionId) {
 		
 		if (userId == null || channel == null)
 			return;
 		
-		User user = new User(userId, nickName, avatar, channel, sessionId);		
+		User user = new User(userId, nickName, avatar, gender, channel, sessionId);		
 		User userFound = onlineUserMap.putIfAbsent(userId, user);
 		if (userFound != null)
 			user = userFound;

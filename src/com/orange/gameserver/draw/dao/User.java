@@ -11,15 +11,17 @@ public class User {
 	final String nickName;
 	final String avatar;
 	final Channel channel;
+	final boolean gender;
 
 	int currentSessionId = -1;		// TODO change to final or not?
 	
-	public User(String userId, String nickName, String avatar, Channel channel, int sessionId) {
+	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId) {
 		super();
 		this.userId = userId;
 		this.nickName = nickName;
 		this.avatar = avatar;
 		this.channel = channel;
+		this.gender = gender;
 		this.setCurrentSessionId(sessionId);
 	}
 	
@@ -33,6 +35,10 @@ public class User {
 	
 	public Channel getChannel() {
 		return channel;
+	}
+	
+	public boolean getGender(){
+		return gender;
 	}
 
 	public synchronized int getCurrentSessionId() {

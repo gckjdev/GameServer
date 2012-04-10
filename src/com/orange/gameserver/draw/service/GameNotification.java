@@ -82,6 +82,7 @@ public class GameNotification {
 				.setNewUserId(newUserId)
 				.setNickName(newUserNickName)
 				.setUserAvatar(newUserAvatar)
+				.setUserGender(user.getGender())
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
 				.setNextPlayUserId("")
 				.build();
@@ -98,7 +99,7 @@ public class GameNotification {
 		}
 	}
 	
-	public static void broadcastUserQuitNotification(GameSession gameSession, String quitUserId,
+	public static void broadcastUserQuitNotification(GameSession gameSession, String quitUserId, 
 			GameEvent gameEvent) {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
@@ -173,7 +174,7 @@ public class GameNotification {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){		
-			if (user.getUserId().equalsIgnoreCase(userId))
+			if (!guessCorrect && user.getUserId().equalsIgnoreCase(userId))
 				continue;
 			
 			// send notification for the user

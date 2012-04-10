@@ -1,6 +1,7 @@
 package com.orange.gameserver.draw.manager;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -100,7 +101,8 @@ public class GameSessionManager {
 		return sessionId;
 	}
 	
-	public int allocGameSessionForUser(String userId, String nickName, String avatar, Channel channel, Set<Integer> excludeSessionSet) {		
+	public int allocGameSessionForUser(String userId, String nickName, String avatar, boolean gender, 
+			Channel channel, Set<Integer> excludeSessionSet) {		
 		int sessionId = NO_SESSION_MATCH_FOR_USER;
 		synchronized(sessionUserLock){
 			
@@ -122,7 +124,7 @@ public class GameSessionManager {
 				
 				// add user into game session
 				GameSession session = this.findGameSessionById(sessionId);
-				int userCount = addUserIntoSession(userId, nickName, avatar, channel, session);
+				int userCount = addUserIntoSession(userId, nickName, avatar, gender, channel, session);
 				
 				// adjust candidate and full set, also add user
 				if (userCount >= MAX_USER_PER_GAME_SESSION){
@@ -139,7 +141,7 @@ public class GameSessionManager {
 		}		
 		
 		if (sessionId != -1){
-			UserManager.getInstance().addOnlineUser(userId, nickName, avatar, channel, sessionId);
+			UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, channel, sessionId);
 		}
 		
 		ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);		
@@ -203,8 +205,8 @@ public class GameSessionManager {
 			UserManager.getInstance().removeOnlineUserById(userId);
 	}
 	
-	private int addUserIntoSession(String userId, String nickName, String avatar, Channel channel, GameSession session){
-			User user = new User(userId, nickName, avatar, channel, session.getSessionId());
+	private int addUserIntoSession(String userId, String nickName, String avatar, boolean gender, Channel channel, GameSession session){
+			User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId());
 			sessionUserManager.addUserIntoSession(user, session);
 			return 0;
 	}		
@@ -225,6 +227,31 @@ public class GameSessionManager {
 		}
 		
 		return GameCompleteReason.REASON_NOT_COMPLETE;
+	}
+	
+	public void adjustCurrentPlayerForUserQuit(GameSession session, String quitUserId) {
+		List<User> userList = GameSessionUserManager.getInstance().getUserListBySession(session.getSessionId());
+		int index = 0;
+		boolean userFound = false;
+		for (User user : userList){
+			if (user.getUserId().equals(quitUserId)){
+				userFound = true;
+				if (index >= 1){
+					// has previous user
+					session.setCurrentPlayUser(userList.get(index - 1));
+				}
+				else{
+					// user is the first user
+					session.setCurrentPlayUser(null);
+				}
+				break;
+			}
+			index ++;
+		}
+		
+		if (userFound){
+			
+		}
 	}
 	
 
