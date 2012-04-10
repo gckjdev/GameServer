@@ -290,6 +290,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		session.resetExpireTimer();
 		session.calculateDrawUserCoins();
 		sessionUserManager.chooseNewPlayUser(session);		
+		sessionManager.adjustSessionSetForTurnComplete(session);
 //		session.chooseNewPlayUser();
 		
 		GameNotification.broadcastNotification(session, gameEvent, "", 

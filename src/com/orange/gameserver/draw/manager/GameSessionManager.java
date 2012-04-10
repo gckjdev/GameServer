@@ -1,6 +1,7 @@
 package com.orange.gameserver.draw.manager;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,6 +32,7 @@ public class GameSessionManager {
 	ConcurrentHashSet<Integer> candidateSet = new ConcurrentHashSet<Integer>();
 	ConcurrentHashSet<Integer> freeSet = new ConcurrentHashSet<Integer>();
 	ConcurrentHashSet<Integer> fullSet = new ConcurrentHashSet<Integer>();
+	ConcurrentHashSet<Integer> playSet = new ConcurrentHashSet<Integer>();
 	
 	// lock candidate/free/full set
 	Object sessionUserLock = new Object();
@@ -94,11 +96,16 @@ public class GameSessionManager {
 		Set<Integer> diffSet = new HashSet<Integer>();
 		diffSet.addAll(set);
 		diffSet.removeAll(excludeSessionSet);
-		if (diffSet.isEmpty())
-			return -1;
+
+		Iterator<Integer> iter = diffSet.iterator();
+		while (iter != null){
+			sessionId = iter.next().intValue();
+			if (!playSet.contains(sessionId)){
+				return sessionId;
+			}
+		}
 		
-		sessionId = diffSet.iterator().next().intValue();
-		return sessionId;
+		return -1;
 	}
 	
 	public int allocGameSessionForUser(String userId, String nickName, String avatar, boolean gender, 
@@ -152,14 +159,17 @@ public class GameSessionManager {
 		synchronized(sessionUserLock){
 			int sessionId = session.getSessionId();
 			candidateSet.remove(sessionId);
-			freeSet.remove(sessionId);						
+			freeSet.remove(sessionId);
+			playSet.add(sessionId);
 		}
 	}
 	
-	public void adjustSessionSetForWaiting(GameSession session){
+	public void adjustSessionSetForTurnComplete(GameSession session){
 		synchronized(sessionUserLock){
 			int sessionId = session.getSessionId();
 			int userCount = sessionUserManager.getSessionUserCount(sessionId);
+			
+			playSet.remove(sessionId);
 			
 			// adjust candidate and full set, also add user
 			if (userCount >= MAX_USER_PER_GAME_SESSION){
@@ -180,6 +190,8 @@ public class GameSessionManager {
 			int sessionId = session.getSessionId();
 			int userCount = sessionUserManager.getSessionUserCount(sessionId);
 			
+			boolean isSessionPlaying = playSet.contains(sessionId);			
+			
 			if (userCount >= MAX_USER_PER_GAME_SESSION){
 				candidateSet.remove(sessionId);
 				freeSet.remove(sessionId);
@@ -188,12 +200,14 @@ public class GameSessionManager {
 			else if (userCount >= MAX_USER_PER_GAME_SESSION - 2){
 				freeSet.remove(sessionId);
 				fullSet.remove(sessionId);
-				candidateSet.add(sessionId);
+				if (!isSessionPlaying)
+					candidateSet.add(sessionId);
 			}
 			else{
 				candidateSet.remove(sessionId);
 				fullSet.remove(sessionId);
-				freeSet.add(sessionId);				
+				if (!isSessionPlaying)
+					freeSet.add(sessionId);				
 			}
 		}
 	}
@@ -240,9 +254,15 @@ public class GameSessionManager {
 					// has previous user
 					session.setCurrentPlayUser(userList.get(index - 1));
 				}
-				else{
+				else {
 					// user is the first user
-					session.setCurrentPlayUser(null);
+					int size = userList.size();
+					if (size <= 1){
+						session.setCurrentPlayUser(null);
+					}
+					else{
+						session.setCurrentPlayUser(userList.get(index+1));
+					}
 				}
 				break;
 			}
