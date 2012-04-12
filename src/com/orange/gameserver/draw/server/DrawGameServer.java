@@ -27,7 +27,7 @@ public class DrawGameServer {
 	 */
 	public static void main(String[] args) {
 		
-		GameService.getInstance().createWorkerThreads(20);
+		GameService.getInstance().createWorkerThreads(25);
 		
 		ServerBootstrap bootstrap = new ServerBootstrap(
 				new NioServerSocketChannelFactory(
