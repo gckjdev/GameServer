@@ -16,6 +16,7 @@ import com.orange.gameserver.draw.manager.GameSessionUserManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
@@ -53,17 +54,11 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		if (session.isStart())
 			return GameResultCode.ERROR_SESSION_ALREADY_START;
 		
-//		if (!session.canUserStartGame(userId))
-//			return GameResultCode.ERROR_USER_CANNOT_START_GAME;		
-		
 		return GameResultCode.SUCCESS;
 	}
 
 	public static void handleStartGameRequest(GameEvent gameEvent,
 			GameSession session) {
-		
-		// set current play user id and next play user id
-		// session.chooseNewPlayUser();				
 		
 		// start game
 		session.startGame();
@@ -135,7 +130,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		// broast draw data to all other users in the session
 		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());
 		
-		if ((reason = sessionManager.isSessionTurnFinish(session)) != GameCompleteReason.REASON_NOT_COMPLETE){
+		reason = sessionManager.isSessionTurnFinish(session);
+		if (reason != GameCompleteReason.REASON_NOT_COMPLETE){
 			gameService.fireTurnFinishEvent(session, reason);
 		}
 	}
@@ -173,13 +169,15 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		boolean completeGameTurn = false;
 		String userId = gameEvent.getMessage().getUserId();
 
+		int sessionId = session.getSessionId();
+		GameLog.info(sessionId, "user "+userId+" quit");
+		
 		if (session.isCurrentPlayUser(userId)){
 			sessionManager.adjustCurrentPlayerForUserQuit(session, userId);
 			completeGameTurn = true;
 			reason = GameCompleteReason.REASON_DRAW_USER_QUIT;
 		}
 		
-		int sessionId = session.getSessionId();
 
 		GameSessionManager.getInstance().removeUserFromSession(message.getUserId(), session);
 		if (!completeGameTurn){
@@ -231,8 +229,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 		User user = userManager.findUserById(gameEvent.getMessage().getUserId());
 		if (user == null){
-			logger.info("<handleChangeRoomRequest> but user id "+gameEvent.getMessage().getUserId()
-					+" not found at session "+session.getSessionId());
+			GameLog.info(session.getSessionId(), "<handleChangeRoomRequest> but user id "+gameEvent.getMessage().getUserId()
+					+" not found");
 			HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.ERROR_USER_NOT_IN_SESSION);
 			return;
 		}

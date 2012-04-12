@@ -24,7 +24,6 @@ public class GameSessionManager {
 
 	public static final int NO_SESSION_MATCH_FOR_USER = -1; 
 	public static final int GAME_SESSION_COUNT = 1000;
-	public static final int MAX_USER_PER_GAME_SESSION = 5;
 
 	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
 	
@@ -121,13 +120,13 @@ public class GameSessionManager {
 				int userCount = addUserIntoSession(userId, nickName, avatar, gender, channel, session);
 				
 				// adjust candidate and full set, also add user
-				if (userCount >= MAX_USER_PER_GAME_SESSION){
+				if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION){
 					logger.info("allocGameSessionForUser, user count "+userCount+" reach max user, remove from freeset/candidate set");
 					freeSet.remove(sessionId);
 					candidateSet.remove(sessionId);
 					fullSet.add(sessionId);
 				}
-				else if (userCount >= MAX_USER_PER_GAME_SESSION - 2){
+				else if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION - 2){
 					logger.info("allocGameSessionForUser, user count "+userCount+" reach max user - 2, move to candidate set");
 					currentSet.remove(sessionId);
 					candidateSet.add(sessionId);
@@ -155,6 +154,8 @@ public class GameSessionManager {
 	}
 	
 	public void adjustSessionSetForTurnComplete(GameSession session){
+		
+		// TODO add log
 		synchronized(sessionUserLock){
 			int sessionId = session.getSessionId();
 			int userCount = sessionUserManager.getSessionUserCount(sessionId);
@@ -162,10 +163,10 @@ public class GameSessionManager {
 			playSet.remove(sessionId);
 			
 			// adjust candidate and full set, also add user
-			if (userCount >= MAX_USER_PER_GAME_SESSION){
+			if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION){
 				fullSet.add(sessionId);
 			}
-			else if (userCount >= MAX_USER_PER_GAME_SESSION - 2){
+			else if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION - 2){
 				candidateSet.add(sessionId);
 			}				
 			else{
@@ -182,12 +183,12 @@ public class GameSessionManager {
 			
 			boolean isSessionPlaying = playSet.contains(sessionId);			
 			
-			if (userCount >= MAX_USER_PER_GAME_SESSION){
+			if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION){
 				candidateSet.remove(sessionId);
 				freeSet.remove(sessionId);
 				fullSet.add(sessionId);
 			}
-			else if (userCount >= MAX_USER_PER_GAME_SESSION - 2){
+			else if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION - 2){
 				freeSet.remove(sessionId);
 				fullSet.remove(sessionId);
 				if (!isSessionPlaying)
@@ -232,6 +233,7 @@ public class GameSessionManager {
 	}
 	
 	public void adjustCurrentPlayerForUserQuit(GameSession session, String quitUserId) {
+		// TODO add log here
 		List<User> userList = GameSessionUserManager.getInstance().getUserListBySession(session.getSessionId());
 		int index = 0;
 		boolean userFound = false;

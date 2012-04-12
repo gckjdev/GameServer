@@ -7,6 +7,7 @@ import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.gameserver.draw.statemachine.game.GameEventKey;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
@@ -28,10 +29,14 @@ public abstract class AbstractRequestHandler {
 	public abstract void handleRequest(GameMessage message);
 	
 	public void sendResponse(GameMessage response){
-		if (messageEvent == null)
+		if (messageEvent == null || response == null)
 			return;
 
-		logger.info(String.format("[%08X] [SEND] %s", response.getMessageId(), response.toString()));
+		GameLog.debug((int)response.getSessionId(), "[SEND] ", response.toString());
+		GameLog.info((int)response.getSessionId(), "[SEND] ", 
+				response.getCommand().toString(), 
+				response.getResultCode().toString());
+		
 		messageEvent.getChannel().write(response);
 	}
 	
@@ -42,17 +47,18 @@ public abstract class AbstractRequestHandler {
 			.setResultCode(resultCode)
 			.build();
 	
-		logger.info(String.format("[%08X] [SEND] %s", response.getSessionId(), response.toString()));
+		GameLog.info((int)response.getSessionId(), "[SEND] ", 
+				response.getCommand().toString(), response.getResultCode().toString());
 		messageEvent.getChannel().write(response);
 	}
 	
-	public void printRequest(GameMessage request){
-		logger.info(String.format("[%08X] [RECV] %s", request.getMessageId(), request.toString()));	
-	}
-	
-	public void log(String message){
-		logger.info(String.format("[%08X] %s", gameMessage.getMessageId(), message));
-	}
+//	public void printRequest(GameMessage request){
+//		logger.info(String.format("[%08X] [RECV] %s", request.getMessageId(), request.toString()));	
+//	}
+//	
+//	public void log(String message){
+//		logger.info(String.format("[%08X] %s", gameMessage.getMessageId(), message));
+//	}
 	
 	public GameEvent toGameEvent(GameMessage gameMessage){
 		return new GameEvent(

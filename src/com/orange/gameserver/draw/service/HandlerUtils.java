@@ -6,6 +6,7 @@ import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.draw.server.GameWorkerThread;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos;
@@ -13,13 +14,13 @@ import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 
 public class HandlerUtils {
 
-	protected static final Logger logger = Logger.getLogger(HandlerUtils.class.getName());
+//	protected static final Logger logger = Logger.getLogger(HandlerUtils.class.getName());
 
 	public static void sendMessage(GameEvent gameEvent, GameMessage message, Channel channel) {
 		if (gameEvent == null || message == null || channel == null)
 			return;
 		
-		logger.info(String.format("[%08X] [SEND] %s", message.getSessionId(), message.toString()));
+		GameLog.debug((int)message.getSessionId(), message.toString());
 		if (channel.isConnected() && channel.isWritable()){
 			channel.write(message);
 		}
@@ -29,7 +30,7 @@ public class HandlerUtils {
 		if (gameEvent == null || response == null || gameEvent.getChannel() == null)
 			return;
 		
-		logger.info(String.format("[%08X] [SEND] %s", response.getSessionId(), response.toString()));
+		GameLog.debug((int)response.getSessionId(), response.toString());
 		gameEvent.getChannel().write(response);
 	}
 
@@ -66,7 +67,7 @@ public class HandlerUtils {
 			.setResultCode(resultCode)
 			.build();
 
-		logger.info(String.format("[%08X] [SEND] %s", response.getSessionId(), response.toString()));
+		GameLog.debug((int)response.getSessionId(), response.toString());
 		if (channel.isConnected() && channel.isWritable()){
 			channel.write(response);
 		}

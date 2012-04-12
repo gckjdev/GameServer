@@ -21,6 +21,7 @@ import com.orange.gameserver.draw.service.GameSessionRequestHandler;
 import com.orange.gameserver.draw.service.HandlerUtils;
 import com.orange.gameserver.draw.service.JoinGameRequestHandler;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.constants.GameConstantsProtos;
@@ -72,8 +73,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 			.setResultCode(resultCode)
 			.build();
 
-		logger.debug(String.format("[%08X] [SEND] %s", response.getSessionId(), response.toString()));
-		logger.info(String.format("[%08X] [SEND] error (%d)", response.getSessionId(), resultCode.toString()));
+		GameLog.info((int)response.getSessionId(), resultCode.toString());
 		messageEvent.getChannel().write(response);
 	}
 	
@@ -86,7 +86,6 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx,
             ChannelStateEvent e){
-		logger.debug("GameServerHandler channel disconnected");		
 		
 		// find all users related to the channel and post a message to game session that this user is quit
 		Channel channel = e.getChannel();		
@@ -94,7 +93,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		for (String userId : userIdList){
 			int sessionId = UserManager.getInstance().findGameSessionIdByUserId(userId);
 			if (sessionId != -1){
-				// fire event to the game session								
+				// fire event to the game session
 				gameService.fireAndDispatchEvent(GameCommandType.LOCAL_CHANNEL_DISCONNECT,
 						sessionId, userId);
 			}
@@ -109,7 +108,6 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx,
             ChannelStateEvent e){
-		logger.debug("GameServerHandler channel connected");		
 		ChannelUserManager.getInstance().addChannel(e.getChannel());
 		
 	}

@@ -14,6 +14,7 @@ import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.service.HandlerUtils;
 import com.orange.gameserver.draw.statemachine.GameStateMachineBuilder;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 
 
@@ -41,7 +42,8 @@ public class GameWorkerThread extends Thread {
 				GameSession session = gameManager.findGameSessionById(event.getTargetSession());
 				if (session == null){
 					// no session available for this event?
-					logger.warn("process event but session id not found " + event.getTargetSession());
+					
+					GameLog.warn(event.getTargetSession(), "process event but session id not found ");
 					HandlerUtils.sendErrorResponse(event, GameResultCode.ERROR_NO_SESSION_ID);
 					continue;
 				}

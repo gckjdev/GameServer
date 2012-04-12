@@ -20,7 +20,7 @@ import com.orange.network.game.protocol.model.GameBasicProtos;
 
 public class GameNotification {
 
-	protected static final Logger logger = Logger.getLogger(GameNotification.class.getName());
+//	protected static final Logger logger = Logger.getLogger(GameNotification.class.getName());
 	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
 	private static final GameSessionManager sessionManager = GameSessionManager.getInstance();
 	private static final GameService gameService = GameService.getInstance();

@@ -96,20 +96,24 @@ public class GameSession {
 
 	public void startGame(){
 		status = SessionStatus.PLAYING;
+		GameLog.info(sessionId, "start game, set status to" + status);
 	}
 	
 	public void finishGame(){
 		status = SessionStatus.WAIT;
+		GameLog.info(sessionId, "finish game, set status to" + status);
 	}
 	
 	public void resetGame() {
 		status = SessionStatus.INIT;
 		this.resetExpireTimer();
+		GameLog.info(sessionId, "reset game, set status to" + status);
 	}
 
 	public void waitForPlay() {
 		status = SessionStatus.WAIT;
 		this.resetExpireTimer();
+		GameLog.info(sessionId, "wait for play, set status to" + status);
 	}
 	
 	public void startNewTurn(String word, int level){
@@ -119,6 +123,7 @@ public class GameSession {
 		else{
 			currentTurn = new GameTurn(sessionId, currentTurn.getRound() + 1, word, level);
 		}		
+		GameLog.info(sessionId, "start new game turn "+currentTurn.getRound(), "word=" + word);
 	}
 
 	public int getCurrentRound() {
@@ -137,6 +142,7 @@ public class GameSession {
 
 	public void resetExpireTimer(){
 		if (this.expireTimer != null){
+			GameLog.info(sessionId, "cancel & clear expire timer");			
 			this.expireTimer.cancel();
 			this.expireTimer = null;
 		}		
@@ -156,6 +162,7 @@ public class GameSession {
 		if (currentTurn == null)
 			return;
 		
+		GameLog.info(sessionId, "user " + guessUserId + " guess " + guessWord);			
 		currentTurn.userGuessWord(guessUserId, guessWord);
 	}
 
@@ -168,6 +175,7 @@ public class GameSession {
 
 	public synchronized void setCurrentPlayUser(User user){
 		this.currentPlayUser = user;
+		GameLog.info(sessionId, "current play user is set to "+user);					
 	}
 
 	public boolean isAllUserGuessWord(int userCount) {

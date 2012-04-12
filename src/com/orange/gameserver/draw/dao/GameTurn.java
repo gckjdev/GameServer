@@ -144,6 +144,8 @@ public class GameTurn {
 		else{
 			this.drawUserCoins = 0;
 		}
+		
+		GameLog.info(sessionId, "drawUserCoins set to "+drawUserCoins);
 	}
 
 	public int getUserFinalCoins(String userId) {

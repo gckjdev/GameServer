@@ -14,13 +14,14 @@ import org.eclipse.jetty.util.ConcurrentHashSet;
 
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.model.GameBasicProtos;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 public class GameSessionUserManager {
 
-	protected static final Logger logger = Logger.getLogger("GameSessionUserManager");
-	private static final int MAX_USER_PER_SESSION = 6;
+//	protected static final Logger logger = Logger.getLogger("GameSessionUserManager");
+	public static final int MAX_USER_PER_SESSION = 5;
 	
 	ConcurrentMap<Integer, CopyOnWriteArrayList<User>> sessionUserMap = 
 		new ConcurrentHashMap<Integer, CopyOnWriteArrayList<User>>();
@@ -47,13 +48,13 @@ public class GameSessionUserManager {
     	// add user and set user data
 		if (users.addIfAbsent(user)){
 			user.setCurrentSessionId(sessionId);
-    		logger.info("<addUserIntoSession> user="+user.getNickName()+", sessionId="+sessionId);
+    		GameLog.info(sessionId, "<addUserIntoSession> user="+user.getNickName()+", sessionId="+sessionId);
 
     		int size = users.size();
         	if (size == 1 || (size > 0 && session.getCurrentPlayUser() == null)){
         		User firstUser = users.get(0);
         		session.setCurrentPlayUser(firstUser);
-        		logger.info("<addUserIntoSession> init first user as current, user = " + firstUser);
+        		GameLog.info(sessionId, "<addUserIntoSession> set first user " + firstUser + " as current user");
         	}
         	
         	return size;
@@ -66,6 +67,7 @@ public class GameSessionUserManager {
     public void removeUserFromSession(String userId, int sessionId){
     	CopyOnWriteArrayList<User> users = sessionUserMap.get(sessionId);
     	if (users == null){
+    		GameLog.info(sessionId, "<removeUserFromSession> session not found, user="+userId+", sessionId="+sessionId);    	
     		return;
     	}
     	
@@ -78,8 +80,11 @@ public class GameSessionUserManager {
     	}
     	
     	if (userFound != null){
-        	logger.info("<removeUserFromSession> user="+userFound.getNickName()+", sessionId="+sessionId);
+    		GameLog.info(sessionId, "<removeUserFromSession> user="+userFound+", sessionId="+sessionId);
     		users.remove(userFound);
+    	}
+    	else{
+    		GameLog.info(sessionId, "<removeUserFromSession> cannot find user, user="+userId+", sessionId="+sessionId);    		
     	}
     }
     
@@ -136,15 +141,24 @@ public class GameSessionUserManager {
 			return true;
 		}
 		
-		return userSet.size() == 0 ? true : false;
+		return (userSet.size() == 0);
 	}
 
 	public void chooseNewPlayUser(GameSession session) {
-		CopyOnWriteArrayList<User> users = sessionUserMap.get(session.getSessionId());
-		Iterator<User> iter = users.iterator();
-		if (iter == null)
+		int sessionId = session.getSessionId();
+		CopyOnWriteArrayList<User> users = sessionUserMap.get(sessionId);
+		if (users == null){
+    		GameLog.info(sessionId, "<chooseNewPlayUser> but sessionId not found in session user map");								
 			return;
+		}
 		
+		Iterator<User> iter = users.iterator();
+		if (iter == null){
+    		GameLog.info(sessionId, "<chooseNewPlayUser> but no user");								
+			return;
+		}
+		
+		User userSelected = null;
 		while (iter.hasNext()){
 			User user = iter.next();
 			if (session.isCurrentPlayUser(user.getUserId())){
@@ -152,7 +166,8 @@ public class GameSessionUserManager {
 					// use next one as current play user				
 					User nextUser = iter.next(); 
 					session.setCurrentPlayUser(nextUser);
-		    		logger.info("<addUserIntoSession> init first user as current, user = " + nextUser);					
+					userSelected = nextUser;
+		    		GameLog.info(sessionId, "<chooseNewPlayUser> choose next user for play, user = " + nextUser);					
 				}
 				else{
 					// use the first one as current play user
@@ -160,9 +175,22 @@ public class GameSessionUserManager {
 					if (newIter != null && newIter.hasNext()){
 						User firstUser = newIter.next();
 						session.setCurrentPlayUser(firstUser);
-			    		logger.info("<addUserIntoSession> init first user as current, user = " + firstUser);					
+						userSelected = firstUser;
+						GameLog.info(sessionId, "<chooseNewPlayUser> set first user for play, user = " + firstUser);					
 					}
 				}
+			}
+		}
+		
+		if (userSelected == null){
+			if (users.size() > 0){
+				User firstUser = users.get(0);
+				GameLog.info(sessionId, "<chooseNewPlayUser> set first user for play, user = " + firstUser);					
+				session.setCurrentPlayUser(firstUser);
+			}
+			else{
+				GameLog.info(sessionId, "<chooseNewPlayUser> no user, clear user for play");					
+				session.setCurrentPlayUser(null);
 			}
 		}
 	}

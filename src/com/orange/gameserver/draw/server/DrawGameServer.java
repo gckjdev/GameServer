@@ -38,7 +38,7 @@ public class DrawGameServer {
 		bootstrap.setPipelineFactory(new GameServerPipelineFactory());
 		
 		bootstrap.bind(new InetSocketAddress(getPort()));
-		logger.info("Start traffic server at "+getPort());
+		logger.info("Start Traffic Server At Port "+getPort());
 	}
 
 }

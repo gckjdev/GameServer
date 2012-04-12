@@ -14,20 +14,27 @@ public class GameLog {
 		String s = "";
 		switch (msg.length){
 		case 1:
-			s = String.format("[08X] %s", sessionId, msg[0]);
+			s = String.format("[%08X] %s", sessionId, msg[0]);
 			break;
 		case 2:
-			s = String.format("[08X] %s, %s", sessionId, msg[0], msg[1]);
+			s = String.format("[%08X] %s, %s", sessionId, msg[0], msg[1]);
 			break;
 		case 3:
 		default:
-			s = String.format("[08X] %s, %s, %s", sessionId, msg[0], msg[1], msg[2]);
+			s = String.format("[%08X] %s, %s, %s", sessionId, msg[0], msg[1], msg[2]);
 			break;
 		}		
 		
 		return s;
 	}
 	
+	public static void debug(int sessionId, String...msg){
+		if (msg.length == 0)
+			return;
+		
+		logger.debug(getMessage(sessionId, msg));		
+	}
+
 	public static void info(int sessionId, String...msg){
 		if (msg.length == 0)
 			return;
@@ -55,6 +62,5 @@ public class GameLog {
 		
 		logger.error(getMessage(sessionId, " catch exception=".concat(e.toString())), e);						
 	}
-	
-	
+
 }

@@ -21,6 +21,7 @@ import com.orange.gameserver.draw.manager.ChannelUserManager;
 import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 import com.orange.network.game.protocol.message.GameMessageProtos;
@@ -64,8 +65,6 @@ public class GameService {
 		return workerThreads;
 	}
 
-	private Object getMatchSessionLock = new Object();
-
 	public void dispatchEvent(GameEvent gameEvent) {
 		long assignWorkerThreadIndex = hash(gameEvent.getTargetSession());
 		Integer key = Integer.valueOf((int) assignWorkerThreadIndex);
@@ -79,10 +78,10 @@ public class GameService {
 		return (targetSession + 31) % numberOfWorkerThread;
 	}
 
-	public void sendResponse(Channel channel, GameMessage response) {
-		// TODO Auto-generated method stub
-
-	}
+//	public void sendResponse(Channel channel, GameMessage response) {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	public int generateMessageId() {
 		return messageIdIndex.incrementAndGet();
@@ -103,7 +102,7 @@ public class GameService {
 	public void fireAndDispatchEvent(GameCommandType command,
 			int sessionId, String userId, int priority) {
 		
-		Log.info("fire event " + command + ", sessionId = " + sessionId + ", userId = " + userId);
+		GameLog.info(sessionId, "fire event " + command + ", userId = " + userId);
 		
 		String userIdForMessage = userId;
 		if (userId == null){
@@ -133,12 +132,13 @@ public class GameService {
 
 			@Override
 			public void run() {
-				logger.info("<scheduleGameSessionExpireTimer> timer fired");
+				GameLog.info(session.getSessionId(), "expired timer is triggered");
 				fireTurnFinishEvent(session, GameCompleteReason.REASON_EXPIRED);
 			}
 			
 		}, EXPIRE_TIME_SECONDS*1000);
 		
+		GameLog.info(session.getSessionId(), "schedule expired timer after "+ EXPIRE_TIME_SECONDS);
 		session.setExpireTimer(timer);
 	}
 
@@ -150,6 +150,7 @@ public class GameService {
 			.setCompleteReason(reason)
 			.build();
 
+		GameLog.info(session.getSessionId(), "fire LOCAL_GAME_TURN_COMPLETE event due to "+reason);
 		GameEvent event = new GameEvent(GameCommandType.LOCAL_GAME_TURN_COMPLETE, 
 			session.getSessionId(), message, null);
 
