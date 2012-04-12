@@ -24,7 +24,7 @@ public class GameSessionManager {
 
 	public static final int NO_SESSION_MATCH_FOR_USER = -1; 
 	public static final int GAME_SESSION_COUNT = 1000;
-	public static final int MAX_USER_PER_GAME_SESSION = 6;
+	public static final int MAX_USER_PER_GAME_SESSION = 5;
 
 	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
 	
@@ -44,27 +44,12 @@ public class GameSessionManager {
     private static GameSessionManager manager = new GameSessionManager();     
     private GameSessionManager(){		
     	initAllGameSession(GAME_SESSION_COUNT);
-    	logger.info("<GameManager> init");
-//    	logger.info("hashMap:"+gameCollection);
 	} 	    
     public static GameSessionManager getInstance() { 
     	return manager; 
     } 
 	
-//    public int getGameSessionSize () {
-//		return sessionIdIndex.get();
-//	}
-    
-//	public DrawGameSession createNewDrawGameSession(String userId) {
-//		int sessionId = sessionIdIndex.incrementAndGet();	
-//		String roomName = roomNumber.incrementAndGet() + "";
-//		DrawGameSession session = new DrawGameSession(sessionId, roomName, userId);
-//		gameCollection.put(Integer.valueOf(sessionId), session);		
-//		freeSet.add(sessionId);
-//		return session;
-//	}
-		
-	public void initAllGameSession(int count)
+    public void initAllGameSession(int count)
 	{
 		synchronized(sessionUserLock){
 			for (int i = 1; i <= count; i++) {
@@ -213,7 +198,6 @@ public class GameSessionManager {
 	}
 	
 	public void removeUserFromSession(String userId, GameSession session){
-//			session.removeUser(userId); 			
 			sessionUserManager.removeUserFromSession(userId, session.getSessionId());
 			adjustSessionSet(session);
 			UserManager.getInstance().removeOnlineUserById(userId);

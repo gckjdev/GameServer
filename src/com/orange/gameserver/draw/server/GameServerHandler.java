@@ -39,9 +39,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e)
 			throws Exception {
-		logger.info(e.toString());
-		if (e instanceof ChannelStateEvent) {
-		}
+		logger.debug(e.toString());
 		super.handleUpstream(ctx, e);
 	}
 
@@ -74,7 +72,8 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 			.setResultCode(resultCode)
 			.build();
 
-		logger.info(String.format("[%08X] [SEND] %s", response.getSessionId(), response.toString()));
+		logger.debug(String.format("[%08X] [SEND] %s", response.getSessionId(), response.toString()));
+		logger.info(String.format("[%08X] [SEND] error (%d)", response.getSessionId(), resultCode.toString()));
 		messageEvent.getChannel().write(response);
 	}
 	
@@ -87,7 +86,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx,
             ChannelStateEvent e){
-		logger.info("GameServerHandler channel disconnected");		
+		logger.debug("GameServerHandler channel disconnected");		
 		
 		// find all users related to the channel and post a message to game session that this user is quit
 		Channel channel = e.getChannel();		
@@ -110,12 +109,9 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx,
             ChannelStateEvent e){
-		logger.info("GameServerHandler channel connected");		
+		logger.debug("GameServerHandler channel connected");		
 		ChannelUserManager.getInstance().addChannel(e.getChannel());
 		
 	}
 	
-//	private static String toString(Continent c) {
-//		return "" + c.name().charAt(0) + c.name().toLowerCase().substring(1);
-//	}
 }

@@ -11,15 +11,16 @@ import java.util.concurrent.ConcurrentMap;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.log.Log;
 
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 
 public class GameTurn {
 	
-	protected static final Logger logger = Logger.getLogger("GameTurn");
 
 	final String	wordText;
 	final int		wordLevel;			
 	final int		round;
+	final int		sessionId;
 	
 	GameCompleteReason completeReason = GameCompleteReason.REASON_NOT_COMPLETE;
 	
@@ -29,7 +30,8 @@ public class GameTurn {
 	List<DrawAction>	drawActionList = new ArrayList<DrawAction>();
 
 	
-	public GameTurn(int round, String word, int level) {
+	public GameTurn(int sessionId, int round, String word, int level) {
+		this.sessionId = sessionId;
 		this.round = round;
 		this.wordLevel = level;
 		this.wordText = word;
@@ -104,7 +106,7 @@ public class GameTurn {
 				break;
 			}
 			
-			logger.info("<userGuessWord> correct, gain coins = " + finalCoins);
+			GameLog.info(sessionId, "<userGuessWord> correct, gain coins = " + finalCoins);
 		}
 
 		guess.guess(guessWord, isCorrect, finalCoins);
