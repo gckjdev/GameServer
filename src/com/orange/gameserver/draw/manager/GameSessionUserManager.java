@@ -35,7 +35,7 @@ public class GameSessionUserManager {
     	return manager; 
     } 
 
-    public void addUserIntoSession(User user, GameSession session){    	
+    public int addUserIntoSession(User user, GameSession session){    	
 
     	int sessionId = session.getSessionId();
     	CopyOnWriteArrayList<User> users = new CopyOnWriteArrayList<User>();
@@ -55,9 +55,12 @@ public class GameSessionUserManager {
         		session.setCurrentPlayUser(firstUser);
         		logger.info("<addUserIntoSession> init first user as current, user = " + firstUser);
         	}
+        	
+        	return size;
 		}
-    	    	
-    	return;
+		else{
+			return users.size();
+		}    	    	
     }
     
     public void removeUserFromSession(String userId, int sessionId){

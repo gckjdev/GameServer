@@ -117,12 +117,14 @@ public class GameSessionManager {
 			
 			sessionId = getSessionFromSet(candidateSet, excludeSessionSet);
 			if (sessionId != -1){
+				logger.info("allocGameSessionForUser, use candidate set, sessionId="+sessionId);
 				currentSet = candidateSet;
 			}
 
 			if (sessionId == -1){
 				sessionId = getSessionFromSet(freeSet, excludeSessionSet);
 				if (sessionId != -1){
+					logger.info("allocGameSessionForUser, use free set, sessionId="+sessionId);
 					currentSet = freeSet;
 				}
 			}
@@ -135,10 +137,13 @@ public class GameSessionManager {
 				
 				// adjust candidate and full set, also add user
 				if (userCount >= MAX_USER_PER_GAME_SESSION){
-					currentSet.remove(sessionId);
+					logger.info("allocGameSessionForUser, user count "+userCount+" reach max user, remove from freeset/candidate set");
+					freeSet.remove(sessionId);
+					candidateSet.remove(sessionId);
 					fullSet.add(sessionId);
 				}
 				else if (userCount >= MAX_USER_PER_GAME_SESSION - 2){
+					logger.info("allocGameSessionForUser, user count "+userCount+" reach max user - 2, move to candidate set");
 					currentSet.remove(sessionId);
 					candidateSet.add(sessionId);
 				}
@@ -220,10 +225,9 @@ public class GameSessionManager {
 	}
 	
 	private int addUserIntoSession(String userId, String nickName, String avatar, boolean gender, Channel channel, GameSession session){
-			User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId());
-			sessionUserManager.addUserIntoSession(user, session);
-			return 0;
-	}		
+		User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId());
+		return sessionUserManager.addUserIntoSession(user, session);
+	}			
 	
 	public void printSets() {		
 		logger.info("<Free Set> : " + freeSet);
