@@ -21,7 +21,7 @@ import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 public class GameSessionUserManager {
 
 //	protected static final Logger logger = Logger.getLogger("GameSessionUserManager");
-	public static final int MAX_USER_PER_SESSION = 5;
+	public static final int MAX_USER_PER_SESSION = 6;
 	
 	ConcurrentMap<Integer, CopyOnWriteArrayList<User>> sessionUserMap = 
 		new ConcurrentHashMap<Integer, CopyOnWriteArrayList<User>>();

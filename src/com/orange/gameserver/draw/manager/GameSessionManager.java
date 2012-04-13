@@ -15,6 +15,7 @@ import org.jboss.netty.channel.Channel;
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 
 
@@ -101,14 +102,14 @@ public class GameSessionManager {
 			
 			sessionId = getSessionFromSet(candidateSet, excludeSessionSet);
 			if (sessionId != -1){
-				logger.info("allocGameSessionForUser, use candidate set, sessionId="+sessionId);
+				GameLog.info(sessionId, "alloc session, use candidate set");
 				currentSet = candidateSet;
 			}
 
 			if (sessionId == -1){
 				sessionId = getSessionFromSet(freeSet, excludeSessionSet);
 				if (sessionId != -1){
-					logger.info("allocGameSessionForUser, use free set, sessionId="+sessionId);
+					GameLog.info(sessionId, "alloc session, use free set, sessionId=");
 					currentSet = freeSet;
 				}
 			}
@@ -121,13 +122,13 @@ public class GameSessionManager {
 				
 				// adjust candidate and full set, also add user
 				if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION){
-					logger.info("allocGameSessionForUser, user count "+userCount+" reach max user, remove from freeset/candidate set");
+					GameLog.info(sessionId, "alloc session, user count "+userCount+" reach max user, remove from freeset/candidate set");
 					freeSet.remove(sessionId);
 					candidateSet.remove(sessionId);
 					fullSet.add(sessionId);
 				}
 				else if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION - 2){
-					logger.info("allocGameSessionForUser, user count "+userCount+" reach max user - 2, move to candidate set");
+					GameLog.info(sessionId, "alloc session, user count "+userCount+" reach max user - 2, move to candidate set");
 					currentSet.remove(sessionId);
 					candidateSet.add(sessionId);
 				}
