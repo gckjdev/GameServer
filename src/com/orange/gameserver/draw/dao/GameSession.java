@@ -82,14 +82,17 @@ public class GameSession {
 	}
 
 	@Override
+//	public String toString() {
+//		return "GameSession [createBy=" + createBy + ", createDate="
+//				+ createDate + ", currentPlayUser=" + currentPlayUser
+//				+ ", currentState=" + currentState + ", host=" + host
+//				+ ", name=" + name
+//				+ ", sessionId=" + sessionId + "]\n";
+//	}
 	public String toString() {
-		return "GameSession [createBy=" + createBy + ", createDate="
-				+ createDate + ", currentPlayUser=" + currentPlayUser
-				+ ", currentState=" + currentState + ", host=" + host
-				+ ", name=" + name
-				+ ", sessionId=" + sessionId + "]\n";
+		return String.format("[%010d]", sessionId);
 	}
-
+	
 	public boolean isStart() {
 		return (status == SessionStatus.PLAYING);
 	}

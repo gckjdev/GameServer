@@ -53,6 +53,9 @@ public class ChannelUserManager {
     public void removeChannel(Channel channel){
 		logger.info("<removeChannel> Channel " + channel.toString());    		
     	channelUserMap.remove(channel);
+    	if (channel.isOpen()){
+    		channel.close();
+    	}
     }
     
 	public List<String> findUsersInChannel(Channel channel) {		

@@ -79,7 +79,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	
 	@Override
 	public void exceptionCaught( ChannelHandlerContext ctx, ExceptionEvent e) {
-		logger.error("GameServerHandler catch unexpected exception .", e.getCause());
+		logger.error("GameServerHandler catch unexpected exception at " + e.getChannel().toString() + ", cause=", e.getCause());
 		e.getChannel().close();
 	}
 			
