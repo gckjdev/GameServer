@@ -34,7 +34,7 @@ public class DrawGameClient {
 //        future.getChannel().getCloseFuture().awaitUninterruptibly();
 //        // Shut down thread pools to exit.
 //        bootstrap.releaseExternalResources();
-		int userCount = 4;
+		int userCount = 3;
 		for (int i = 0; i < userCount; i++) {
 			new Thread(new UserTask()).start();
 		}

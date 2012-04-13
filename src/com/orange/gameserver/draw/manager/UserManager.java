@@ -26,7 +26,7 @@ public class UserManager {
 	public void removeOnlineUserById(String userId) {
 		logger.info("<removeOnlineUserById> userId= " + userId);
 		if (userId != null) {			
-			this.onlineUserMap.remove(userId);	
+			this.onlineUserMap.remove(userId);
 		}	
 	}
 	
