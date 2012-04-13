@@ -54,9 +54,8 @@ public class GameWorkerThread extends Thread {
 					continue;
 				}
 				
-				String id = String.format("[%010d]", session.getSessionId());
 				 com.orange.common.statemachine.State nextState = 
-					 stateMachine.nextState(session.getCurrentState(), event, id);
+					 stateMachine.nextState(session.getCurrentState(), event, session);
 				 
 				 if (nextState == null){
 					 // incorrect message event?
