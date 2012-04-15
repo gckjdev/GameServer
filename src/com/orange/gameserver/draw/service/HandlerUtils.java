@@ -21,6 +21,8 @@ public class HandlerUtils {
 			return;
 		
 		GameLog.debug((int)message.getSessionId(), message.toString());
+		GameLog.info((int)message.getSessionId(), "SEND "+message.getCommand().toString(), 
+				"to user="+message.getUserId(), "resultCode="+message.getResultCode());
 		if (channel.isConnected() && channel.isWritable()){
 			channel.write(message);
 		}
@@ -31,6 +33,8 @@ public class HandlerUtils {
 			return;
 		
 		GameLog.debug((int)response.getSessionId(), response.toString());
+		GameLog.info((int)response.getSessionId(), "SEND "+response.getCommand().toString(), 
+				"to user="+response.getUserId(), "resultCode="+response.getResultCode());
 		gameEvent.getChannel().write(response);
 	}
 
@@ -69,6 +73,8 @@ public class HandlerUtils {
 
 		GameLog.debug((int)response.getSessionId(), response.toString());
 		if (channel.isConnected() && channel.isWritable()){
+			GameLog.info((int)response.getSessionId(), "SEND "+response.getCommand().toString(), 
+					"to user="+response.getUserId(), "resultCode="+response.getResultCode());
 			channel.write(response);
 		}
 	}

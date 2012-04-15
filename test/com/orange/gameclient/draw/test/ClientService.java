@@ -1,6 +1,7 @@
 package com.orange.gameclient.draw.test;
 
 import org.apache.cassandra.thrift.Cassandra.Client;
+import org.apache.log4j.Logger;
 import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameclient.draw.test.dao.ClientUser;
@@ -11,6 +12,8 @@ import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRe
 
 public class ClientService {
 
+	private static final Logger logger = Logger
+	.getLogger(ClientService.class.getName());
 	private static int messageId = 1;
 	private static ClientService instance = new ClientService();
 
@@ -33,6 +36,7 @@ public class ClientService {
 	}
 
 	void sendStartRequst(ClientUser user) {
+		logger.info("send start game request for user="+user.getNickName());
 		sendSimpleMessage(GameCommandType.START_GAME_REQUEST, user);
 	}
 
@@ -58,6 +62,7 @@ public class ClientService {
 
 		} else {
 
+			
 			request = JoinGameRequest.newBuilder().setUserId(user.getUserId())
 					.setNickName(user.getNickName())
 					.setGender(user.getGender()).setAvatar(user.getAvatarUrl())
@@ -68,15 +73,21 @@ public class ClientService {
 					.setJoinGameRequest(request).build();
 		}
 
+		logger.info("send join game request for user="+user.getNickName());
 		user.getChannel().write(message);
 
 	}
 
 	void sendRunawayRequest(ClientUser user) {
+		logger.info("send quit game request for user="+user.getNickName());
 		sendSimpleMessage(GameCommandType.QUIT_GAME_REQUEST, user);
+		user.getChannel().disconnect();
+		user.getChannel().close();
 	}
 
 	public void sendStartDraw(ClientUser user, String word, int level) {
+		logger.info("send start draw request for user="+user.getNickName());
+
 		SendDrawDataRequest request = SendDrawDataRequest.newBuilder().setWord(
 				word).setLevel(level).setLanguage(1).build();
 		GameMessage message = GameMessage.newBuilder()
@@ -88,6 +99,7 @@ public class ClientService {
 	}
 	
 	public void sendGeussWordRequest(ClientUser user, String word) {
+		logger.info("send guess word request for user="+user.getNickName());
 		
 		SendDrawDataRequest request = SendDrawDataRequest.newBuilder().setGuessWord(
 				word).setGuessUserId(user.getUserId()).build();

@@ -1,5 +1,6 @@
 package com.orange.gameclient.draw.test;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,6 +30,8 @@ public class GameClientHandler extends SimpleChannelUpstreamHandler {
 	private static int joinCount = 0;
 	private static int startCount = 0;
 	private ClientService service = ClientService.getInstanceClientService();
+	
+	boolean startGameByMe = false;
 
 	public GameClientHandler() {
 		super();
@@ -47,6 +50,11 @@ public class GameClientHandler extends SimpleChannelUpstreamHandler {
 		super.handleUpstream(ctx, e);
 	}
 
+	int randValue(int number){
+		Random random = new Random();
+		random.setSeed(System.currentTimeMillis());
+		return random.nextInt(number);
+	}
 	
 	private void handleJoinGameResponse(GameMessage message){
 
@@ -61,8 +69,10 @@ public class GameClientHandler extends SimpleChannelUpstreamHandler {
 		logger.info("<DIDJOIN>:" + SessionManager.getString());
 		logger.info("<JOINCOUNT>:" + joinCount++);
 		
+		
+		
 		if (currentPlayer != null && currentPlayer.equalsIgnoreCase(user.getUserId())) {
-			startGame(10000);
+			startGame(randValue(5000));
 		}
 
 	}
@@ -102,16 +112,23 @@ public class GameClientHandler extends SimpleChannelUpstreamHandler {
 		}
 	}
 
-
+	Timer startTimer = null;
 
 	private void startGame(long delay){
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		
+		if (startTimer != null){
+			startTimer.cancel();
+			startTimer = null;
+		}
+		
+		startTimer = new Timer();
+		startTimer.schedule(new TimerTask() {
 			
 			@Override
 			public void run() {
 				logger.info("<Start> " + user.getNickName()+" start game, session in " + user.getSessionId());
 				service.sendStartRequst(user);
+				startGameByMe = true;
 				logger.info("<StartCount>:"+ (++startCount));					
 			}
 		},delay);
@@ -121,34 +138,91 @@ public class GameClientHandler extends SimpleChannelUpstreamHandler {
 	private void handleGameCompleteNotificationResquest(GameMessage message) {
 		String uid =  message.getNotification().getCurrentPlayUserId();
 		
-		logger.info("<COMPLETE>"+" next player " + uid);
+		// clear timer
+		if (startTimer != null){
+			startTimer.cancel();
+			startTimer = null;
+		}
+		
+		if (sendGuessWordTimer != null){
+			sendGuessWordTimer.cancel();
+			sendGuessWordTimer = null;
+		}
+
+		if (quitGameTimer != null){
+			quitGameTimer.cancel();
+			quitGameTimer = null;
+		}
+		
+		startGameByMe = false;
+		
+		logger.info("<COMPLETE> reason="+message.getCompleteReason()+" next player " + uid);
+		
 		
 		if (uid.equalsIgnoreCase(user.getUserId())) {
 			startGame(5000);
 		}
 	}
 
+	Timer sendGuessWordTimer = null;
+	Timer quitGameTimer = null;
+	
 	private void handleNewWordNotificationResponse(GameMessage message) {
 		
-		final String word = message.getSendDrawDataRequest().getGuessWord(); 
+		final String word = message.getNotification().getWord();
 		logger.info("<WORD>:"+ word);
 //		if (word == null || word.length() == 0) {
 //			return;
 //		}
 		
-		new Timer().schedule(new TimerTask() {
-			
-			@Override
-			public void run() {
-				logger.info("<GUESS> " + user.getNickName() + " guess word ");
-//				if ((Math.random() * 12121) % 3 == 1) {
-//					service.sendGeussWordRequest(user, "杯子");	
-//				}else{
-//					service.sendGeussWordRequest(user, "屌丝");
-//				}
-				service.sendGeussWordRequest(user, "杯子");
+		
+		int rand = this.randValue(5000);
+
+//		boolean enableQuit = false;
+		
+		if (randValue(100) == 0 && !startGameByMe){
+			// quit game randomly
+			if (quitGameTimer != null){
+				quitGameTimer.cancel();
+				quitGameTimer = null;
 			}
-		},5000);
+
+			quitGameTimer = new Timer();
+			quitGameTimer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					logger.info("<QUIT> " + user.getNickName());
+					service.sendRunawayRequest(user);
+				}
+			},1000);	// quit after 1 second			
+			
+		}
+		else{
+			
+			if (startGameByMe)		// don't send guess word due to game is started by me
+				return;
+			
+			if (sendGuessWordTimer != null){
+				sendGuessWordTimer.cancel();
+				sendGuessWordTimer = null;
+			}
+
+			sendGuessWordTimer = new Timer();
+			sendGuessWordTimer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					logger.info("<GUESS> " + user.getNickName() + " guess word ");
+//					if ((Math.random() * 12121) % 3 == 1) {
+//						service.sendGeussWordRequest(user, "杯子");	
+//					}else{
+//						service.sendGeussWordRequest(user, "屌丝");
+//					}
+					service.sendGeussWordRequest(user, "杯子");
+				}
+			},rand);			
+		}
 	}
 
 	@Override

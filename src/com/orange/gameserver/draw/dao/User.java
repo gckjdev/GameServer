@@ -80,7 +80,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [avatar=" + avatar + ", nickName=" + nickName
+		return "User [nickName=" + nickName
 				+ ", userId=" + userId + "]";
 	}
 	

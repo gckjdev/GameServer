@@ -109,7 +109,7 @@ public class GameSessionManager {
 			if (sessionId == -1){
 				sessionId = getSessionFromSet(freeSet, excludeSessionSet);
 				if (sessionId != -1){
-					GameLog.info(sessionId, "alloc session, use free set, sessionId=");
+					GameLog.info(sessionId, "alloc session, use free set");
 					currentSet = freeSet;
 				}
 			}

@@ -31,7 +31,7 @@ public class SessionManager {
 				logger.error("session " + sessionID + " session count " + countInteger + " bigger than max "+ MAX_COUNT);
 			}
 			sessionMap.put(Long.valueOf(sessionID), countInteger);
-			logger.info("user count = " + (count ++) + "�� "+ "session count = "+sessionMap.keySet().size());
+			logger.info("user count = " + (count ++) + " "+ "session count = "+sessionMap.keySet().size());
 
 		}
 	}

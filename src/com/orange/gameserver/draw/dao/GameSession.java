@@ -99,24 +99,24 @@ public class GameSession {
 
 	public void startGame(){
 		status = SessionStatus.PLAYING;
-		GameLog.info(sessionId, "start game, set status to" + status);
+		GameLog.info(sessionId, "start game, set status to " + status);
 	}
 	
 	public void finishGame(){
 		status = SessionStatus.WAIT;
-		GameLog.info(sessionId, "finish game, set status to" + status);
+		GameLog.info(sessionId, "finish game, set status to " + status);
 	}
 	
 	public void resetGame() {
 		status = SessionStatus.INIT;
 		this.resetExpireTimer();
-		GameLog.info(sessionId, "reset game, set status to" + status);
+		GameLog.info(sessionId, "reset game, set status to " + status);
 	}
 
 	public void waitForPlay() {
 		status = SessionStatus.WAIT;
 		this.resetExpireTimer();
-		GameLog.info(sessionId, "wait for play, set status to" + status);
+		GameLog.info(sessionId, "wait for play, set status to " + status);
 	}
 	
 	public void startNewTurn(String word, int level){
