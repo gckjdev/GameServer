@@ -27,6 +27,7 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 			.addTransition(GameCommandType.LOCAL_JOIN_GAME, GameStateKey.WAITING)
 			
 			// no change on state
+			.addTransition(GameCommandType.LOCAL_USER_TIME_OUT, GameStateKey.CREATE)
 			.addTransition(GameCommandType.LOCAL_CHANNEL_DISCONNECT, GameStateKey.CREATE)
 			.addTransition(GameCommandType.CHAT_REQUEST, GameStateKey.CREATE)
 			.addTransition(GameCommandType.QUIT_GAME_REQUEST, GameStateKey.CREATE)
@@ -41,6 +42,7 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 			.addTransition(GameCommandType.LOCAL_CHANNEL_DISCONNECT, GameStateKey.WAITING)
 			.addTransition(GameCommandType.QUIT_GAME_REQUEST, GameStateKey.WAITING)
 			.addTransition(GameCommandType.CHAT_REQUEST, GameStateKey.WAITING)
+			.addTransition(GameCommandType.LOCAL_USER_TIME_OUT, GameStateKey.WAITING)
 
 			// make transition
 			.addTransition(GameCommandType.LOCAL_GAME_TURN_COMPLETE, GameStateKey.WAITING)
@@ -53,6 +55,8 @@ public class GameStateMachineBuilder extends StateMachineBuilder {
 			.addTransition(GameCommandType.QUIT_GAME_REQUEST, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.LOCAL_JOIN_GAME, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.CHAT_REQUEST, GameStateKey.PLAYING)
+			.addTransition(GameCommandType.LOCAL_USER_TIME_OUT, GameStateKey.PLAYING)
+			
 
 			.addTransition(GameCommandType.SEND_DRAW_DATA_REQUEST, GameStateKey.PLAYING)
 			.addTransition(GameCommandType.CLEAN_DRAW_REQUEST, GameStateKey.PLAYING)

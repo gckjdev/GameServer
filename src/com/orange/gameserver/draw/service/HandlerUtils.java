@@ -16,6 +16,12 @@ public class HandlerUtils {
 
 //	protected static final Logger logger = Logger.getLogger(HandlerUtils.class.getName());
 
+	public static void safeWrite(Channel channel, GameMessage message){
+		if (channel.isConnected() && channel.isWritable()){
+			channel.write(message);
+		}
+	}
+	
 	public static void sendMessage(GameEvent gameEvent, GameMessage message, Channel channel) {
 		if (gameEvent == null || message == null || channel == null)
 			return;
@@ -23,9 +29,7 @@ public class HandlerUtils {
 		GameLog.debug((int)message.getSessionId(), message.toString());
 		GameLog.info((int)message.getSessionId(), "SEND "+message.getCommand().toString(), 
 				"to user="+message.getUserId(), "resultCode="+message.getResultCode());
-		if (channel.isConnected() && channel.isWritable()){
-			channel.write(message);
-		}
+		safeWrite(channel, message);
 	}
 	
 	public static void sendResponse(GameEvent gameEvent, GameMessage response) {
@@ -35,7 +39,8 @@ public class HandlerUtils {
 		GameLog.debug((int)response.getSessionId(), response.toString());
 		GameLog.info((int)response.getSessionId(), "SEND "+response.getCommand().toString(), 
 				"to user="+response.getUserId(), "resultCode="+response.getResultCode());
-		gameEvent.getChannel().write(response);
+		safeWrite(gameEvent.getChannel(), response);
+
 	}
 
 
@@ -72,10 +77,8 @@ public class HandlerUtils {
 			.build();
 
 		GameLog.debug((int)response.getSessionId(), response.toString());
-		if (channel.isConnected() && channel.isWritable()){
-			GameLog.info((int)response.getSessionId(), "SEND "+response.getCommand().toString(), 
-					"to user="+response.getUserId(), "resultCode="+response.getResultCode());
-			channel.write(response);
-		}
+		GameLog.info((int)response.getSessionId(), "SEND "+response.getCommand().toString(), 
+				"to user="+response.getUserId(), "resultCode="+response.getResultCode());
+		safeWrite(channel, response);
 	}
 }

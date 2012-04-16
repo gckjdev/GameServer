@@ -4,8 +4,13 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.cassandra.cli.CliParser.newColumnFamily_return;
@@ -34,6 +39,8 @@ public class GameService {
 	protected static final Logger logger = Logger.getLogger(GameService.class
 			.getName());
 
+	
+	
 	ConcurrentHashMap<Integer, GameWorkerThread> workerThreads = new ConcurrentHashMap<Integer, GameWorkerThread>();
 	int numberOfWorkerThread = 20;
 
@@ -156,5 +163,38 @@ public class GameService {
 
 		dispatchEvent(event);
 	}
+	
+//	public void fireTimeOutEvent(final GameSession session) {
+//		GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+//			.setCommand(GameCommandType.LOCAL_GAME_TIME_OUT)
+//			.setSessionId(session.getSessionId())
+//			.setMessageId(0)
+//			.build();
+//
+//		GameLog.info(session.getSessionId(), "fire LOCAL_GAME_TIME_OUT event");
+//		GameEvent event = new GameEvent(GameCommandType.LOCAL_GAME_TIME_OUT, 
+//			session.getSessionId(), message, null);
+//
+//		dispatchEvent(event);
+//	}
+
+	public void fireUserTimeOutEvent(int sessionId, String userId, final Channel channel) {
+		GameLog.info(sessionId, "fire LOCAL_USER_TIME_OUT event for user "+userId);
+		GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+			.setCommand(GameCommandType.LOCAL_USER_TIME_OUT)
+			.setSessionId(sessionId)
+			.setUserId(userId)
+			.setMessageId(0)
+			.build();
+
+//		GameLog.info(sessionId, "step 2, fire LOCAL_USER_TIME_OUT event for user "+userId);
+		GameEvent event = new GameEvent(GameCommandType.LOCAL_USER_TIME_OUT, 
+			sessionId, message, channel);
+	
+		dispatchEvent(event);
+		
+	}
+	
+	
 
 }

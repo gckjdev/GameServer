@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.MessageEvent;
 
 import sun.tools.tree.ThisExpression;
@@ -11,6 +12,7 @@ import sun.tools.tree.ThisExpression;
 import com.orange.common.statemachine.Event;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.manager.ChannelUserManager;
 import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.GameSessionUserManager;
 import com.orange.gameserver.draw.manager.UserManager;
@@ -59,7 +61,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 	public static void handleStartGameRequest(GameEvent gameEvent,
 			GameSession session) {
-		
+					
 		// start game
 		session.startGame();
 		GameSessionManager.getInstance().adjustSessionSetForPlaying(session); // adjust set so that it's not allowed to join
@@ -116,6 +118,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			session.startNewTurn(drawRequest.getWord(), drawRequest.getLevel());
 
 			// schedule timer for finishing this turn
+//			session.clearStartExpireTimer();
 			gameService.scheduleGameSessionExpireTimer(session);
 		}
 		
@@ -152,7 +155,13 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		if (chatRequest == null)
 			return;				
 		
+		String userId = gameEvent.getMessage().getUserId();
+		if (session.getCurrentPlayUserId().equals(userId)){
+			session.resetStartExpireTimer();
+		}
+		
 		// TODO record chat data into turn
+		
 		
 		// broast draw data to all other users in the session
 		GameNotification.broadcastChatNotification(session, gameEvent, gameEvent.getMessage().getUserId());
@@ -226,18 +235,17 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 	public static void handleChangeRoomRequest(GameEvent gameEvent,
 			GameSession session) {
-
-		User user = userManager.findUserById(gameEvent.getMessage().getUserId());
-		if (user == null){
-			GameLog.info(session.getSessionId(), "<handleChangeRoomRequest> but user id "+gameEvent.getMessage().getUserId()
-					+" not found");
-			HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.ERROR_USER_NOT_IN_SESSION);
-			return;
+		
+		JoinGameRequest request = gameEvent.getMessage().getJoinGameRequest();
+		if (request == null){
+			GameLog.info(session.getSessionId(), "<handleChangeRoomRequest> but request null ");
+			HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.ERROR_JOIN_GAME);
+			return;			
 		}
 
-		String nickName = user.getNickName();
-		String avatar = user.getAvatar();
-		boolean gender = user.getGender();
+		String nickName = request.getNickName();
+		String avatar = request.getAvatar();
+		boolean gender = request.getGender();
 
 		// user quit session
 		userQuitSession(gameEvent, session);
@@ -302,5 +310,23 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// send back response
 		HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.SUCCESS);
+	}
+
+	public static void handleUserTimeOut(GameEvent gameEvent,
+			GameSession session) {
+
+		if (sessionUserManager.getSessionUserCount(session.getSessionId()) == 1){
+			GameLog.info(session.getSessionId(), "<UserTimeOut> but only has one user, userId="+
+					gameEvent.getMessage().getUserId());
+			session.resetStartExpireTimer();
+			return;
+		}
+
+		// quit user
+		userQuitSession(gameEvent, session);		
+		
+		if (gameEvent.getChannel() != null){
+			ChannelUserManager.getInstance().processDisconnectChannel(gameEvent.getChannel());
+		}
 	}
 }

@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledFuture;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 
 import com.orange.common.statemachine.State;
+import com.orange.gameserver.draw.manager.GameSessionUserManager;
+import com.orange.gameserver.draw.manager.UserManager;
+import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameStartState;
 import com.orange.gameserver.draw.statemachine.game.GameStateKey;
 import com.orange.gameserver.draw.utils.GameLog;
@@ -99,17 +104,20 @@ public class GameSession {
 
 	public void startGame(){
 		status = SessionStatus.PLAYING;
+		clearStartExpireTimer();		
 		GameLog.info(sessionId, "start game, set status to " + status);
 	}
 	
 	public void finishGame(){
 		status = SessionStatus.WAIT;
+		clearStartExpireTimer();
 		GameLog.info(sessionId, "finish game, set status to " + status);
 	}
 	
 	public void resetGame() {
 		status = SessionStatus.INIT;
 		this.resetExpireTimer();
+		clearStartExpireTimer();
 		GameLog.info(sessionId, "reset game, set status to " + status);
 	}
 
@@ -176,9 +184,55 @@ public class GameSession {
 		return currentPlayUser.userId.equals(userId);
 	}
 
+	Timer startExpireTimer = null;
+	static final int DEFAULT_START_EXPIRE_TIMER = 30*1000;
+	
+	public void clearStartExpireTimer(){
+		if (startExpireTimer != null){
+			GameLog.info(sessionId, "Clear start expire timer");			
+			startExpireTimer.cancel();
+			startExpireTimer = null;
+		}
+	}
+	
+	public void scheduleStartExpireTimer(final String userId){
+				
+		clearStartExpireTimer();		
+
+		GameLog.info(sessionId, "Scheule start expire timer on userId="+userId);
+		startExpireTimer = new Timer();
+		startExpireTimer.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				GameLog.info(sessionId, "Fire start expire timer on userId="+userId);
+				User user = UserManager.getInstance().findUserById(userId);
+				if (user == null){
+					// user already disconnect?
+					GameService.getInstance().fireUserTimeOutEvent(sessionId, userId, null);					
+				}
+				else{
+					GameService.getInstance().fireUserTimeOutEvent(sessionId, userId, user.getChannel());
+				}
+			}
+			
+		}, DEFAULT_START_EXPIRE_TIMER);
+	}
+	
+	public void resetStartExpireTimer() {
+		if (this.currentPlayUser != null){
+			scheduleStartExpireTimer(currentPlayUser.getUserId());
+		}
+	}	
+	
 	public synchronized void setCurrentPlayUser(User user){
 		this.currentPlayUser = user;
-		GameLog.info(sessionId, "current play user is set to "+user);					
+		GameLog.info(sessionId, "current play user is set to "+user);		
+		
+		if (user != null){
+			// set a start timer here
+			scheduleStartExpireTimer(user.getUserId());
+		}
 	}
 
 	public boolean isAllUserGuessWord(int userCount) {
@@ -245,6 +299,23 @@ public class GameSession {
 		return this.currentPlayUser;
 	}
 
+	private ScheduledFuture timeOutFuture = null;
 	
+	public void setTimeOutFuture(ScheduledFuture future) {
+		if (timeOutFuture != null){
+			timeOutFuture.cancel(false);
+			timeOutFuture = null;
+		}
+		
+		timeOutFuture = future;
+	}
+
+	public void clearTimeOutFuture(ScheduledFuture future) {
+		if (timeOutFuture != null){
+			timeOutFuture.cancel(false);
+			timeOutFuture = null;
+		}		
+	}
+
 	
 }

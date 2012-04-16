@@ -4,8 +4,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
@@ -15,6 +20,7 @@ import org.jboss.netty.channel.Channel;
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 
@@ -72,9 +78,13 @@ public class GameSessionManager {
 		int sessionId = -1;
 		if (set.isEmpty())
 			return -1;
+
+		Iterator<Integer> iterSet = set.iterator();
+		if (iterSet == null || !iterSet.hasNext())
+			return -1;					
 		
 		if (excludeSessionSet == null){
-			sessionId = set.iterator().next().intValue();
+			sessionId = iterSet.next().intValue();
 			return sessionId;
 		}		
 		
@@ -83,7 +93,7 @@ public class GameSessionManager {
 		diffSet.removeAll(excludeSessionSet);
 
 		Iterator<Integer> iter = diffSet.iterator();
-		while (iter != null){
+		while (iter != null && iter.hasNext()){
 			sessionId = iter.next().intValue();
 			if (!playSet.contains(sessionId)){
 				return sessionId;
@@ -265,5 +275,19 @@ public class GameSessionManager {
 		}
 	}
 	
+//	public void scheduleTimeOutOnSession(final GameSession session, int timeOutSeconds){
+//
+//		Callable callable = new Callable(){
+//			@Override
+//			public Object call()  {
+//				GameService.getInstance().fireTimeOutEvent(session);
+//				return null;
+//			}			
+//		};
+//		
+//		ScheduledFuture future = scheduleService.schedule(callable, timeOutSeconds, TimeUnit.SECONDS);  
+//		
+//		session.setTimeOutFuture(future);
+//	}
 
 }
