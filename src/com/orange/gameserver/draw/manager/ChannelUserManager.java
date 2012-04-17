@@ -82,7 +82,7 @@ public class ChannelUserManager {
 		return userList;
 	}
 	
-	static final int DEFAULT_USER_TIMEOUT_SECONDS = 60;
+	static final int DEFAULT_USER_TIMEOUT_SECONDS = 90;
 	
 	public void resetUserTimeOut(final Channel channel) {
 		
