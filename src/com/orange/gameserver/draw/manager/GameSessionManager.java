@@ -73,6 +73,18 @@ public class GameSessionManager {
 	public GameSession findGameSessionById(int id) {
 		return gameCollection.get(id);		
 	}
+	
+	private boolean isForFree(int count){
+		return (count >0);
+	}
+	
+	private boolean isForCandidate(int count){
+		return (count >=1 && count<4);
+	}
+	
+	private boolean isForFull(int count){
+		return (count >= GameSessionUserManager.MAX_USER_PER_SESSION);
+	}
 
 	private int getSessionFromSet(Set<Integer> set, Set<Integer> excludeSessionSet){
 		int sessionId = -1;
@@ -131,14 +143,14 @@ public class GameSessionManager {
 				int userCount = addUserIntoSession(userId, nickName, avatar, gender, channel, session);
 				
 				// adjust candidate and full set, also add user
-				if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION){
-					GameLog.info(sessionId, "alloc session, user count "+userCount+" reach max user, remove from freeset/candidate set");
+				if (isForFull(userCount)){
+					GameLog.info(sessionId, "alloc session, user count "+userCount+" reach max, remove from freeset/candidate set");
 					freeSet.remove(sessionId);
 					candidateSet.remove(sessionId);
 					fullSet.add(sessionId);
 				}
-				else if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION - 2){
-					GameLog.info(sessionId, "alloc session, user count "+userCount+" reach max user - 2, move to candidate set");
+				else if (isForCandidate(userCount)){
+					GameLog.info(sessionId, "alloc session, user count "+userCount+", move to candidate set");
 					currentSet.remove(sessionId);
 					candidateSet.add(sessionId);
 				}
@@ -174,10 +186,10 @@ public class GameSessionManager {
 			playSet.remove(sessionId);
 			
 			// adjust candidate and full set, also add user
-			if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION){
+			if (isForFull(userCount)){
 				fullSet.add(sessionId);
 			}
-			else if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION - 2){
+			else if (isForCandidate(userCount)){
 				candidateSet.add(sessionId);
 			}				
 			else{
@@ -194,12 +206,12 @@ public class GameSessionManager {
 			
 			boolean isSessionPlaying = playSet.contains(sessionId);			
 			
-			if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION){
+			if (isForFull(userCount)){
 				candidateSet.remove(sessionId);
 				freeSet.remove(sessionId);
 				fullSet.add(sessionId);
 			}
-			else if (userCount >= GameSessionUserManager.MAX_USER_PER_SESSION - 2){
+			else if (isForCandidate(userCount)){ 
 				freeSet.remove(sessionId);
 				fullSet.remove(sessionId);
 				if (!isSessionPlaying)

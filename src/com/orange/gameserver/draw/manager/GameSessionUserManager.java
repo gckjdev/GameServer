@@ -20,8 +20,8 @@ import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 public class GameSessionUserManager {
 
-//	protected static final Logger logger = Logger.getLogger("GameSessionUserManager");
-	public static final int MAX_USER_PER_SESSION = 6;
+	protected static final Logger logger = Logger.getLogger("GameSessionUserManager");
+	public static int MAX_USER_PER_SESSION = 6;
 	
 	ConcurrentMap<Integer, CopyOnWriteArrayList<User>> sessionUserMap = 
 		new ConcurrentHashMap<Integer, CopyOnWriteArrayList<User>>();
@@ -29,7 +29,20 @@ public class GameSessionUserManager {
 	// thread-safe singleton implementation
     private static GameSessionUserManager manager = new GameSessionUserManager(); 
     
+    public void initMaxUserPerSession(){    		
+    	String value = System.getProperty("game.maxsessionuser");
+		if (value != null && !value.isEmpty()){
+			MAX_USER_PER_SESSION = Integer.parseInt(value);
+		}
+		else{
+			MAX_USER_PER_SESSION = 6; // default
+		}
+		
+		logger.info("set MAX_USER_PER_SESSION to "+MAX_USER_PER_SESSION);
+    }
+    
     private GameSessionUserManager(){		
+    	initMaxUserPerSession();
 	} 	    
     
     public static GameSessionUserManager getInstance() { 

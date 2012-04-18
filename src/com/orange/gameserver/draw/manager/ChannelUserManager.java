@@ -39,6 +39,7 @@ public class ChannelUserManager {
     
     public void addChannel(Channel channel){
 		logger.info("<addChannel> Channel " + channel.toString());
+		logger.info("<addChannel> Channel Count = " + channelUserMap.size());
 		CopyOnWriteArrayList<String> userList = new CopyOnWriteArrayList<String>();
 		channelUserMap.putIfAbsent(channel, userList);
     }
@@ -63,6 +64,7 @@ public class ChannelUserManager {
     
     public void removeChannel(Channel channel){
 		logger.info("<removeChannel> Channel " + channel.toString());
+		logger.info("<removeChannel> Channel Count = " + channelUserMap.size());
 		clearChannelTimeOut(channel);
     	channelUserMap.remove(channel);    	
     	channelTimeOutFutureMap.remove(channel);
@@ -82,7 +84,7 @@ public class ChannelUserManager {
 		return userList;
 	}
 	
-	static final int DEFAULT_USER_TIMEOUT_SECONDS = 90;
+	static final int DEFAULT_USER_TIMEOUT_SECONDS = 60*5;
 	
 	public void resetUserTimeOut(final Channel channel) {
 		

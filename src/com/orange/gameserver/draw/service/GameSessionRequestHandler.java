@@ -186,9 +186,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			completeGameTurn = true;
 			reason = GameCompleteReason.REASON_DRAW_USER_QUIT;
 		}
-		
 
-		GameSessionManager.getInstance().removeUserFromSession(message.getUserId(), session);
+		GameSessionManager.getInstance().removeUserFromSession(userId, session);
 		if (!completeGameTurn){
 			int sessionUserCount = sessionUserManager.getSessionUserCount(sessionId);
 			if (sessionUserCount <= 1){

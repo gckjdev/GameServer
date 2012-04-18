@@ -236,8 +236,10 @@ public class GameSession {
 	}
 
 	public boolean isAllUserGuessWord(int userCount) {
-		if (currentTurn == null)
-			return true;
+		if (currentTurn == null){
+			GameLog.warn(sessionId, "call isAllUserGuessWord but current turn is null?");
+			return false;
+		}
 		
 		return currentTurn.isAllUserGuessWord(userCount);
 	}
