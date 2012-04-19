@@ -127,7 +127,7 @@ public class GameSession {
 		GameLog.info(sessionId, "wait for play, set status to " + status);
 	}
 	
-	public void startNewTurn(String word, int level){
+	public synchronized void startNewTurn(String word, int level){
 		if (currentTurn == null){
 			currentTurn = new GameTurn(sessionId, 1, word, level);
 		}
@@ -136,6 +136,13 @@ public class GameSession {
 		}		
 		GameLog.info(sessionId, "start new game turn "+currentTurn.getRound(), "word=" + word);
 	}
+	
+	public synchronized boolean isGameTurnPlaying(){
+		if (currentTurn == null)
+			return false;
+		
+		return currentTurn.isTurnPlaying();
+	}	
 
 	public int getCurrentRound() {
 		if (currentTurn == null)
@@ -318,6 +325,8 @@ public class GameSession {
 			timeOutFuture = null;
 		}		
 	}
+
+
 
 	
 }

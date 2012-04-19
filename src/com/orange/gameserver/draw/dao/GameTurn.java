@@ -16,11 +16,19 @@ import com.orange.network.game.protocol.constants.GameConstantsProtos.GameComple
 
 public class GameTurn {
 	
+	enum TurnStatus{
+		PICK_WORD,
+		PLAYING,
+		FINISH
+	}
+	
 
 	final String	wordText;
 	final int		wordLevel;			
 	final int		round;
 	final int		sessionId;
+	
+	TurnStatus status;
 	
 	GameCompleteReason completeReason = GameCompleteReason.REASON_NOT_COMPLETE;
 	
@@ -35,6 +43,7 @@ public class GameTurn {
 		this.round = round;
 		this.wordLevel = level;
 		this.wordText = word;
+		this.status = TurnStatus.PICK_WORD;
 	}
 
 	public void addDrawAction(DrawAction action){
@@ -162,10 +171,19 @@ public class GameTurn {
 	}
 	
 	public void completeTurn(GameCompleteReason reason){
+		setTurnStatus(TurnStatus.FINISH);
 		this.completeReason = reason;
 	}
 	
 	public GameCompleteReason getCompleteReason(){
 		return this.completeReason;
+	}
+	
+	public synchronized void setTurnStatus(TurnStatus newStatus){
+		this.status = newStatus;
+	}
+
+	public synchronized boolean isTurnPlaying() {
+		return (status != TurnStatus.FINISH);
 	}
 }

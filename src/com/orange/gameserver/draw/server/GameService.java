@@ -150,6 +150,12 @@ public class GameService {
 	}
 
 	public void fireTurnFinishEvent(GameSession session, GameCompleteReason reason) {
+		
+		if (session.isGameTurnPlaying() == false){
+			GameLog.warn(session.getSessionId(), "<fireTurnFinishEvent> but game turn is not in PLAY");
+			return;
+		}
+		
 		GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
 			.setCommand(GameCommandType.LOCAL_GAME_TURN_COMPLETE)
 			.setSessionId(session.getSessionId())

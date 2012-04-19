@@ -49,6 +49,14 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 				
 		GameMessage message = (GameMessageProtos.GameMessage)e.getMessage();
 		
+		if (message.getCommand() == GameConstantsProtos.GameCommandType.KEEP_ALIVE_REQUEST){
+			GameLog.info((int)message.getSessionId(), "recv KEEP ALIVE for user " + message.getUserId());
+
+			// if receive some message, then keep user not time out...
+			ChannelUserManager.getInstance().resetUserTimeOut(e.getChannel());
+			return;
+		}				
+		
 		AbstractRequestHandler handler = null;
 		if (message.hasSessionId()){
 			handler = new GameSessionRequestHandler(e);
