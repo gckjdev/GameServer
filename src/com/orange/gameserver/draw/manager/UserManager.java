@@ -24,7 +24,7 @@ public class UserManager {
 	}
 	
 	public void removeOnlineUserById(String userId) {
-		logger.info("<removeOnlineUserById> userId= " + userId);
+		logger.info("<removeOnlineUserById> userId= " + userId + ", user count = " + onlineUserMap.size());
 		if (userId != null) {			
 			this.onlineUserMap.remove(userId);
 		}	
@@ -46,7 +46,7 @@ public class UserManager {
 			user = userFound;
 		
 		user.setCurrentSessionId(sessionId);
-		logger.info("<addOnlineUser> userId= " + userId + ", nick=" + nickName + " at session " + sessionId);
+		logger.info("<addOnlineUser> userId= " + userId + ", nick=" + nickName + " at session " + sessionId  + ", user count = " + onlineUserMap.size());
 	}
 	
 	public int findGameSessionIdByUserId(String userId){

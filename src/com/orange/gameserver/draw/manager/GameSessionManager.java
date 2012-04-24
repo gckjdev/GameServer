@@ -36,9 +36,11 @@ public class GameSessionManager {
 	
 	//use three sets to classify the game sessions
 	ConcurrentHashSet<Integer> candidateSet = new ConcurrentHashSet<Integer>();
+//	ConcurrentHashSet<Integer> candidateSet2 = new ConcurrentHashSet<Integer>();
 	ConcurrentHashSet<Integer> freeSet = new ConcurrentHashSet<Integer>();
 	ConcurrentHashSet<Integer> fullSet = new ConcurrentHashSet<Integer>();
 	ConcurrentHashSet<Integer> playSet = new ConcurrentHashSet<Integer>();
+	
 	
 	// lock candidate/free/full set
 	Object sessionUserLock = new Object();
@@ -75,12 +77,16 @@ public class GameSessionManager {
 	}
 	
 	private boolean isForFree(int count){
-		return (count >0);
+		return (count >= 0);
 	}
 	
 	private boolean isForCandidate(int count){
-		return (count >=1 && count<4);
+		return (count >= 1 && count <=4);
 	}
+
+//	private boolean isForCandidate2(int count){
+//		return (count >= 2 && count<GameSessionUserManager.MAX_USER_PER_SESSION);
+//	}
 	
 	private boolean isForFull(int count){
 		return (count >= GameSessionUserManager.MAX_USER_PER_SESSION);
@@ -127,6 +133,12 @@ public class GameSessionManager {
 				GameLog.info(sessionId, "alloc session, use candidate set");
 				currentSet = candidateSet;
 			}
+			
+//			sessionId = getSessionFromSet(candidateSet2, excludeSessionSet);
+//			if (sessionId != -1){
+//				GameLog.info(sessionId, "alloc session, use candidate set 2");
+//				currentSet = candidateSet2;
+//			}
 
 			if (sessionId == -1){
 				sessionId = getSessionFromSet(freeSet, excludeSessionSet);
@@ -154,6 +166,11 @@ public class GameSessionManager {
 					currentSet.remove(sessionId);
 					candidateSet.add(sessionId);
 				}
+//				else if (isForCandidate2(userCount)){
+//					GameLog.info(sessionId, "alloc session, user count "+userCount+", move to candidate set 2");
+//					currentSet.remove(sessionId);
+//					candidateSet2.add(sessionId);					
+//				}
 			}
 			
 			
@@ -171,6 +188,7 @@ public class GameSessionManager {
 		synchronized(sessionUserLock){
 			int sessionId = session.getSessionId();
 			candidateSet.remove(sessionId);
+//			candidateSet2.remove(sessionId);
 			freeSet.remove(sessionId);
 			playSet.add(sessionId);
 		}
@@ -192,6 +210,9 @@ public class GameSessionManager {
 			else if (isForCandidate(userCount)){
 				candidateSet.add(sessionId);
 			}				
+//			else if (isForCandidate2(userCount)){
+//				candidateSet2.add(sessionId);
+//			}				
 			else{
 				freeSet.add(sessionId);
 			}
@@ -208,17 +229,27 @@ public class GameSessionManager {
 			
 			if (isForFull(userCount)){
 				candidateSet.remove(sessionId);
+//				candidateSet2.remove(sessionId);
 				freeSet.remove(sessionId);
 				fullSet.add(sessionId);
 			}
 			else if (isForCandidate(userCount)){ 
+//				candidateSet2.remove(sessionId);
 				freeSet.remove(sessionId);
 				fullSet.remove(sessionId);
 				if (!isSessionPlaying)
 					candidateSet.add(sessionId);
 			}
+//			else if (isForCandidate2(userCount)){ 
+//				candidateSet.remove(sessionId);
+//				freeSet.remove(sessionId);
+//				fullSet.remove(sessionId);
+//				if (!isSessionPlaying)
+//					candidateSet2.add(sessionId);
+//			}
 			else{
 				candidateSet.remove(sessionId);
+//				candidateSet2.remove(sessionId);
 				fullSet.remove(sessionId);
 				if (!isSessionPlaying)
 					freeSet.add(sessionId);				
