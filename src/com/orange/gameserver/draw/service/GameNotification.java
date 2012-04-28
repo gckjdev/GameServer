@@ -8,6 +8,7 @@ import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.GameSessionUserManager;
+import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
@@ -28,7 +29,9 @@ public class GameNotification {
 	public static void broadcastNotification(GameSession gameSession,
 			GameEvent gameEvent, String excludeUserId, GameCommandType command) {
 		
-		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());	
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
+		
 		for (User user : list){		
 			if (excludeUserId != null && user.getUserId().equalsIgnoreCase(excludeUserId))
 				continue;
@@ -56,6 +59,7 @@ public class GameNotification {
 				.setCompleteReason(gameSession.getCompleteReason())
 				.setNotification(notification)			
 				.setRound(gameSession.getCurrentRound())
+				.setOnlineUserCount(onlineUserCount)
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
@@ -70,6 +74,7 @@ public class GameNotification {
 		
 		String newUserNickName = request.getJoinGameRequest().getNickName();
 		String newUserAvatar = request.getJoinGameRequest().getAvatar();
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){
@@ -93,6 +98,7 @@ public class GameNotification {
 				.setNotification(notification)
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.setOnlineUserCount(onlineUserCount)
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, response, user.getChannel());
@@ -103,6 +109,8 @@ public class GameNotification {
 			GameEvent gameEvent) {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
+
 		for (User user : list){
 			if (user.getUserId().equalsIgnoreCase(quitUserId)){
 				continue;
@@ -122,6 +130,7 @@ public class GameNotification {
 				.setNotification(notification)
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.setOnlineUserCount(onlineUserCount)
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, response, user.getChannel());
@@ -232,6 +241,7 @@ public class GameNotification {
 			return;
 		
 		GameChatRequest chatRequest = message.getChatRequest();
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 
 		List<User> list = sessionUserManager.getUserListBySession(session.getSessionId());	
 		for (User user : list){		
@@ -253,6 +263,7 @@ public class GameNotification {
 				.setUserId(userId)
 				.setNotification(notification)
 				.setRound(message.getRound())
+				.setOnlineUserCount(onlineUserCount)
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, m, user.getChannel());

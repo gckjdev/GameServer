@@ -75,6 +75,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		int sessionId = gameSession.getSessionId();
 		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId);
 		sessionUserManager.addUserIntoSession(user, gameSession);
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
 		// send back response
 		List<GameBasicProtos.PBGameUser> pbGameUserList = sessionUserManager.usersToPBUsers(sessionId);	
@@ -96,6 +97,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 					.setCommand(GameCommandType.JOIN_GAME_RESPONSE)
 					.setMessageId(request.getMessageId())
 					.setResultCode(GameResultCode.SUCCESS)
+					.setOnlineUserCount(onlineUserCount)
 					.setJoinGameResponse(joinGameResponse)
 					.build();
 

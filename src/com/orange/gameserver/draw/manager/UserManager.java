@@ -57,4 +57,8 @@ public class UserManager {
 		return user.getCurrentSessionId();
 	}
 	
+	public int getOnlineUserCount(){
+		return onlineUserMap.size();
+	}
+	
 }
