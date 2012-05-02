@@ -43,6 +43,14 @@ public final class GameMessageProtos {
     // optional bool gender = 8;
     boolean hasGender();
     boolean getGender();
+    
+    // optional bool isRobot = 9;
+    boolean hasIsRobot();
+    boolean getIsRobot();
+    
+    // optional int32 targetSessionId = 10;
+    boolean hasTargetSessionId();
+    int getTargetSessionId();
   }
   public static final class JoinGameRequest extends
       com.google.protobuf.GeneratedMessage
@@ -245,6 +253,26 @@ public final class GameMessageProtos {
       return gender_;
     }
     
+    // optional bool isRobot = 9;
+    public static final int ISROBOT_FIELD_NUMBER = 9;
+    private boolean isRobot_;
+    public boolean hasIsRobot() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    public boolean getIsRobot() {
+      return isRobot_;
+    }
+    
+    // optional int32 targetSessionId = 10;
+    public static final int TARGETSESSIONID_FIELD_NUMBER = 10;
+    private int targetSessionId_;
+    public boolean hasTargetSessionId() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    public int getTargetSessionId() {
+      return targetSessionId_;
+    }
+    
     private void initFields() {
       userId_ = "";
       gameId_ = "";
@@ -254,6 +282,8 @@ public final class GameMessageProtos {
       excludeSessionId_ = java.util.Collections.emptyList();;
       sessionToBeChange_ = 0L;
       gender_ = false;
+      isRobot_ = false;
+      targetSessionId_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -303,6 +333,12 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeBool(8, gender_);
       }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBool(9, isRobot_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(10, targetSessionId_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -348,6 +384,14 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(8, gender_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(9, isRobot_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, targetSessionId_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -489,6 +533,10 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000040);
         gender_ = false;
         bitField0_ = (bitField0_ & ~0x00000080);
+        isRobot_ = false;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        targetSessionId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
       
@@ -560,6 +608,14 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000040;
         }
         result.gender_ = gender_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.isRobot_ = isRobot_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.targetSessionId_ = targetSessionId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -606,6 +662,12 @@ public final class GameMessageProtos {
         }
         if (other.hasGender()) {
           setGender(other.getGender());
+        }
+        if (other.hasIsRobot()) {
+          setIsRobot(other.getIsRobot());
+        }
+        if (other.hasTargetSessionId()) {
+          setTargetSessionId(other.getTargetSessionId());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -697,6 +759,16 @@ public final class GameMessageProtos {
             case 64: {
               bitField0_ |= 0x00000080;
               gender_ = input.readBool();
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000100;
+              isRobot_ = input.readBool();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000200;
+              targetSessionId_ = input.readInt32();
               break;
             }
           }
@@ -953,6 +1025,48 @@ public final class GameMessageProtos {
       public Builder clearGender() {
         bitField0_ = (bitField0_ & ~0x00000080);
         gender_ = false;
+        onChanged();
+        return this;
+      }
+      
+      // optional bool isRobot = 9;
+      private boolean isRobot_ ;
+      public boolean hasIsRobot() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      public boolean getIsRobot() {
+        return isRobot_;
+      }
+      public Builder setIsRobot(boolean value) {
+        bitField0_ |= 0x00000100;
+        isRobot_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearIsRobot() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        isRobot_ = false;
+        onChanged();
+        return this;
+      }
+      
+      // optional int32 targetSessionId = 10;
+      private int targetSessionId_ ;
+      public boolean hasTargetSessionId() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      public int getTargetSessionId() {
+        return targetSessionId_;
+      }
+      public Builder setTargetSessionId(int value) {
+        bitField0_ |= 0x00000200;
+        targetSessionId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearTargetSessionId() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        targetSessionId_ = 0;
         onChanged();
         return this;
       }
@@ -8459,54 +8573,55 @@ public final class GameMessageProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\021GameMessage.proto\022\004game\032\017GameBasic.pro" +
-      "to\032\023GameConstants.proto\"\254\001\n\017JoinGameRequ" +
+      "to\032\023GameConstants.proto\"\326\001\n\017JoinGameRequ" +
       "est\022\016\n\006userId\030\001 \002(\t\022\016\n\006gameId\030\002 \002(\t\022\022\n\007a" +
       "utoNew\030\003 \001(\005:\0010\022\020\n\010nickName\030\004 \002(\t\022\016\n\006ava" +
       "tar\030\005 \001(\t\022\030\n\020excludeSessionId\030\006 \003(\003\022\031\n\021s" +
-      "essionToBeChange\030\007 \001(\003\022\016\n\006gender\030\010 \001(\010\"<" +
-      "\n\020JoinGameResponse\022(\n\013gameSession\030\001 \002(\0132" +
-      "\023.game.PBGameSession\"\022\n\020StartGameRequest" +
-      "\"F\n\021StartGameResponse\022\031\n\021currentPlayUser" +
-      "Id\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"4\n\017Game",
-      "ChatRequest\022\020\n\010toUserId\030\001 \003(\t\022\017\n\007content" +
-      "\030\002 \001(\t\"\022\n\020GameChatResponse\"\264\001\n\023SendDrawD" +
-      "ataRequest\022\014\n\004word\030\n \001(\t\022\r\n\005level\030\013 \001(\005\022" +
-      "\020\n\010language\030\014 \001(\005\022\022\n\006points\030\001 \003(\005B\002\020\001\022\r\n" +
-      "\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\022\021\n\tguessWord" +
-      "\030) \001(\t\022\023\n\013guessUserId\030* \001(\t\022\024\n\014guessCorr" +
-      "ect\030+ \001(\010\"\026\n\024SendDrawDataResponse\"\335\003\n\023Ge" +
-      "neralNotification\022\023\n\013sessionHost\030\003 \001(\t\022\025" +
-      "\n\rsessionStatus\030\004 \001(\005\022\031\n\021currentPlayUser" +
-      "Id\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021\n\tnewU",
-      "serId\030\007 \001(\t\022\022\n\nquitUserId\030\010 \001(\t\022\020\n\010nickN" +
-      "ame\030\t \001(\t\022\022\n\nuserAvatar\030\n \001(\t\022\022\n\nuserGen" +
-      "der\030\013 \001(\010\022\022\n\006points\030\025 \003(\005B\002\020\001\022\r\n\005width\030\026" +
-      " \001(\002\022\r\n\005color\030\027 \001(\005\022\014\n\004word\030\037 \001(\t\022\r\n\005lev" +
-      "el\030  \001(\005\022\r\n\005round\030! \001(\005\022\020\n\010language\030\" \001(" +
-      "\005\022\021\n\tguessWord\030) \001(\t\022\023\n\013guessUserId\030* \001(" +
-      "\t\022\024\n\014guessCorrect\030+ \001(\010\022\026\n\016guessGainCoin" +
-      "s\030, \001(\005\022\024\n\014chatToUserId\0303 \003(\t\022\023\n\013chatCon" +
-      "tent\0304 \001(\t\022\025\n\rturnGainCoins\030= \001(\005\"\300\005\n\013Ga" +
-      "meMessage\022&\n\007command\030\001 \002(\0162\025.game.GameCo",
-      "mmandType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nresultCo" +
-      "de\030\003 \001(\0162\024.game.GameResultCode:\007SUCCESS\022" +
-      "\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022\r\n" +
-      "\005round\030\006 \001(\005\0220\n\016completeReason\030\007 \001(\0162\030.g" +
-      "ame.GameCompleteReason\022\027\n\017onlineUserCoun" +
-      "t\030\010 \001(\005\022.\n\017joinGameRequest\030\013 \001(\0132\025.game." +
-      "JoinGameRequest\0220\n\020joinGameResponse\030\014 \001(" +
-      "\0132\026.game.JoinGameResponse\0220\n\020startGameRe" +
-      "quest\030\r \001(\0132\026.game.StartGameRequest\0222\n\021s" +
-      "tartGameResponse\030\016 \001(\0132\027.game.StartGameR",
-      "esponse\0226\n\023sendDrawDataRequest\030\025 \001(\0132\031.g" +
-      "ame.SendDrawDataRequest\0228\n\024sendDrawDataR" +
-      "esponse\030\026 \001(\0132\032.game.SendDrawDataRespons" +
-      "e\022*\n\013chatRequest\030\027 \001(\0132\025.game.GameChatRe" +
-      "quest\022,\n\014chatResponse\030\030 \001(\0132\026.game.GameC" +
-      "hatResponse\022/\n\014notification\0303 \001(\0132\031.game" +
-      ".GeneralNotificationB=\n(com.orange.netwo" +
-      "rk.game.protocol.messageB\021GameMessagePro" +
-      "tos"
+      "essionToBeChange\030\007 \001(\003\022\016\n\006gender\030\010 \001(\010\022\017" +
+      "\n\007isRobot\030\t \001(\010\022\027\n\017targetSessionId\030\n \001(\005" +
+      "\"<\n\020JoinGameResponse\022(\n\013gameSession\030\001 \002(" +
+      "\0132\023.game.PBGameSession\"\022\n\020StartGameReque" +
+      "st\"F\n\021StartGameResponse\022\031\n\021currentPlayUs",
+      "erId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\"4\n\017Ga" +
+      "meChatRequest\022\020\n\010toUserId\030\001 \003(\t\022\017\n\007conte" +
+      "nt\030\002 \001(\t\"\022\n\020GameChatResponse\"\264\001\n\023SendDra" +
+      "wDataRequest\022\014\n\004word\030\n \001(\t\022\r\n\005level\030\013 \001(" +
+      "\005\022\020\n\010language\030\014 \001(\005\022\022\n\006points\030\001 \003(\005B\002\020\001\022" +
+      "\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\022\021\n\tguessWo" +
+      "rd\030) \001(\t\022\023\n\013guessUserId\030* \001(\t\022\024\n\014guessCo" +
+      "rrect\030+ \001(\010\"\026\n\024SendDrawDataResponse\"\335\003\n\023" +
+      "GeneralNotification\022\023\n\013sessionHost\030\003 \001(\t" +
+      "\022\025\n\rsessionStatus\030\004 \001(\005\022\031\n\021currentPlayUs",
+      "erId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021\n\tne" +
+      "wUserId\030\007 \001(\t\022\022\n\nquitUserId\030\010 \001(\t\022\020\n\010nic" +
+      "kName\030\t \001(\t\022\022\n\nuserAvatar\030\n \001(\t\022\022\n\nuserG" +
+      "ender\030\013 \001(\010\022\022\n\006points\030\025 \003(\005B\002\020\001\022\r\n\005width" +
+      "\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\022\014\n\004word\030\037 \001(\t\022\r\n\005l" +
+      "evel\030  \001(\005\022\r\n\005round\030! \001(\005\022\020\n\010language\030\" " +
+      "\001(\005\022\021\n\tguessWord\030) \001(\t\022\023\n\013guessUserId\030* " +
+      "\001(\t\022\024\n\014guessCorrect\030+ \001(\010\022\026\n\016guessGainCo" +
+      "ins\030, \001(\005\022\024\n\014chatToUserId\0303 \003(\t\022\023\n\013chatC" +
+      "ontent\0304 \001(\t\022\025\n\rturnGainCoins\030= \001(\005\"\300\005\n\013",
+      "GameMessage\022&\n\007command\030\001 \002(\0162\025.game.Game" +
+      "CommandType\022\021\n\tmessageId\030\002 \002(\005\0221\n\nresult" +
+      "Code\030\003 \001(\0162\024.game.GameResultCode:\007SUCCES" +
+      "S\022\016\n\006userId\030\004 \001(\t\022\024\n\tsessionId\030\005 \001(\003:\0010\022" +
+      "\r\n\005round\030\006 \001(\005\0220\n\016completeReason\030\007 \001(\0162\030" +
+      ".game.GameCompleteReason\022\027\n\017onlineUserCo" +
+      "unt\030\010 \001(\005\022.\n\017joinGameRequest\030\013 \001(\0132\025.gam" +
+      "e.JoinGameRequest\0220\n\020joinGameResponse\030\014 " +
+      "\001(\0132\026.game.JoinGameResponse\0220\n\020startGame" +
+      "Request\030\r \001(\0132\026.game.StartGameRequest\0222\n",
+      "\021startGameResponse\030\016 \001(\0132\027.game.StartGam" +
+      "eResponse\0226\n\023sendDrawDataRequest\030\025 \001(\0132\031" +
+      ".game.SendDrawDataRequest\0228\n\024sendDrawDat" +
+      "aResponse\030\026 \001(\0132\032.game.SendDrawDataRespo" +
+      "nse\022*\n\013chatRequest\030\027 \001(\0132\025.game.GameChat" +
+      "Request\022,\n\014chatResponse\030\030 \001(\0132\026.game.Gam" +
+      "eChatResponse\022/\n\014notification\0303 \001(\0132\031.ga" +
+      "me.GeneralNotificationB=\n(com.orange.net" +
+      "work.game.protocol.messageB\021GameMessageP" +
+      "rotos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8518,7 +8633,7 @@ public final class GameMessageProtos {
           internal_static_game_JoinGameRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_JoinGameRequest_descriptor,
-              new java.lang.String[] { "UserId", "GameId", "AutoNew", "NickName", "Avatar", "ExcludeSessionId", "SessionToBeChange", "Gender", },
+              new java.lang.String[] { "UserId", "GameId", "AutoNew", "NickName", "Avatar", "ExcludeSessionId", "SessionToBeChange", "Gender", "IsRobot", "TargetSessionId", },
               com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.class,
               com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest.Builder.class);
           internal_static_game_JoinGameResponse_descriptor =

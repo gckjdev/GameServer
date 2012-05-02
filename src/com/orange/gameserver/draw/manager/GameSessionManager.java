@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.ConcurrentHashSet;
+import org.eclipse.jetty.util.log.Log;
 import org.jboss.netty.channel.Channel;
 
 import com.orange.gameserver.draw.dao.DrawGameSession;
@@ -22,7 +23,9 @@ import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.utils.GameLog;
+import com.orange.gameserver.robot.RobotService;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 
 
 public class GameSessionManager {
@@ -33,6 +36,7 @@ public class GameSessionManager {
 	public static final int GAME_SESSION_COUNT = 1000;
 
 	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
+	ScheduledExecutorService scheduleService = Executors.newScheduledThreadPool(5);
 	
 	//use three sets to classify the game sessions
 	ConcurrentHashSet<Integer> candidateSet = new ConcurrentHashSet<Integer>();
@@ -121,6 +125,47 @@ public class GameSessionManager {
 		return -1;
 	}
 	
+	public GameResultCode directPutUserIntoSession(String userId,
+			String nickName, String avatar, boolean gender, Channel channel, boolean isRobot,
+			int targetSessionId) {
+
+		synchronized(sessionUserLock){
+
+			if (fullSet.contains(targetSessionId)){
+				return GameResultCode.ERROR_SESSIONID_FULL;
+			}
+						
+				
+			// add user into game session
+			GameSession session = this.findGameSessionById(targetSessionId);
+			if (session == null){
+				return GameResultCode.ERROR_SESSIONID_NULL;
+			}
+			
+			int userCount = addUserIntoSession(userId, nickName, avatar, gender, isRobot, channel, session);
+			
+			// adjust candidate and full set, also add user
+			if (isForFull(userCount)){
+				GameLog.info(targetSessionId, "direct alloc session, user count "+userCount+" reach max, remove from freeset/candidate set");
+				freeSet.remove(targetSessionId);
+				candidateSet.remove(targetSessionId);
+				fullSet.add(targetSessionId);
+			}
+			else if (isForCandidate(userCount)){
+				GameLog.info(targetSessionId, "direct alloc session, user count "+userCount+", move to candidate set");
+				freeSet.remove(targetSessionId);
+				fullSet.remove(targetSessionId);
+				candidateSet.add(targetSessionId);					
+			}			
+			
+		}		
+		
+		UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, channel, targetSessionId);		
+		ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);				
+		
+		return GameResultCode.SUCCESS;
+	}
+	
 	public int allocGameSessionForUser(String userId, String nickName, String avatar, boolean gender, 
 			Channel channel, Set<Integer> excludeSessionSet) {		
 		int sessionId = NO_SESSION_MATCH_FOR_USER;
@@ -152,7 +197,7 @@ public class GameSessionManager {
 				
 				// add user into game session
 				GameSession session = this.findGameSessionById(sessionId);
-				int userCount = addUserIntoSession(userId, nickName, avatar, gender, channel, session);
+				int userCount = addUserIntoSession(userId, nickName, avatar, gender, false, channel, session);
 				
 				// adjust candidate and full set, also add user
 				if (isForFull(userCount)){
@@ -263,8 +308,11 @@ public class GameSessionManager {
 			UserManager.getInstance().removeOnlineUserById(userId);
 	}
 	
-	private int addUserIntoSession(String userId, String nickName, String avatar, boolean gender, Channel channel, GameSession session){
-		User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId());
+	private int addUserIntoSession(String userId, String nickName, String avatar, boolean gender,
+			boolean isRobot,
+			Channel channel, 
+			GameSession session){
+		User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId(), isRobot);
 		return sessionUserManager.addUserIntoSession(user, session);
 	}			
 	
@@ -317,6 +365,52 @@ public class GameSessionManager {
 			
 		}
 	}
+
+	public final static int ROBOT_TIMEROUT = 3;
+	public final static int ROBOT_USER_COUNT = 1;
+	public void prepareRobotTimer(GameSession gameSession) {
+		
+		final int sessionId = gameSession.getSessionId();
+		int userCount = sessionUserManager.getSessionUserCount(sessionId);
+		if (userCount != ROBOT_USER_COUNT){
+			return;
+		}
+			
+		Callable<Object> callable = new Callable<Object>(){
+			@Override
+			public Object call()  {
+				try{
+					int userCount = sessionUserManager.getSessionUserCount(sessionId);
+					if (userCount == ROBOT_USER_COUNT){
+						GameLog.info(sessionId, "Fire robot timer, start robot now");
+						RobotService.getInstance().startNewRobot(sessionId);
+					}
+					else{
+						GameLog.info(sessionId, "Fire robot timer but user count <> 1");					
+					}
+				}
+				catch(Exception e){
+					GameLog.error(sessionId, e);					
+				}
+
+				return null;
+			}			
+		};
+		
+		ScheduledFuture<Object> newFuture = scheduleService.schedule(callable, 
+				ROBOT_TIMEROUT, TimeUnit.SECONDS);		
+		
+		GameLog.info(sessionId, "Only one user, set robot timer");
+		gameSession.setRobotTimeOutFuture(newFuture);
+	}
+	
+	public void resetRobotTimer(GameSession gameSession) {
+		gameSession.clearRobotTimer();
+	}
+	
+	
+
+
 	
 //	public void scheduleTimeOutOnSession(final GameSession session, int timeOutSeconds){
 //

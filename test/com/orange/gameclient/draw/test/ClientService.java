@@ -1,8 +1,6 @@
 package com.orange.gameclient.draw.test;
 
-import org.apache.cassandra.thrift.Cassandra.Client;
 import org.apache.log4j.Logger;
-import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameclient.draw.test.dao.ClientUser;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;

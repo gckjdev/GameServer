@@ -91,13 +91,16 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void exceptionCaught( ChannelHandlerContext ctx, ExceptionEvent e) {
 		logger.error("GameServerHandler catch unexpected exception at " + e.getChannel().toString() + ", cause=", e.getCause());
-		e.getChannel().close();
-	}
-			
+		ChannelUserManager.getInstance().processDisconnectChannel(e.getChannel());
+	}				
+	
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx,
             ChannelStateEvent e){
+
+		ChannelUserManager.getInstance().processDisconnectChannel(e.getChannel());
 		
+		/*
 		// find all users related to the channel and post a message to game session that this user is quit
 		Channel channel = e.getChannel();		
 		List<String> userIdList = ChannelUserManager.getInstance().findUsersInChannel(channel);
@@ -114,6 +117,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		
 		// remove channel
 		ChannelUserManager.getInstance().removeChannel(e.getChannel());
+		*/
 	}
 	
 	@Override

@@ -12,6 +12,7 @@ public class User {
 	final String avatar;
 	final Channel channel;
 	final boolean gender;
+	final boolean isRobot;
 
 	int currentSessionId = -1;		// TODO change to final or not?
 	
@@ -23,8 +24,20 @@ public class User {
 		this.channel = channel;
 		this.gender = gender;
 		this.setCurrentSessionId(sessionId);
+		this.isRobot = false;
 	}
 	
+	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId, boolean isRobot) {
+		super();
+		this.userId = userId;
+		this.nickName = nickName;
+		this.avatar = avatar;
+		this.channel = channel;
+		this.gender = gender;
+		this.setCurrentSessionId(sessionId);
+		this.isRobot = isRobot;
+	}
+
 	public String getUserId() {
 		return userId;
 	}

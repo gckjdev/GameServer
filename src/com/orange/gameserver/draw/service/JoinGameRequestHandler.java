@@ -40,11 +40,28 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String nickName = request.getJoinGameRequest().getNickName();			
 		String avatar = request.getJoinGameRequest().getAvatar();
 		boolean gender = request.getJoinGameRequest().getGender();
+		int gameSessionId = -1;
 		
-		int gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender, messageEvent.getChannel(), null);
-		if (gameSessionId == -1){
-			HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
-			return;
+		if (request.getJoinGameRequest().hasTargetSessionId()){
+			gameSessionId = request.getJoinGameRequest().getTargetSessionId();
+			boolean isRobot = false;
+			if (request.getJoinGameRequest().hasIsRobot()){
+				isRobot = request.getJoinGameRequest().getIsRobot();
+			}
+			
+			GameResultCode result = gameManager.directPutUserIntoSession(userId, nickName, avatar, gender, 
+					messageEvent.getChannel(), isRobot, gameSessionId);
+			if (result != GameResultCode.SUCCESS){
+				HandlerUtils.sendErrorResponse(request, result, messageEvent.getChannel());
+				return;
+			}					
+		}
+		else{		
+			gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender, messageEvent.getChannel(), null);
+			if (gameSessionId == -1){
+				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
+				return;
+			}
 		}
 				
 		GameEvent gameEvent = new GameEvent(
@@ -76,6 +93,12 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId);
 		sessionUserManager.addUserIntoSession(user, gameSession);
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
+		
+		// reset start expire timer
+		gameSession.resetStartExpireTimer();
+		
+		// schedule robot timer if needed
+		GameSessionManager.getInstance().prepareRobotTimer(gameSession);
 		
 		// send back response
 		List<GameBasicProtos.PBGameUser> pbGameUserList = sessionUserManager.usersToPBUsers(sessionId);	

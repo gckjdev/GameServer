@@ -326,7 +326,22 @@ public class GameSession {
 		}		
 	}
 
+	ScheduledFuture<Object> inviteRobotTimer = null;
+		
+	public void setRobotTimeOutFuture(ScheduledFuture<Object> future) {
+		if (inviteRobotTimer != null){
+			inviteRobotTimer.cancel(false);
+			inviteRobotTimer = null;
+		}
+		
+		inviteRobotTimer = future;
+	}
 
-
+	public void clearRobotTimer() {
+		if (inviteRobotTimer != null){
+			inviteRobotTimer.cancel(false);
+			inviteRobotTimer = null;
+		}		
+	}
 	
 }
