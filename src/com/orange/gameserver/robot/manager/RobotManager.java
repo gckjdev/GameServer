@@ -1,9 +1,11 @@
 package com.orange.gameserver.robot.manager;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import org.eclipse.jetty.util.ConcurrentHashSet;
 
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.gameserver.robot.client.RobotClient;
 
 public class RobotManager {
@@ -33,7 +35,27 @@ public class RobotManager {
     			freeSet.iterator() == null)
     			return -1;
     		
-    		int index = freeSet.iterator().next().intValue();
+    		Random random = new Random();
+    		random.setSeed(System.currentTimeMillis());
+    		int randomCount = random.nextInt(freeSet.size());
+    		Iterator<Integer> iter = freeSet.iterator();
+    		
+    		
+    		int index = 0;
+    		while (iter != null && iter.hasNext() && index < randomCount){
+    			index++;
+    			iter.next();
+    		}
+    		
+    		if (iter != null && iter.hasNext()){
+    			index = iter.next().intValue();
+    		}
+
+    		GameLog.info(0, "alloc index, random count = "+randomCount+ ", alloc index="+index);
+    		
+    		if (index == -1)
+    			return -1;
+    		
     		allocSet.add(index);
     		freeSet.remove(index);
     		return index;

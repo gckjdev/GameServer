@@ -127,12 +127,13 @@ public class GameSession {
 		GameLog.info(sessionId, "wait for play, set status to " + status);
 	}
 	
-	public synchronized void startNewTurn(String word, int level){
+	public synchronized void startNewTurn(String word, int level, int language){
 		if (currentTurn == null){
-			currentTurn = new GameTurn(sessionId, 1, word, level);
+			currentTurn = new GameTurn(sessionId, 1, word, level, language);
 		}
 		else{
-			currentTurn = new GameTurn(sessionId, currentTurn.getRound() + 1, word, level);
+			currentTurn.storeDrawData();
+			currentTurn = new GameTurn(sessionId, currentTurn.getRound() + 1, word, level, language);
 		}		
 		GameLog.info(sessionId, "start new game turn "+currentTurn.getRound(), "word=" + word);
 	}
@@ -342,6 +343,20 @@ public class GameSession {
 			inviteRobotTimer.cancel(false);
 			inviteRobotTimer = null;
 		}		
+	}
+
+	public void appendDrawData(List<Integer> pointsList, int color, float width) {
+		if (currentTurn == null)
+			return;
+
+		currentTurn.appendDrawData(pointsList, color, width);
+	}
+
+	public void appendCleanDrawAction() {
+		if (currentTurn == null)
+			return;
+		
+		currentTurn.appendCleanDrawAction();
 	}
 	
 }

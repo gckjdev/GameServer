@@ -1961,6 +1961,1635 @@ public final class GameBasicProtos {
     // @@protoc_insertion_point(class_scope:game.PBGameSession)
   }
   
+  public interface PBDrawActionOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 type = 1;
+    boolean hasType();
+    int getType();
+    
+    // repeated int32 points = 2 [packed = true];
+    java.util.List<java.lang.Integer> getPointsList();
+    int getPointsCount();
+    int getPoints(int index);
+    
+    // optional float width = 3;
+    boolean hasWidth();
+    float getWidth();
+    
+    // optional int32 color = 4;
+    boolean hasColor();
+    int getColor();
+  }
+  public static final class PBDrawAction extends
+      com.google.protobuf.GeneratedMessage
+      implements PBDrawActionOrBuilder {
+    // Use PBDrawAction.newBuilder() to construct.
+    private PBDrawAction(Builder builder) {
+      super(builder);
+    }
+    private PBDrawAction(boolean noInit) {}
+    
+    private static final PBDrawAction defaultInstance;
+    public static PBDrawAction getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public PBDrawAction getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orange.network.game.protocol.model.GameBasicProtos.internal_static_game_PBDrawAction_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orange.network.game.protocol.model.GameBasicProtos.internal_static_game_PBDrawAction_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required int32 type = 1;
+    public static final int TYPE_FIELD_NUMBER = 1;
+    private int type_;
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getType() {
+      return type_;
+    }
+    
+    // repeated int32 points = 2 [packed = true];
+    public static final int POINTS_FIELD_NUMBER = 2;
+    private java.util.List<java.lang.Integer> points_;
+    public java.util.List<java.lang.Integer>
+        getPointsList() {
+      return points_;
+    }
+    public int getPointsCount() {
+      return points_.size();
+    }
+    public int getPoints(int index) {
+      return points_.get(index);
+    }
+    private int pointsMemoizedSerializedSize = -1;
+    
+    // optional float width = 3;
+    public static final int WIDTH_FIELD_NUMBER = 3;
+    private float width_;
+    public boolean hasWidth() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public float getWidth() {
+      return width_;
+    }
+    
+    // optional int32 color = 4;
+    public static final int COLOR_FIELD_NUMBER = 4;
+    private int color_;
+    public boolean hasColor() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getColor() {
+      return color_;
+    }
+    
+    private void initFields() {
+      type_ = 0;
+      points_ = java.util.Collections.emptyList();;
+      width_ = 0F;
+      color_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, type_);
+      }
+      if (getPointsList().size() > 0) {
+        output.writeRawVarint32(18);
+        output.writeRawVarint32(pointsMemoizedSerializedSize);
+      }
+      for (int i = 0; i < points_.size(); i++) {
+        output.writeInt32NoTag(points_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeFloat(3, width_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(4, color_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, type_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < points_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(points_.get(i));
+        }
+        size += dataSize;
+        if (!getPointsList().isEmpty()) {
+          size += 1;
+          size += com.google.protobuf.CodedOutputStream
+              .computeInt32SizeNoTag(dataSize);
+        }
+        pointsMemoizedSerializedSize = dataSize;
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(3, width_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, color_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orange.network.game.protocol.model.GameBasicProtos.internal_static_game_PBDrawAction_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orange.network.game.protocol.model.GameBasicProtos.internal_static_game_PBDrawAction_fieldAccessorTable;
+      }
+      
+      // Construct using com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        type_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        points_ = java.util.Collections.emptyList();;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        width_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        color_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.getDescriptor();
+      }
+      
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction getDefaultInstanceForType() {
+        return com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.getDefaultInstance();
+      }
+      
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction build() {
+        com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction buildPartial() {
+        com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction result = new com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.type_ = type_;
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          points_ = java.util.Collections.unmodifiableList(points_);
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.points_ = points_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.width_ = width_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.color_ = color_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction) {
+          return mergeFrom((com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction other) {
+        if (other == com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.getDefaultInstance()) return this;
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        if (!other.points_.isEmpty()) {
+          if (points_.isEmpty()) {
+            points_ = other.points_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensurePointsIsMutable();
+            points_.addAll(other.points_);
+          }
+          onChanged();
+        }
+        if (other.hasWidth()) {
+          setWidth(other.getWidth());
+        }
+        if (other.hasColor()) {
+          setColor(other.getColor());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasType()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              type_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              ensurePointsIsMutable();
+              points_.add(input.readInt32());
+              break;
+            }
+            case 18: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              while (input.getBytesUntilLimit() > 0) {
+                addPoints(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 29: {
+              bitField0_ |= 0x00000004;
+              width_ = input.readFloat();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              color_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required int32 type = 1;
+      private int type_ ;
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public int getType() {
+        return type_;
+      }
+      public Builder setType(int value) {
+        bitField0_ |= 0x00000001;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // repeated int32 points = 2 [packed = true];
+      private java.util.List<java.lang.Integer> points_ = java.util.Collections.emptyList();;
+      private void ensurePointsIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          points_ = new java.util.ArrayList<java.lang.Integer>(points_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      public java.util.List<java.lang.Integer>
+          getPointsList() {
+        return java.util.Collections.unmodifiableList(points_);
+      }
+      public int getPointsCount() {
+        return points_.size();
+      }
+      public int getPoints(int index) {
+        return points_.get(index);
+      }
+      public Builder setPoints(
+          int index, int value) {
+        ensurePointsIsMutable();
+        points_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addPoints(int value) {
+        ensurePointsIsMutable();
+        points_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllPoints(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensurePointsIsMutable();
+        super.addAll(values, points_);
+        onChanged();
+        return this;
+      }
+      public Builder clearPoints() {
+        points_ = java.util.Collections.emptyList();;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+      
+      // optional float width = 3;
+      private float width_ ;
+      public boolean hasWidth() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public float getWidth() {
+        return width_;
+      }
+      public Builder setWidth(float value) {
+        bitField0_ |= 0x00000004;
+        width_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearWidth() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        width_ = 0F;
+        onChanged();
+        return this;
+      }
+      
+      // optional int32 color = 4;
+      private int color_ ;
+      public boolean hasColor() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public int getColor() {
+        return color_;
+      }
+      public Builder setColor(int value) {
+        bitField0_ |= 0x00000008;
+        color_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearColor() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        color_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:game.PBDrawAction)
+    }
+    
+    static {
+      defaultInstance = new PBDrawAction(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:game.PBDrawAction)
+  }
+  
+  public interface PBDrawOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string userId = 1;
+    boolean hasUserId();
+    String getUserId();
+    
+    // required string word = 2;
+    boolean hasWord();
+    String getWord();
+    
+    // required int32 level = 3;
+    boolean hasLevel();
+    int getLevel();
+    
+    // required int32 language = 4;
+    boolean hasLanguage();
+    int getLanguage();
+    
+    // optional int32 createDate = 5;
+    boolean hasCreateDate();
+    int getCreateDate();
+    
+    // optional string nickName = 6;
+    boolean hasNickName();
+    String getNickName();
+    
+    // repeated .game.PBDrawAction drawData = 10;
+    java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction> 
+        getDrawDataList();
+    com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction getDrawData(int index);
+    int getDrawDataCount();
+    java.util.List<? extends com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder> 
+        getDrawDataOrBuilderList();
+    com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder getDrawDataOrBuilder(
+        int index);
+  }
+  public static final class PBDraw extends
+      com.google.protobuf.GeneratedMessage
+      implements PBDrawOrBuilder {
+    // Use PBDraw.newBuilder() to construct.
+    private PBDraw(Builder builder) {
+      super(builder);
+    }
+    private PBDraw(boolean noInit) {}
+    
+    private static final PBDraw defaultInstance;
+    public static PBDraw getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public PBDraw getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.orange.network.game.protocol.model.GameBasicProtos.internal_static_game_PBDraw_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.orange.network.game.protocol.model.GameBasicProtos.internal_static_game_PBDraw_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required string userId = 1;
+    public static final int USERID_FIELD_NUMBER = 1;
+    private java.lang.Object userId_;
+    public boolean hasUserId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getUserId() {
+      java.lang.Object ref = userId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          userId_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getUserIdBytes() {
+      java.lang.Object ref = userId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        userId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string word = 2;
+    public static final int WORD_FIELD_NUMBER = 2;
+    private java.lang.Object word_;
+    public boolean hasWord() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getWord() {
+      java.lang.Object ref = word_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          word_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getWordBytes() {
+      java.lang.Object ref = word_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        word_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required int32 level = 3;
+    public static final int LEVEL_FIELD_NUMBER = 3;
+    private int level_;
+    public boolean hasLevel() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getLevel() {
+      return level_;
+    }
+    
+    // required int32 language = 4;
+    public static final int LANGUAGE_FIELD_NUMBER = 4;
+    private int language_;
+    public boolean hasLanguage() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public int getLanguage() {
+      return language_;
+    }
+    
+    // optional int32 createDate = 5;
+    public static final int CREATEDATE_FIELD_NUMBER = 5;
+    private int createDate_;
+    public boolean hasCreateDate() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public int getCreateDate() {
+      return createDate_;
+    }
+    
+    // optional string nickName = 6;
+    public static final int NICKNAME_FIELD_NUMBER = 6;
+    private java.lang.Object nickName_;
+    public boolean hasNickName() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public String getNickName() {
+      java.lang.Object ref = nickName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          nickName_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getNickNameBytes() {
+      java.lang.Object ref = nickName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        nickName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // repeated .game.PBDrawAction drawData = 10;
+    public static final int DRAWDATA_FIELD_NUMBER = 10;
+    private java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction> drawData_;
+    public java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction> getDrawDataList() {
+      return drawData_;
+    }
+    public java.util.List<? extends com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder> 
+        getDrawDataOrBuilderList() {
+      return drawData_;
+    }
+    public int getDrawDataCount() {
+      return drawData_.size();
+    }
+    public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction getDrawData(int index) {
+      return drawData_.get(index);
+    }
+    public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder getDrawDataOrBuilder(
+        int index) {
+      return drawData_.get(index);
+    }
+    
+    private void initFields() {
+      userId_ = "";
+      word_ = "";
+      level_ = 0;
+      language_ = 0;
+      createDate_ = 0;
+      nickName_ = "";
+      drawData_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasUserId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasWord()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasLevel()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasLanguage()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getDrawDataCount(); i++) {
+        if (!getDrawData(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getWordBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, level_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, language_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, createDate_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(6, getNickNameBytes());
+      }
+      for (int i = 0; i < drawData_.size(); i++) {
+        output.writeMessage(10, drawData_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getWordBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, level_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, language_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, createDate_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getNickNameBytes());
+      }
+      for (int i = 0; i < drawData_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(10, drawData_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.orange.network.game.protocol.model.GameBasicProtos.PBDraw parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.orange.network.game.protocol.model.GameBasicProtos.PBDraw prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.orange.network.game.protocol.model.GameBasicProtos.PBDrawOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.orange.network.game.protocol.model.GameBasicProtos.internal_static_game_PBDraw_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.orange.network.game.protocol.model.GameBasicProtos.internal_static_game_PBDraw_fieldAccessorTable;
+      }
+      
+      // Construct using com.orange.network.game.protocol.model.GameBasicProtos.PBDraw.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getDrawDataFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        userId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        word_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        level_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        language_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        createDate_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        nickName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
+        if (drawDataBuilder_ == null) {
+          drawData_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000040);
+        } else {
+          drawDataBuilder_.clear();
+        }
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.orange.network.game.protocol.model.GameBasicProtos.PBDraw.getDescriptor();
+      }
+      
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDraw getDefaultInstanceForType() {
+        return com.orange.network.game.protocol.model.GameBasicProtos.PBDraw.getDefaultInstance();
+      }
+      
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDraw build() {
+        com.orange.network.game.protocol.model.GameBasicProtos.PBDraw result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.orange.network.game.protocol.model.GameBasicProtos.PBDraw buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.orange.network.game.protocol.model.GameBasicProtos.PBDraw result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDraw buildPartial() {
+        com.orange.network.game.protocol.model.GameBasicProtos.PBDraw result = new com.orange.network.game.protocol.model.GameBasicProtos.PBDraw(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.userId_ = userId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.word_ = word_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.level_ = level_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.language_ = language_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.createDate_ = createDate_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.nickName_ = nickName_;
+        if (drawDataBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040)) {
+            drawData_ = java.util.Collections.unmodifiableList(drawData_);
+            bitField0_ = (bitField0_ & ~0x00000040);
+          }
+          result.drawData_ = drawData_;
+        } else {
+          result.drawData_ = drawDataBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.orange.network.game.protocol.model.GameBasicProtos.PBDraw) {
+          return mergeFrom((com.orange.network.game.protocol.model.GameBasicProtos.PBDraw)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.orange.network.game.protocol.model.GameBasicProtos.PBDraw other) {
+        if (other == com.orange.network.game.protocol.model.GameBasicProtos.PBDraw.getDefaultInstance()) return this;
+        if (other.hasUserId()) {
+          setUserId(other.getUserId());
+        }
+        if (other.hasWord()) {
+          setWord(other.getWord());
+        }
+        if (other.hasLevel()) {
+          setLevel(other.getLevel());
+        }
+        if (other.hasLanguage()) {
+          setLanguage(other.getLanguage());
+        }
+        if (other.hasCreateDate()) {
+          setCreateDate(other.getCreateDate());
+        }
+        if (other.hasNickName()) {
+          setNickName(other.getNickName());
+        }
+        if (drawDataBuilder_ == null) {
+          if (!other.drawData_.isEmpty()) {
+            if (drawData_.isEmpty()) {
+              drawData_ = other.drawData_;
+              bitField0_ = (bitField0_ & ~0x00000040);
+            } else {
+              ensureDrawDataIsMutable();
+              drawData_.addAll(other.drawData_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.drawData_.isEmpty()) {
+            if (drawDataBuilder_.isEmpty()) {
+              drawDataBuilder_.dispose();
+              drawDataBuilder_ = null;
+              drawData_ = other.drawData_;
+              bitField0_ = (bitField0_ & ~0x00000040);
+              drawDataBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getDrawDataFieldBuilder() : null;
+            } else {
+              drawDataBuilder_.addAllMessages(other.drawData_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasUserId()) {
+          
+          return false;
+        }
+        if (!hasWord()) {
+          
+          return false;
+        }
+        if (!hasLevel()) {
+          
+          return false;
+        }
+        if (!hasLanguage()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getDrawDataCount(); i++) {
+          if (!getDrawData(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              userId_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              word_ = input.readBytes();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              level_ = input.readInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              language_ = input.readInt32();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              createDate_ = input.readInt32();
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000020;
+              nickName_ = input.readBytes();
+              break;
+            }
+            case 82: {
+              com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder subBuilder = com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addDrawData(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required string userId = 1;
+      private java.lang.Object userId_ = "";
+      public boolean hasUserId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public String getUserId() {
+        java.lang.Object ref = userId_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          userId_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setUserId(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearUserId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        userId_ = getDefaultInstance().getUserId();
+        onChanged();
+        return this;
+      }
+      void setUserId(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        userId_ = value;
+        onChanged();
+      }
+      
+      // required string word = 2;
+      private java.lang.Object word_ = "";
+      public boolean hasWord() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getWord() {
+        java.lang.Object ref = word_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          word_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setWord(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        word_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearWord() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        word_ = getDefaultInstance().getWord();
+        onChanged();
+        return this;
+      }
+      void setWord(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        word_ = value;
+        onChanged();
+      }
+      
+      // required int32 level = 3;
+      private int level_ ;
+      public boolean hasLevel() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public int getLevel() {
+        return level_;
+      }
+      public Builder setLevel(int value) {
+        bitField0_ |= 0x00000004;
+        level_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLevel() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        level_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required int32 language = 4;
+      private int language_ ;
+      public boolean hasLanguage() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public int getLanguage() {
+        return language_;
+      }
+      public Builder setLanguage(int value) {
+        bitField0_ |= 0x00000008;
+        language_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLanguage() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        language_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional int32 createDate = 5;
+      private int createDate_ ;
+      public boolean hasCreateDate() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public int getCreateDate() {
+        return createDate_;
+      }
+      public Builder setCreateDate(int value) {
+        bitField0_ |= 0x00000010;
+        createDate_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearCreateDate() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        createDate_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional string nickName = 6;
+      private java.lang.Object nickName_ = "";
+      public boolean hasNickName() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public String getNickName() {
+        java.lang.Object ref = nickName_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          nickName_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setNickName(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        nickName_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearNickName() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        nickName_ = getDefaultInstance().getNickName();
+        onChanged();
+        return this;
+      }
+      void setNickName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000020;
+        nickName_ = value;
+        onChanged();
+      }
+      
+      // repeated .game.PBDrawAction drawData = 10;
+      private java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction> drawData_ =
+        java.util.Collections.emptyList();
+      private void ensureDrawDataIsMutable() {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
+          drawData_ = new java.util.ArrayList<com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction>(drawData_);
+          bitField0_ |= 0x00000040;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder> drawDataBuilder_;
+      
+      public java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction> getDrawDataList() {
+        if (drawDataBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(drawData_);
+        } else {
+          return drawDataBuilder_.getMessageList();
+        }
+      }
+      public int getDrawDataCount() {
+        if (drawDataBuilder_ == null) {
+          return drawData_.size();
+        } else {
+          return drawDataBuilder_.getCount();
+        }
+      }
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction getDrawData(int index) {
+        if (drawDataBuilder_ == null) {
+          return drawData_.get(index);
+        } else {
+          return drawDataBuilder_.getMessage(index);
+        }
+      }
+      public Builder setDrawData(
+          int index, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction value) {
+        if (drawDataBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureDrawDataIsMutable();
+          drawData_.set(index, value);
+          onChanged();
+        } else {
+          drawDataBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setDrawData(
+          int index, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder builderForValue) {
+        if (drawDataBuilder_ == null) {
+          ensureDrawDataIsMutable();
+          drawData_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          drawDataBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addDrawData(com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction value) {
+        if (drawDataBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureDrawDataIsMutable();
+          drawData_.add(value);
+          onChanged();
+        } else {
+          drawDataBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addDrawData(
+          int index, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction value) {
+        if (drawDataBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureDrawDataIsMutable();
+          drawData_.add(index, value);
+          onChanged();
+        } else {
+          drawDataBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addDrawData(
+          com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder builderForValue) {
+        if (drawDataBuilder_ == null) {
+          ensureDrawDataIsMutable();
+          drawData_.add(builderForValue.build());
+          onChanged();
+        } else {
+          drawDataBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addDrawData(
+          int index, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder builderForValue) {
+        if (drawDataBuilder_ == null) {
+          ensureDrawDataIsMutable();
+          drawData_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          drawDataBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllDrawData(
+          java.lang.Iterable<? extends com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction> values) {
+        if (drawDataBuilder_ == null) {
+          ensureDrawDataIsMutable();
+          super.addAll(values, drawData_);
+          onChanged();
+        } else {
+          drawDataBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearDrawData() {
+        if (drawDataBuilder_ == null) {
+          drawData_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000040);
+          onChanged();
+        } else {
+          drawDataBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeDrawData(int index) {
+        if (drawDataBuilder_ == null) {
+          ensureDrawDataIsMutable();
+          drawData_.remove(index);
+          onChanged();
+        } else {
+          drawDataBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder getDrawDataBuilder(
+          int index) {
+        return getDrawDataFieldBuilder().getBuilder(index);
+      }
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder getDrawDataOrBuilder(
+          int index) {
+        if (drawDataBuilder_ == null) {
+          return drawData_.get(index);  } else {
+          return drawDataBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder> 
+           getDrawDataOrBuilderList() {
+        if (drawDataBuilder_ != null) {
+          return drawDataBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(drawData_);
+        }
+      }
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder addDrawDataBuilder() {
+        return getDrawDataFieldBuilder().addBuilder(
+            com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.getDefaultInstance());
+      }
+      public com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder addDrawDataBuilder(
+          int index) {
+        return getDrawDataFieldBuilder().addBuilder(
+            index, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.getDefaultInstance());
+      }
+      public java.util.List<com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder> 
+           getDrawDataBuilderList() {
+        return getDrawDataFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder> 
+          getDrawDataFieldBuilder() {
+        if (drawDataBuilder_ == null) {
+          drawDataBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder, com.orange.network.game.protocol.model.GameBasicProtos.PBDrawActionOrBuilder>(
+                  drawData_,
+                  ((bitField0_ & 0x00000040) == 0x00000040),
+                  getParentForChildren(),
+                  isClean());
+          drawData_ = null;
+        }
+        return drawDataBuilder_;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:game.PBDraw)
+    }
+    
+    static {
+      defaultInstance = new PBDraw(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:game.PBDraw)
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_game_PBGameUser_descriptor;
   private static
@@ -1971,6 +3600,16 @@ public final class GameBasicProtos {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_game_PBGameSession_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_game_PBDrawAction_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_game_PBDrawAction_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_game_PBDraw_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_game_PBDraw_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1988,8 +3627,14 @@ public final class GameBasicProtos {
       "me\030\005 \001(\005\022\014\n\004host\030\006 \001(\t\022\016\n\006status\030\007 \001(\005\022\031" +
       "\n\021currentPlayUserId\030\010 \001(\t\022\026\n\016nextPlayUse" +
       "rId\030\t \001(\t\022\037\n\005users\0302 \003(\0132\020.game.PBGameUs" +
-      "erB9\n&com.orange.network.game.protocol.m" +
-      "odelB\017GameBasicProtos"
+      "er\"N\n\014PBDrawAction\022\014\n\004type\030\001 \002(\005\022\022\n\006poin" +
+      "ts\030\002 \003(\005B\002\020\001\022\r\n\005width\030\003 \001(\002\022\r\n\005color\030\004 \001",
+      "(\005\"\223\001\n\006PBDraw\022\016\n\006userId\030\001 \002(\t\022\014\n\004word\030\002 " +
+      "\002(\t\022\r\n\005level\030\003 \002(\005\022\020\n\010language\030\004 \002(\005\022\022\n\n" +
+      "createDate\030\005 \001(\005\022\020\n\010nickName\030\006 \001(\t\022$\n\010dr" +
+      "awData\030\n \003(\0132\022.game.PBDrawActionB9\n&com." +
+      "orange.network.game.protocol.modelB\017Game" +
+      "BasicProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2012,6 +3657,22 @@ public final class GameBasicProtos {
               new java.lang.String[] { "GameId", "SessionId", "Name", "CreateBy", "CreateTime", "Host", "Status", "CurrentPlayUserId", "NextPlayUserId", "Users", },
               com.orange.network.game.protocol.model.GameBasicProtos.PBGameSession.class,
               com.orange.network.game.protocol.model.GameBasicProtos.PBGameSession.Builder.class);
+          internal_static_game_PBDrawAction_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_game_PBDrawAction_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_game_PBDrawAction_descriptor,
+              new java.lang.String[] { "Type", "Points", "Width", "Color", },
+              com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.class,
+              com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction.Builder.class);
+          internal_static_game_PBDraw_descriptor =
+            getDescriptor().getMessageTypes().get(3);
+          internal_static_game_PBDraw_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_game_PBDraw_descriptor,
+              new java.lang.String[] { "UserId", "Word", "Level", "Language", "CreateDate", "NickName", "DrawData", },
+              com.orange.network.game.protocol.model.GameBasicProtos.PBDraw.class,
+              com.orange.network.game.protocol.model.GameBasicProtos.PBDraw.Builder.class);
           return null;
         }
       };

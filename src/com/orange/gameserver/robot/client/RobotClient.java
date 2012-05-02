@@ -1,6 +1,9 @@
 package com.orange.gameserver.robot.client;
 
 import java.net.InetSocketAddress;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -10,28 +13,53 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
+import com.orange.common.utils.RandomUtil;
 import com.orange.gameclient.draw.test.dao.ClientUser;
 import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.draw.server.DrawGameServer;
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
+import com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification;
 import com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest;
+import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest;
 
-public class RobotClient {
+public class RobotClient implements Runnable {
 
+	private static final int MIN_SESSION_USER_COUNT = 4;
 	final int sessionId;
 	final String userId;
 	final String nickName;
 	final boolean gender;
 	final String userAvatar;
 	final int robotIndex;
+	
+	enum ClientState{
+		WAITING,
+		PICK_WORD,
+		PLAYING
+	};
+	
+	// game session running data
+	ConcurrentHashMap<String, User> userList = new ConcurrentHashMap<String, User>();
+	ClientState state = ClientState.WAITING;	
+	String currentPlayUserId = null;
+	int round = -1;
+	String word = null;
+	int level = 0;
+	int language = 0;
+	int guessCount = 0;
+	
+	// simulation
+	Timer guessWordTimer;
+	
+	// connection information
 	ChannelFuture future;
 	ClientBootstrap bootstrap;
-	
-	AtomicInteger messageId = new AtomicInteger(1);
 	Channel channel;
-	ConcurrentHashMap<String, User> userList = new ConcurrentHashMap<String, User>();
+
+	// message
+	AtomicInteger messageId = new AtomicInteger(1);
 	
 	public RobotClient(String userId, String nickName, String avatar, boolean gender, int sessionId, int index){
 		this.sessionId = sessionId;
@@ -69,12 +97,19 @@ public class RobotClient {
         
         // Wait until the connection is closed or the connection attempt fails.
         future.getChannel().getCloseFuture().awaitUninterruptibly();
+        future = null;
         
         // Shut down thread pools to exit.
-        bootstrap.releaseExternalResources();		
-        
+        bootstrap.releaseExternalResources();		        
+        bootstrap = null;        
 	}
 	
+	void send(GameMessage msg){
+		if (channel != null && channel.isWritable()){
+			GameLog.info(sessionId, "robot "+nickName+ " send "+msg.getCommand());
+			channel.write(msg);
+		}
+	}
 	
 	void sendJoinGameRequest() {
 
@@ -93,22 +128,21 @@ public class RobotClient {
 				.setCommand(GameCommandType.JOIN_GAME_REQUEST)
 				.setJoinGameRequest(request).build();
 		
-		if (channel != null && channel.isWritable()){
-			GameLog.info(sessionId, "robot "+nickName+ " send JOIN GAME request");
-			channel.write(message);
-		}
-
+		send(message);
 	}
 
 	public void disconnect() {
 		GameLog.info(sessionId, "Robot " + nickName + " Disconnect");
-		if (channel != null && channel.isConnected()){
-			channel.disconnect();
+		if (channel != null){
+			if (channel.isConnected()){
+				channel.disconnect();
+			}
+
 			channel.close();
 			channel = null;
 		}
 	}
-
+		
 	public void removeUserByUserId(String userIdForRemove) {
 		userList.remove(userIdForRemove);
 	}
@@ -125,14 +159,155 @@ public class RobotClient {
 		return robotIndex;
 	}
 
-	public void stop() {
+	public void stopClient() {
+		
+		disconnect();
+		
 		if (future != null){		
 			future.cancel();
 		}
 		
         // Shut down thread pools to exit.
-        bootstrap.releaseExternalResources();			        
+		if (bootstrap != null){
+			bootstrap.releaseExternalResources();
+		}
+	}
+
+	public ClientState getState() {
+		return state;
+	}
+
+	public void setState(ClientState state) {
+		this.state = state;
+	}
+
+	public void updateByNotification(GeneralNotification notification) {
+		
+		if (notification == null){
+			return;
+		}
+		
+		if (notification.hasCurrentPlayUserId()){
+			this.setCurrentPlayUserId(notification.getCurrentPlayUserId());			
+		}
+		
+		if (notification.hasNewUserId()){
+			this.addNewUser(notification.getNewUserId(),
+					notification.getNickName(),
+					notification.getUserAvatar(),
+					notification.getUserGender());
+		}
+		
+		if (notification.hasQuitUserId()){
+			removeUserByUserId(notification.getQuitUserId());
+		}
+		
+	}
+
+	private void addNewUser(String newUserId, String nickName2,
+			String userAvatar2, boolean userGender) {
+
+		if (newUserId == null){
+			return;
+		}
+		
+		User user = new User(newUserId, nickName2, userAvatar2, userGender, null, sessionId);
+		userList.put(newUserId, user);
+	}
+
+	private void setCurrentPlayUserId(String userId) {
+		this.currentPlayUserId = userId;
+	}
+
+	public boolean canQuitNow() {
+		if (this.sessionUserCount() >= MIN_SESSION_USER_COUNT){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public void updateTurnData(GeneralNotification notification) {
+		if (notification == null)
+			return;
+		
+		if (notification.hasRound())
+			this.round = notification.getRound();
+		
+		if (notification.hasWord())
+			this.word = notification.getWord();
+		
+		if (notification.hasLevel())
+			this.level = notification.getLevel();
+		
+		if (notification.hasLanguage())
+			this.language = notification.getLanguage();
+		
 	}
 	
+	public final void sendGuessWord(String guessWord){
+		SendDrawDataRequest request = SendDrawDataRequest.newBuilder().setGuessWord(guessWord)
+			.setGuessUserId(userId)
+			.build();
+		
+		GameMessage message = GameMessage.newBuilder().setCommand(GameCommandType.SEND_DRAW_DATA_REQUEST)
+			.setMessageId(messageId.getAndIncrement())
+			.setUserId(userId)
+			.setSessionId(sessionId)
+			.setSendDrawDataRequest(request)
+			.build();
+		
+		send(message);
+	}
+	
+	
+	public static int RANDOM_GUESS_WORD_INTERVAL = 5;
+	public void setGuessWordTimer(){
+				
+		clearGuessWordTimer();
+		
+		guessWordTimer = new Timer();
+		guessWordTimer.schedule(new TimerTask(){
+
+			@Override
+			public void run() {	
+				try{
+					String guessWord = null;
+					
+					if (guessCount >= 3){
+						guessWord = (RandomUtil.random(1) == 0) ? word : "WRONG2";
+					}
+					else{
+						guessWord = "WRONG1";
+					}
+					
+					guessCount ++;
+					sendGuessWord(guessWord);
+					
+				}
+				catch (Exception e){
+					GameLog.error(sessionId, e, "robot client guess word timer ");
+				}
+
+				// schedule next timer
+				setGuessWordTimer();
+			}
+			
+		}, 1000*RandomUtil.random(RANDOM_GUESS_WORD_INTERVAL));
+	}
+	
+	public void clearGuessWordTimer(){
+		if (guessWordTimer != null){
+			guessWordTimer.cancel();
+			guessWordTimer = null;
+		}
+		
+	}
+
+	public void resetPlayData() {
+		clearGuessWordTimer();
+		guessCount = 0;
+	}
 	
 }

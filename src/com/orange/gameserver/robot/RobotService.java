@@ -1,5 +1,8 @@
 package com.orange.gameserver.robot;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.gameserver.robot.client.RobotClient;
 import com.orange.gameserver.robot.manager.RobotManager;
@@ -14,6 +17,8 @@ public class RobotService {
     public static RobotService getInstance() { 
     	return service; 
     }
+
+    ExecutorService executor = Executors.newFixedThreadPool(1);
     
     RobotManager robotManager = RobotManager.getInstance();
 
@@ -24,10 +29,17 @@ public class RobotService {
     		return;
     	}
     	
-    	client.run();
+    	executor.execute(client);
 	}
-	public void finishRobot(RobotClient robotClient) {
-		robotManager.deallocClient(robotClient);
+    
+	public void finishRobot(final RobotClient robotClient) {		
+		executor.execute(new Runnable(){
+			@Override
+			public void run() {
+				robotManager.deallocClient(robotClient);
+				robotClient.stopClient();
+			}		
+		});
 	} 	
     
     

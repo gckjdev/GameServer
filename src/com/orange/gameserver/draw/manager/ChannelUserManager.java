@@ -68,10 +68,11 @@ public class ChannelUserManager {
 		clearChannelTimeOut(channel);
     	channelUserMap.remove(channel);    	
     	channelTimeOutFutureMap.remove(channel);
-    	if (channel.isOpen()){
+    	if (channel.isConnected()){
     		channel.disconnect();
-    		channel.close();
     	}
+		
+    	channel.close();
     }
     
 	public List<String> findUsersInChannel(Channel channel) {		

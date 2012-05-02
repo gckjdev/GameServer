@@ -115,7 +115,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		}
 
 		if (drawRequest.hasWord()){
-			session.startNewTurn(drawRequest.getWord(), drawRequest.getLevel());
+			session.startNewTurn(drawRequest.getWord(), drawRequest.getLevel(), drawRequest.getLanguage());
 
 			// schedule timer for finishing this turn
 //			session.clearStartExpireTimer();
@@ -124,11 +124,14 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		if (drawRequest.getPointsCount() > 0){
 			// TODO save draw data into turn data
+			session.appendDrawData(drawRequest.getPointsList(),
+					drawRequest.getColor(),
+					drawRequest.getWidth());
 		}
 		
 		if (drawRequest.hasGuessWord()){
 			session.userGuessWord(drawRequest.getGuessUserId(), drawRequest.getGuessWord());
-		}
+		}				
 				
 		// broast draw data to all other users in the session
 		GameNotification.broadcastDrawDataNotification(session, gameEvent, gameEvent.getMessage().getUserId());
@@ -143,6 +146,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameSession session) {
 		
 		// TODO save clean draw into turn data 		
+		session.appendCleanDrawAction();
 		
 		// broast draw data to all other users in the session
 		GameNotification.broadcastCleanDrawNotification(session, gameEvent, gameEvent.getMessage().getUserId());

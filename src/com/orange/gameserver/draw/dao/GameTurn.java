@@ -13,6 +13,8 @@ import org.eclipse.jetty.util.log.Log;
 
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBDraw;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction;
 
 public class GameTurn {
 	
@@ -27,6 +29,7 @@ public class GameTurn {
 	final int		wordLevel;			
 	final int		round;
 	final int		sessionId;
+	final int 		language;
 	
 	TurnStatus status;
 	
@@ -35,15 +38,16 @@ public class GameTurn {
 	String drawUserId = null;
 	int drawUserCoins = 0;
 	ConcurrentMap<String, UserGuessWord> userGuessWordMap = new ConcurrentHashMap<String, UserGuessWord>();
-	List<DrawAction>	drawActionList = new ArrayList<DrawAction>();
+	List<DrawAction> drawActionList = new ArrayList<DrawAction>();
 
 	
-	public GameTurn(int sessionId, int round, String word, int level) {
+	public GameTurn(int sessionId, int round, String word, int level, int language) {
 		this.sessionId = sessionId;
 		this.round = round;
 		this.wordLevel = level;
 		this.wordText = word;
 		this.status = TurnStatus.PICK_WORD;
+		this.language = language;
 	}
 
 	public void addDrawAction(DrawAction action){
@@ -186,4 +190,72 @@ public class GameTurn {
 	public synchronized boolean isTurnPlaying() {
 		return (status != TurnStatus.FINISH);
 	}
+
+	/*
+	// internal usage, to store draw data
+	message DrawAction {
+	  required int32 type = 1;                      // 0 : draw, 1 : clean draw
+	  repeated int32 points = 2 [packed=true];
+	  optional float width = 3;
+	  optional int32 color = 4;
+	}
+
+	// internal usage, to store draw data
+	message Draw {
+	  required string userId = 1;    
+	  required string word = 2;
+	  required int32 level = 3;
+	  required int32 language = 4;                 // 1 Chinese, 2 English
+	  optional int32 createDate = 5;
+	  optional string nickName = 6;
+
+	  repeated DrawAction drawData = 10;  
+	}
+	*/
+	
+	public void storeDrawData() {
+		
+
+//		PBDraw drawData = PBDrawAction.newBuilder()
+		
+		int language = 1;
+		
+		List<PBDrawAction> pbDrawDataList = new ArrayList<PBDrawAction>();
+		for (DrawAction action : drawActionList){
+			if (action.actionType == DrawAction.DRAW_ACTION_TYPE_CLEAN){
+				PBDrawAction cleanDraw = PBDrawAction.newBuilder().setType(action.actionType).build();
+				pbDrawDataList.add(cleanDraw);
+			}
+			else{
+				PBDrawAction draw = PBDrawAction.newBuilder().setType(action.actionType)
+					.setColor(action.color)
+					.setWidth(action.width)
+					.addAllPoints(action.pointList)
+					.build();
+				pbDrawDataList.add(draw);
+			}
+		}
+		
+		PBDraw draw = PBDraw.newBuilder().setUserId(drawUserId)
+			.setWord(wordText)
+			.setLevel(wordLevel)
+			.setLanguage(language)
+			.setCreateDate((int)System.currentTimeMillis()/1000)
+			.addAllDrawData(pbDrawDataList)
+			.build();
+		
+		// write data here...
+		byte[] data = draw.toByteArray();				
+	}
+	
+	public void appendCleanDrawAction() {
+		DrawAction action = new DrawAction();
+		drawActionList.add(action);
+	}
+
+	public void appendDrawData(List<Integer> pointsList, int color, float width) {
+		DrawAction action = new DrawAction(width, color, pointsList);
+		drawActionList.add(action);		
+	}
+
 }

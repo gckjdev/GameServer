@@ -18,9 +18,11 @@ import com.orange.gameclient.draw.test.dao.SessionManager;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.gameserver.robot.RobotService;
+import com.orange.gameserver.robot.client.RobotClient.ClientState;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
+import com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBGameSession;
 
 public class RobotClientHandler extends SimpleChannelUpstreamHandler {
@@ -29,7 +31,11 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 			.getLogger(RobotClientHandler.class.getName());
 	ClientUser user;
 	
+	
+	
 	boolean startGameByMe = false;
+	
+	
 	final RobotClient robotClient;
 
 //	public RobotClientHandler() {
@@ -110,23 +116,24 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 		case JOIN_GAME_RESPONSE:
 			handleJoinGameResponse(message);
 			break;
-			
-		case QUIT_GAME_RESPONSE:
-			break;
-			
+						
 		case START_GAME_RESPONSE:
 			break;
 			
 		case NEW_DRAW_DATA_NOTIFICATION_REQUEST:
+			handleDrawDataNotification(message);
 			break;
 			
-		case GAME_TURN_COMPLETE_NOTIFICATION_REQUEST:
+		case GAME_TURN_COMPLETE_NOTIFICATION_REQUEST:			
+			handleGameTurnCompleteNotification(message);
 			break;
 			
 		case GAME_START_NOTIFICATION_REQUEST:
+			handleGameStartNotification(message);
 			break;
 
 		case USER_JOIN_NOTIFICATION_REQUEST:			
+			handleUserJoinNotification(message);
 			break;
 			
 		case USER_QUIT_NOTIFICATION_REQUEST:
@@ -148,6 +155,46 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 //		}else if(message.getCommand() == GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST){
 //			handleGameCompleteNotificationResquest(message);
 //		}
+	}
+
+	private void handleGameTurnCompleteNotification(GameMessage message) {
+		robotClient.setState(ClientState.WAITING);
+		robotClient.updateByNotification(message.getNotification());
+		
+		robotClient.resetPlayData();
+		
+		// TODO check if the robot is the next user...
+	}
+
+	private void handleDrawDataNotification(GameMessage message) {
+		robotClient.updateTurnData(message.getNotification());
+		
+		if (message.getNotification() == null)
+			return;
+			
+		String word = message.getNotification().getWord();
+		if (word != null && word.length() > 0){
+			robotClient.setState(ClientState.PLAYING);
+			robotClient.resetPlayData();
+		}
+		
+		// now here need to simulate guess word...
+		robotClient.setGuessWordTimer();
+	}
+
+	private void handleGameStartNotification(GameMessage message) {		
+		robotClient.setState(ClientState.PICK_WORD);				
+		robotClient.updateByNotification(message.getNotification());								
+	}
+
+	private void handleUserJoinNotification(GameMessage message) {
+		
+		robotClient.updateByNotification(message.getNotification());		
+		
+		if (robotClient.canQuitNow()){
+			GameLog.info(robotClient.sessionId, "reach min user for session, robot can escape now!");
+			robotClient.disconnect();
+		}
 	}
 
 	private void handleUserQuitNotification(GameMessage message) {
@@ -279,23 +326,15 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		logger.error("GameServerHandler catch unexpected exception .", e
-				.getCause());
+		GameLog.info(robotClient.sessionId, "catch exception, cause="+e.getCause());
 		e.getChannel().close();
 	}
 
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx,
 			ChannelStateEvent e) {
-		logger.info("GameServerHandler channel disconnected");
-
-		if (user != null && user.getSessionId() > 0) {
-			long sid = user.getSessionId();
-			logger.info("[QUIT]:" + user.getNickName() + "quit from session "
-					+ sid);
-			user.setSessionId(-1);
-			SessionManager.decreaseCount(sid);
-		}
+		GameLog.info(robotClient.sessionId, "<robotClient> channel disonnected");
+		RobotService.getInstance().finishRobot(robotClient);
 	}
 
 	@Override
