@@ -417,7 +417,7 @@ public class RobotClient implements Runnable {
 	Timer startDrawTimer = null;
 	int sendDrawIndex = 0;
 	private static final int START_TIMER_WAITING_INTERVAL = 5;
-	private static final int START_DRAW_WAITING_INTERVAL = 2;
+	private static final int START_DRAW_WAITING_INTERVAL = 1;
 	public static int RANDOM_GUESS_WORD_INTERVAL = 30;	
 	
 	public void clearStartDrawTimer(){
@@ -457,46 +457,52 @@ public class RobotClient implements Runnable {
 			@Override
 			public void run() {
 				
-				Set<String> excludeUserSet = new HashSet<String>();
-				Set<String> userIdList = userList.keySet();
-				userIdList.remove(userId);
-				for (String id : userIdList){
-					if (!RobotManager.isRobotUser(id)){
-						excludeUserSet.add(id);						
+				try{
+				
+					Set<String> excludeUserSet = new HashSet<String>();
+					Set<String> userIdList = userList.keySet();
+					userIdList.remove(userId);
+					for (String id : userIdList){
+						if (!RobotManager.isRobotUser(id)){
+							excludeUserSet.add(id);						
+						}
 					}
+					
+					BasicDBObject obj = DrawStorageService.getInstance().randomGetDraw(sessionId, excludeUserSet);
+					if (obj == null){
+						GameLog.warn(sessionId, "robot cannot find any draw for simulation! have to quit");
+						disconnect();
+						return;					
+					}
+	
+					byte[] data = (byte[])obj.get(DrawDBClient.F_DRAW_DATA);
+					if (data == null){
+						GameLog.warn(sessionId, "robot cannot find any draw for simulation! have to quit");
+						disconnect();
+						return;					
+					}
+					
+					try {
+						pbDraw = PBDraw.parseFrom(data);
+					} catch (InvalidProtocolBufferException e) {
+						GameLog.warn(sessionId, "robot catch exception while parsing draw data, e="+e.toString());
+						disconnect();
+						return;					
+					}
+					
+					String word = obj.getString(DrawDBClient.F_WORD);
+					int level = obj.getInt(DrawDBClient.F_LEVEL);
+					int language = obj.getInt(DrawDBClient.F_LANGUAGE);
+					
+					sendStartGame();
+					sendStartDraw(word, level, language);				
+	
+					state = ClientState.PLAYING;				
+					scheduleSendDrawDataTimer(pbDraw);	
 				}
-				
-				BasicDBObject obj = DrawStorageService.getInstance().randomGetDraw(sessionId, excludeUserSet);
-				if (obj == null){
-					GameLog.warn(sessionId, "robot cannot find any draw for simulation! have to quit");
-					disconnect();
-					return;					
+				catch(Exception e){
+					GameLog.error(sessionId, e);					
 				}
-
-				byte[] data = (byte[])obj.get(DrawDBClient.F_DRAW_DATA);
-				if (data == null){
-					GameLog.warn(sessionId, "robot cannot find any draw for simulation! have to quit");
-					disconnect();
-					return;					
-				}
-				
-				try {
-					pbDraw = PBDraw.parseFrom(data);
-				} catch (InvalidProtocolBufferException e) {
-					GameLog.warn(sessionId, "robot catch exception while parsing draw data, e="+e.toString());
-					disconnect();
-					return;					
-				}
-				
-				String word = obj.getString(DrawDBClient.F_WORD);
-				int level = obj.getInt(DrawDBClient.F_LEVEL);
-				int language = obj.getInt(DrawDBClient.F_LANGUAGE);
-				
-				sendStartGame();
-				sendStartDraw(word, level, language);				
-
-				state = ClientState.PLAYING;				
-				scheduleSendDrawDataTimer(pbDraw);				
 			}
 
 
@@ -522,19 +528,24 @@ public class RobotClient implements Runnable {
 
 			@Override
 			public void run() {
-				if (sendDrawIndex < 0 || sendDrawIndex >= pbDraw.getDrawDataCount()){
-					GameLog.info(sessionId, "robot has no more draw data");
-					clearStartDrawTimer();
-					return;
+				try{
+					if (sendDrawIndex < 0 || sendDrawIndex >= pbDraw.getDrawDataCount()){
+						GameLog.info(sessionId, "robot has no more draw data");
+						clearStartDrawTimer();
+						return;
+					}
+					
+					PBDrawAction drawData = pbDraw.getDrawData(sendDrawIndex);
+					if (drawData.getType() == DrawAction.DRAW_ACTION_TYPE_CLEAN)
+						cleanDraw();
+					else
+						sendDraw(drawData.getPointsList(), drawData.getWidth(), drawData.getColor());
+					
+					sendDrawIndex++;
 				}
-				
-				PBDrawAction drawData = pbDraw.getDrawData(sendDrawIndex);
-				if (drawData.getType() == DrawAction.DRAW_ACTION_TYPE_CLEAN)
-					cleanDraw();
-				else
-					sendDraw(drawData.getPointsList(), drawData.getWidth(), drawData.getColor());
-				
-				sendDrawIndex++;
+				catch(Exception e){
+					GameLog.error(sessionId, e);					
+				}
 			}
 			
 		}, START_DRAW_WAITING_INTERVAL*1000+1000, START_DRAW_WAITING_INTERVAL*1000+1000);
