@@ -1,7 +1,11 @@
 package com.orange.gameserver.robot.client;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,16 +17,25 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.mongodb.BasicDBObject;
 import com.orange.common.utils.RandomUtil;
-import com.orange.gameclient.draw.test.dao.ClientUser;
+import com.orange.gameserver.db.DrawDBClient;
+import com.orange.gameserver.db.service.DrawStorageService;
+import com.orange.gameserver.draw.dao.DrawAction;
 import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.manager.WordManager;
 import com.orange.gameserver.draw.server.DrawGameServer;
 import com.orange.gameserver.draw.utils.GameLog;
+import com.orange.gameserver.robot.manager.RobotManager;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification;
 import com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest;
 import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBDraw;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 public class RobotClient implements Runnable {
 
@@ -49,9 +62,11 @@ public class RobotClient implements Runnable {
 	int level = 0;
 	int language = 0;
 	int guessCount = 0;
+	boolean guessCorrect = false;
 	
 	// simulation
 	Timer guessWordTimer;
+	PBDraw pbDraw;
 	
 	// connection information
 	ChannelFuture future;
@@ -133,6 +148,9 @@ public class RobotClient implements Runnable {
 
 	public void disconnect() {
 		GameLog.info(sessionId, "Robot " + nickName + " Disconnect");
+		
+		this.resetPlayData();
+		
 		if (channel != null){
 			if (channel.isConnected()){
 				channel.disconnect();
@@ -235,13 +253,13 @@ public class RobotClient implements Runnable {
 		if (notification.hasRound())
 			this.round = notification.getRound();
 		
-		if (notification.hasWord())
+		if (notification.hasWord() && notification.getWord().length() > 0)
 			this.word = notification.getWord();
 		
 		if (notification.hasLevel())
 			this.level = notification.getLevel();
 		
-		if (notification.hasLanguage())
+		if (notification.hasLanguage() && notification.getLanguage() > 0)
 			this.language = notification.getLanguage();
 		
 	}
@@ -261,11 +279,67 @@ public class RobotClient implements Runnable {
 		send(message);
 	}
 	
+	public final void sendStartGame(){		
+		GameMessage message = GameMessage.newBuilder().setCommand(GameCommandType.START_GAME_REQUEST)
+			.setMessageId(messageId.getAndIncrement())
+			.setUserId(userId)
+			.setSessionId(sessionId)
+			.build();
+		
+		send(message);
+	}
+
+	public final void cleanDraw(){		
+		GameMessage message = GameMessage.newBuilder().setCommand(GameCommandType.CLEAN_DRAW_REQUEST)
+			.setMessageId(messageId.getAndIncrement())
+			.setUserId(userId)
+			.setSessionId(sessionId)
+			.build();
+		
+		send(message);
+	}
 	
-	public static int RANDOM_GUESS_WORD_INTERVAL = 5;
+	public final void sendStartDraw(String word, int level, int language){
+		SendDrawDataRequest request = SendDrawDataRequest.newBuilder().setWord(word)
+			.setLevel(level)
+			.setLanguage(language)
+			.build();
+		
+		GameMessage message = GameMessage.newBuilder().setCommand(GameCommandType.SEND_DRAW_DATA_REQUEST)
+			.setMessageId(messageId.getAndIncrement())
+			.setUserId(userId)
+			.setSessionId(sessionId)
+			.setSendDrawDataRequest(request)
+			.build();
+		
+		send(message);
+	}
+
+	public final void sendDraw(List<Integer> pointList, float width, int color){
+		SendDrawDataRequest request = SendDrawDataRequest.newBuilder()
+			.addAllPoints(pointList)
+			.setWidth(width)
+			.setColor(color)
+			.build();
+		
+		GameMessage message = GameMessage.newBuilder().setCommand(GameCommandType.SEND_DRAW_DATA_REQUEST)
+			.setMessageId(messageId.getAndIncrement())
+			.setUserId(userId)
+			.setSessionId(sessionId)
+			.setSendDrawDataRequest(request)
+			.build();
+		
+		send(message);
+	}	
+	
 	public void setGuessWordTimer(){
 				
-		clearGuessWordTimer();
+		clearGuessWordTimer();				
+		
+		if (currentPlayUserId.equals(userId)){
+			// draw user cannot guess...
+			return;
+		}
 		
 		guessWordTimer = new Timer();
 		guessWordTimer.schedule(new TimerTask(){
@@ -273,13 +347,24 @@ public class RobotClient implements Runnable {
 			@Override
 			public void run() {	
 				try{
-					String guessWord = null;
 					
+					if (guessCorrect){
+						GameLog.info(sessionId, "Robot client, try guess but already guess correct");
+						return;
+					}
+					
+					String guessWord = null;
+					boolean isMatchWordLen = (language == DrawGameServer.LANGUAGE_CHINESE) ? false : true;
+					String randomWord = WordManager.getInstance().randomGetWord(language, word.length(), isMatchWordLen);
 					if (guessCount >= 3){
-						guessWord = (RandomUtil.random(1) == 0) ? word : "WRONG2";
+						guessWord = (RandomUtil.random(1) == 0) ? word : randomWord;
 					}
 					else{
-						guessWord = "WRONG1";
+						guessWord = randomWord;
+					}
+					
+					if (guessWord.equalsIgnoreCase(word)){
+						guessCorrect = true;
 					}
 					
 					guessCount ++;
@@ -291,10 +376,12 @@ public class RobotClient implements Runnable {
 				}
 
 				// schedule next timer
-				setGuessWordTimer();
+				if (!guessCorrect){
+					setGuessWordTimer();
+				}
 			}
 			
-		}, 1000*RandomUtil.random(RANDOM_GUESS_WORD_INTERVAL));
+		}, 1000*RandomUtil.random(RANDOM_GUESS_WORD_INTERVAL)+1000);
 	}
 	
 	public void clearGuessWordTimer(){
@@ -307,7 +394,149 @@ public class RobotClient implements Runnable {
 
 	public void resetPlayData() {
 		clearGuessWordTimer();
+		clearStartGameTimer();
+		clearStartDrawTimer();
+		
 		guessCount = 0;
+		guessCorrect = false;
+	}
+
+	public void saveUserList(List<PBGameUser> pbUserList) {
+		if (pbUserList == null)
+			return;
+		
+		userList.clear();
+		for (PBGameUser pbUser : pbUserList){
+			User user = new User(pbUser.getUserId(), pbUser.getNickName(), 
+					pbUser.getAvatar(), pbUser.getGender(), null, sessionId);
+			userList.put(pbUser.getUserId(), user);
+		}
+	}
+
+	Timer startGameTimer = null;
+	Timer startDrawTimer = null;
+	int sendDrawIndex = 0;
+	private static final int START_TIMER_WAITING_INTERVAL = 5;
+	private static final int START_DRAW_WAITING_INTERVAL = 2;
+	public static int RANDOM_GUESS_WORD_INTERVAL = 30;	
+	
+	public void clearStartDrawTimer(){
+		sendDrawIndex = 0;
+
+		if (startDrawTimer != null){
+			startDrawTimer.cancel();
+			startDrawTimer = null;
+		}		
 	}
 	
+	public void clearStartGameTimer(){
+		if (startGameTimer != null){
+			startGameTimer.cancel();
+			startGameTimer = null;
+		}
+	}
+	
+	public void checkStart() {
+		if (state != ClientState.WAITING)
+			return;
+		
+		if (!this.currentPlayUserId.equals(this.userId)){
+			return;
+		}
+		
+		if (startGameTimer != null){
+			// ongoing...
+			return;
+		}
+		
+		resetPlayData();
+		
+		startGameTimer = new Timer();
+		startGameTimer.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				
+				Set<String> excludeUserSet = new HashSet<String>();
+				Set<String> userIdList = userList.keySet();
+				userIdList.remove(userId);
+				for (String id : userIdList){
+					if (!RobotManager.isRobotUser(id)){
+						excludeUserSet.add(id);						
+					}
+				}
+				
+				BasicDBObject obj = DrawStorageService.getInstance().randomGetDraw(sessionId, excludeUserSet);
+				if (obj == null){
+					GameLog.warn(sessionId, "robot cannot find any draw for simulation! have to quit");
+					disconnect();
+					return;					
+				}
+
+				byte[] data = (byte[])obj.get(DrawDBClient.F_DRAW_DATA);
+				if (data == null){
+					GameLog.warn(sessionId, "robot cannot find any draw for simulation! have to quit");
+					disconnect();
+					return;					
+				}
+				
+				try {
+					pbDraw = PBDraw.parseFrom(data);
+				} catch (InvalidProtocolBufferException e) {
+					GameLog.warn(sessionId, "robot catch exception while parsing draw data, e="+e.toString());
+					disconnect();
+					return;					
+				}
+				
+				String word = obj.getString(DrawDBClient.F_WORD);
+				int level = obj.getInt(DrawDBClient.F_LEVEL);
+				int language = obj.getInt(DrawDBClient.F_LANGUAGE);
+				
+				sendStartGame();
+				sendStartDraw(word, level, language);				
+
+				state = ClientState.PLAYING;				
+				scheduleSendDrawDataTimer(pbDraw);				
+			}
+
+
+			
+		}, RandomUtil.random(START_TIMER_WAITING_INTERVAL)*1000+1000);
+		
+	}
+	
+	private void scheduleSendDrawDataTimer(final PBDraw pbDraw) {
+		if (state != ClientState.PLAYING){
+			return;
+		}
+		
+		if (!this.currentPlayUserId.equals(this.userId)){
+			return;
+		}
+		
+		// clear previous draw timer if exists
+		clearStartDrawTimer();
+		
+		startDrawTimer = new Timer();
+		startDrawTimer.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				if (sendDrawIndex < 0 || sendDrawIndex >= pbDraw.getDrawDataCount()){
+					GameLog.info(sessionId, "robot has no more draw data");
+					clearStartDrawTimer();
+					return;
+				}
+				
+				PBDrawAction drawData = pbDraw.getDrawData(sendDrawIndex);
+				if (drawData.getType() == DrawAction.DRAW_ACTION_TYPE_CLEAN)
+					cleanDraw();
+				else
+					sendDraw(drawData.getPointsList(), drawData.getWidth(), drawData.getColor());
+				
+				sendDrawIndex++;
+			}
+			
+		}, START_DRAW_WAITING_INTERVAL*1000+1000, START_DRAW_WAITING_INTERVAL*1000+1000);
+	}	
 }

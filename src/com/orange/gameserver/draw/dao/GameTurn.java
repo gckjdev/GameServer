@@ -2,6 +2,7 @@ package com.orange.gameserver.draw.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,12 @@ import java.util.concurrent.ConcurrentMap;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.log.Log;
 
+import com.mongodb.BasicDBObject;
+import com.orange.common.mongodb.MongoDBClient;
+import com.orange.gameserver.db.DrawDBClient;
+import com.orange.gameserver.db.service.DrawStorageService;
 import com.orange.gameserver.draw.utils.GameLog;
+import com.orange.gameserver.robot.manager.RobotManager;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBDraw;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction;
@@ -41,13 +47,14 @@ public class GameTurn {
 	List<DrawAction> drawActionList = new ArrayList<DrawAction>();
 
 	
-	public GameTurn(int sessionId, int round, String word, int level, int language) {
+	public GameTurn(int sessionId, int round, String word, int level, int language, String currentPlayUserId) {
 		this.sessionId = sessionId;
 		this.round = round;
 		this.wordLevel = level;
 		this.wordText = word;
 		this.status = TurnStatus.PICK_WORD;
 		this.language = language;
+		this.drawUserId = currentPlayUserId;
 	}
 
 	public void addDrawAction(DrawAction action){
@@ -190,36 +197,17 @@ public class GameTurn {
 	public synchronized boolean isTurnPlaying() {
 		return (status != TurnStatus.FINISH);
 	}
-
-	/*
-	// internal usage, to store draw data
-	message DrawAction {
-	  required int32 type = 1;                      // 0 : draw, 1 : clean draw
-	  repeated int32 points = 2 [packed=true];
-	  optional float width = 3;
-	  optional int32 color = 4;
-	}
-
-	// internal usage, to store draw data
-	message Draw {
-	  required string userId = 1;    
-	  required string word = 2;
-	  required int32 level = 3;
-	  required int32 language = 4;                 // 1 Chinese, 2 English
-	  optional int32 createDate = 5;
-	  optional string nickName = 6;
-
-	  repeated DrawAction drawData = 10;  
-	}
-	*/
 	
 	public void storeDrawData() {
 		
 
 //		PBDraw drawData = PBDrawAction.newBuilder()
 		
-		int language = 1;
-		
+		if (RobotManager.isRobotUser(drawUserId)){
+			GameLog.info(sessionId, "skip store draw data due to robot draw user");
+			return;
+		}
+				
 		List<PBDrawAction> pbDrawDataList = new ArrayList<PBDrawAction>();
 		for (DrawAction action : drawActionList){
 			if (action.actionType == DrawAction.DRAW_ACTION_TYPE_CLEAN){
@@ -245,7 +233,12 @@ public class GameTurn {
 			.build();
 		
 		// write data here...
-		byte[] data = draw.toByteArray();				
+		byte[] data = draw.toByteArray();		
+		
+		
+		DrawStorageService.getInstance().storeDraw(sessionId, drawUserId, wordText, wordLevel, 
+				language, data);
+		
 	}
 	
 	public void appendCleanDrawAction() {

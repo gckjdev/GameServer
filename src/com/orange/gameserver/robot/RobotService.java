@@ -21,8 +21,21 @@ public class RobotService {
     ExecutorService executor = Executors.newFixedThreadPool(1);
     
     RobotManager robotManager = RobotManager.getInstance();
-
+	
+    public boolean isEnableRobot() {
+		String robot = System.getProperty("config.robot");
+		if (robot != null && !robot.isEmpty()){
+			return (Integer.parseInt(robot) == 1);
+		}
+		return false; // default
+	}	
+	
     public void startNewRobot(int sessionId) {
+    	if (!isEnableRobot()){
+    		GameLog.info(sessionId, "Robot not enabled for launch");
+    		return;
+    	}
+    	
     	RobotClient client = robotManager.allocNewClient(sessionId); 
     	if (client == null){
     		GameLog.info(sessionId, "start new robot but no robot client available");

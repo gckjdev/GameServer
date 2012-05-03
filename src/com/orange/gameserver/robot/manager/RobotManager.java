@@ -1,8 +1,15 @@
 package com.orange.gameserver.robot.manager;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.ConcurrentHashSet;
 
 import com.orange.gameserver.draw.utils.GameLog;
@@ -19,15 +26,24 @@ public class RobotManager {
     public static RobotManager getInstance() { 
     	return manager; 
     }
+    
+    public static final Logger log = Logger.getLogger(RobotManager.class.getName()); 
 
+    
     final String USER_NAME_LIST[] = {"Jenny", "Mike", "Tina"};
     final boolean USER_GENDER_LIST[] = {false, true, false};
     final String USER_AVATAR_LIST[] = {"http://icons-search.com/img/yellowicon/game_star_lin.zip/Linux-Pacman_256x256.png-256x256.png", "http://smasherentertainment.files.wordpress.com/2008/06/ninja.png", "http://tux.crystalxp.net/png/caporal-tux-capo-5832.png"};
-    public final static String ROBOT_USER_ID_PREFIX = "robot";     
+    public final static String ROBOT_USER_ID_PREFIX = "robot_$$_";     
     
     ConcurrentHashSet<Integer> allocSet = new ConcurrentHashSet<Integer>();
     ConcurrentHashSet<Integer> freeSet  = new ConcurrentHashSet<Integer>();
     Object allocLock = new Object();
+    
+    
+    
+    public static boolean isRobotUser(String userId){
+    	return userId.contains(ROBOT_USER_ID_PREFIX);
+    }
     
     public int allocIndex(){
     	synchronized(allocLock){
@@ -51,7 +67,7 @@ public class RobotManager {
     			index = iter.next().intValue();
     		}
 
-    		GameLog.info(0, "alloc index, random count = "+randomCount+ ", alloc index="+index);
+    		GameLog.info(0, "alloc robot, random count = "+randomCount+ ", alloc index="+index);
     		
     		if (index == -1)
     			return -1;
@@ -71,6 +87,8 @@ public class RobotManager {
     		freeSet.add(index);
     		allocSet.remove(index);
     	}
+    	
+    	GameLog.info(0, "dealloc robot, index="+index);
     }
     
     public RobotClient allocNewClient(int sessionId) {        	
