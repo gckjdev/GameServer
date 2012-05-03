@@ -18,7 +18,7 @@ public class RobotService {
     	return service; 
     }
 
-    ExecutorService executor = Executors.newFixedThreadPool(1);
+    ExecutorService executor = Executors.newFixedThreadPool(RobotManager.MAX_ROBOT_USER);
     
     RobotManager robotManager = RobotManager.getInstance();
 	

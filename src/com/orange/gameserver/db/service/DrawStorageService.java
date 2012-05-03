@@ -61,13 +61,14 @@ public class DrawStorageService {
     	});
 	} 
   
-    public BasicDBObject randomGetDraw(int sessionId, Set<String> excludeUserIdList){
+    public BasicDBObject randomGetDraw(int sessionId, int language, Set<String> excludeUserIdList){
     	double rand = Math.random();
     	MongoDBClient dbClient = DrawDBClient.getInstance().getMongoClient();
     	BasicDBObject query = new BasicDBObject();
     	BasicDBObject gte = new BasicDBObject();
     	gte.put("$gte", rand);
     	query.put(DrawDBClient.F_RANDOM, gte);
+    	query.put(DrawDBClient.F_LANGUAGE, language);
     	
     	BasicDBObject notInCondition = new BasicDBObject();
     	BasicDBList excludeList = new BasicDBList();
@@ -95,6 +96,7 @@ public class DrawStorageService {
     		lte.put("lte", rand);
     		query.clear();
     		query.put(DrawDBClient.F_RANDOM, lte);
+        	query.put(DrawDBClient.F_LANGUAGE, language);    		
 
         	notInCondition = new BasicDBObject();
         	notInCondition.put("$nin", excludeList);

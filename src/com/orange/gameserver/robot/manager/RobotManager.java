@@ -29,10 +29,31 @@ public class RobotManager {
     
     public static final Logger log = Logger.getLogger(RobotManager.class.getName()); 
 
+    public static final int MAX_ROBOT_USER = 10;
     
-    final String USER_NAME_LIST[] = {"Jenny", "Mike", "Tina"};
-    final boolean USER_GENDER_LIST[] = {false, true, false};
-    final String USER_AVATAR_LIST[] = {"http://icons-search.com/img/yellowicon/game_star_lin.zip/Linux-Pacman_256x256.png-256x256.png", "http://smasherentertainment.files.wordpress.com/2008/06/ninja.png", "http://tux.crystalxp.net/png/caporal-tux-capo-5832.png"};
+    final String USER_NAME_LIST[] = {"Jenny", "Mike", "Tina", "Robert", "Nancy", "Vivian", "Andy", "Cindy", "Judy", "Julie"};
+    final boolean USER_GENDER_LIST[] = {false, true, false, true, false, false, true, false, false, false};
+    final String USER_AVATAR_LIST[] = {
+    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220531.jpg", 
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111113/3-111113230948.jpg", 
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220533.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111113/3-111113230957.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220541.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G647.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111224/1-111224200641.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160GA3.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G648.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G645-50.jpg",    		    		
+    		};
     public final static String ROBOT_USER_ID_PREFIX = "robot_$$_";     
     
     ConcurrentHashSet<Integer> allocSet = new ConcurrentHashSet<Integer>();
@@ -46,7 +67,6 @@ public class RobotManager {
     }
     
     public int allocIndex(){
-    	synchronized(allocLock){
     		if (freeSet.isEmpty() ||
     			freeSet.iterator() == null)
     			return -1;
@@ -75,7 +95,6 @@ public class RobotManager {
     		allocSet.add(index);
     		freeSet.remove(index);
     		return index;
-    	}    	
     }
     
     public void deallocIndex(int index){
@@ -83,10 +102,9 @@ public class RobotManager {
     		return;
     	}
     	
-    	synchronized(allocLock){
+//    	synchronized(allocLock){
     		freeSet.add(index);
     		allocSet.remove(index);
-    	}
     	
     	GameLog.info(0, "dealloc robot, index="+index);
     }

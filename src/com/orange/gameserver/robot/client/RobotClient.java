@@ -146,7 +146,7 @@ public class RobotClient implements Runnable {
 		send(message);
 	}
 
-	public void disconnect() {
+	public synchronized void disconnect() {
 		GameLog.info(sessionId, "Robot " + nickName + " Disconnect");
 		
 		this.resetPlayData();
@@ -418,7 +418,7 @@ public class RobotClient implements Runnable {
 	int sendDrawIndex = 0;
 	private static final int START_TIMER_WAITING_INTERVAL = 5;
 	private static final int START_DRAW_WAITING_INTERVAL = 1;
-	public static int RANDOM_GUESS_WORD_INTERVAL = 30;	
+	public static int RANDOM_GUESS_WORD_INTERVAL = 20;	
 	
 	public void clearStartDrawTimer(){
 		sendDrawIndex = 0;
@@ -468,7 +468,9 @@ public class RobotClient implements Runnable {
 						}
 					}
 					
-					BasicDBObject obj = DrawStorageService.getInstance().randomGetDraw(sessionId, excludeUserSet);
+					BasicDBObject obj = DrawStorageService.getInstance().randomGetDraw(sessionId,
+							DrawGameServer.getLanguage(),
+							excludeUserSet);
 					if (obj == null){
 						GameLog.warn(sessionId, "robot cannot find any draw for simulation! have to quit");
 						disconnect();
