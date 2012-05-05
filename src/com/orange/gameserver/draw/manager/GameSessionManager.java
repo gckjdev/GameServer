@@ -1,5 +1,6 @@
 package com.orange.gameserver.draw.manager;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.eclipse.jetty.util.log.Log;
 import org.jboss.netty.channel.Channel;
 
+import com.orange.common.utils.RandomUtil;
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
@@ -322,12 +324,24 @@ public class GameSessionManager {
 		logger.info("<Full Set> : " + fullSet);		
 	}
 	
+	public boolean isAllUserGuessWord(GameSession session){
+		List<String> userIdList = new ArrayList<String>();
+		List<User> userList = sessionUserManager.getUserListBySession(session.getSessionId());
+		for (User user : userList){
+			if (user != session.getCurrentPlayUser()){
+				userIdList.add(user.getUserId());
+			}
+		}
+		
+		return session.isAllUserGuessWord(userIdList);
+	}
+	
 	public GameCompleteReason isSessionTurnFinish(GameSession session) {
 		int userCount = sessionUserManager.getSessionUserCount(session.getSessionId());
 		if (userCount == 1)
 			return GameCompleteReason.REASON_ONLY_ONE_USER; 
-		
-		if (session.isAllUserGuessWord(userCount)){
+				
+		if (isAllUserGuessWord(session)){
 			return GameCompleteReason.REASON_ALL_USER_GUESS;
 		}
 		
@@ -366,7 +380,7 @@ public class GameSessionManager {
 		}
 	}
 
-	public final static int ROBOT_TIMEROUT = 3;
+	public final static int ROBOT_TIMEROUT = 5;
 	public final static int ROBOT_USER_COUNT = 1;
 	public void prepareRobotTimer(GameSession gameSession) {
 		
@@ -398,7 +412,7 @@ public class GameSessionManager {
 		};
 		
 		ScheduledFuture<Object> newFuture = scheduleService.schedule(callable, 
-				ROBOT_TIMEROUT, TimeUnit.SECONDS);		
+				RandomUtil.random(ROBOT_TIMEROUT)+1, TimeUnit.SECONDS);		
 		
 		GameLog.info(sessionId, "Only one user, set robot timer");
 		gameSession.setRobotTimeOutFuture(newFuture);

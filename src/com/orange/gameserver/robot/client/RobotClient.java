@@ -368,7 +368,7 @@ public class RobotClient implements Runnable {
 					}
 					
 					guessCount ++;
-					sendGuessWord(guessWord);
+					sendGuessWord(guessWord.toUpperCase());
 					
 				}
 				catch (Exception e){
@@ -416,7 +416,7 @@ public class RobotClient implements Runnable {
 	Timer startGameTimer = null;
 	Timer startDrawTimer = null;
 	int sendDrawIndex = 0;
-	private static final int START_TIMER_WAITING_INTERVAL = 5;
+	private static final int START_TIMER_WAITING_INTERVAL = 10;
 	private static final int START_DRAW_WAITING_INTERVAL = 1;
 	public static int RANDOM_GUESS_WORD_INTERVAL = 20;	
 	
@@ -509,7 +509,7 @@ public class RobotClient implements Runnable {
 
 
 			
-		}, RandomUtil.random(START_TIMER_WAITING_INTERVAL)*1000+1000);
+		}, RandomUtil.random(START_TIMER_WAITING_INTERVAL)*1000+3000);
 		
 	}
 	

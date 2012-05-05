@@ -20,7 +20,7 @@ import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 
 public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 
-	private static final Logger logger = Logger.getLogger(RobotClientHandler.class.getName());
+//	private static final Logger logger = Logger.getLogger(RobotClientHandler.class.getName());
 	final RobotClient robotClient;
 
 	public RobotClientHandler(RobotClient client) {
@@ -30,9 +30,6 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e)
 			throws Exception {
-		logger.info(e.toString());
-		if (e instanceof ChannelStateEvent) {
-		}
 		super.handleUpstream(ctx, e);
 	}
 

@@ -15,7 +15,7 @@ import com.orange.gameserver.draw.utils.GameLog;
 public class DrawStorageService {
 
 	
-	protected static final int MIN_DRAW_DATA_LEN = 80;
+	protected static final int MIN_DRAW_DATA_LEN = 100;
 	// thread-safe singleton implementation
     private static DrawStorageService manager = new DrawStorageService();     
     private DrawStorageService(){		
@@ -87,8 +87,8 @@ public class DrawStorageService {
     	pushValue.put(DrawDBClient.F_VIEW_USER_LIST, eachValue);
     	update.put("$addToSet", pushValue);
     	
-    	GameLog.info(sessionId, "<randomGetDraw> query = "+query.toString() + ", update="+update.toString());
-    	DBObject obj = dbClient.findAndModify(DrawDBClient.T_DRAW, query, update);
+    	GameLog.info(sessionId, "<randomGetDraw> query = "+query.toString());
+    	DBObject obj = dbClient.findOne(DrawDBClient.T_DRAW, query);
 
     	if (obj == null){
     		// try random from lte
@@ -102,11 +102,19 @@ public class DrawStorageService {
         	notInCondition.put("$nin", excludeList);
         	query.put(DrawDBClient.F_VIEW_USER_LIST, notInCondition);
     		
-        	GameLog.info(sessionId, "<randomGetDraw> query = "+query.toString() + ", update="+update.toString());
-    		obj = dbClient.findAndModify(DrawDBClient.T_DRAW, query, update);
+        	GameLog.info(sessionId, "<randomGetDraw> query = "+query.toString());
+    		obj = dbClient.findOne(DrawDBClient.T_DRAW, query);
+    		
     	}
     	
-    	if (obj == null){
+		if (obj != null){
+			BasicDBObject keyQuery = new BasicDBObject();
+			keyQuery.put("_id", obj.get("_id"));
+			GameLog.info(sessionId, "<randomGetDraw> update = "+keyQuery.toString() + ", update="+update.toString());
+			dbClient.findAndModify(DrawDBClient.T_DRAW, keyQuery, update);
+		}
+
+		if (obj == null){
     		GameLog.info(sessionId, "random fetch data from DB, but no record return");
     		return null;
     	}

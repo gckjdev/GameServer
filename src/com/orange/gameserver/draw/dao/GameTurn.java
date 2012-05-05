@@ -133,18 +133,33 @@ public class GameTurn {
 		
 	}
 
-	public boolean isAllUserGuessWord(int userCount) {
-		int guessUserCount = userCount - 1;
-		if (userGuessWordMap.size() < guessUserCount)
-			return false;
+	public boolean isAllUserGuessWord(List<String> userIdList) {
+//		int guessUserCount = userCount - 1;
+//		if (userGuessWordMap.size() < guessUserCount)
+//			return false;
+//		
+//		int correctCount = 0;
 		
-		int correctCount = 0;
-		for (UserGuessWord guess : userGuessWordMap.values()){
-			if (guess.isCorrect)
-				correctCount ++;
+		for (String userId : userIdList){
+			if (userGuessWordMap.containsKey(userId)){
+				UserGuessWord guess = userGuessWordMap.get(userId);
+				if (guess == null || !guess.isCorrect){
+					return false;
+				}					
+			}
+			else{
+				return false;
+			}
 		}
 		
-		return (correctCount >= guessUserCount);
+		return true;
+		
+//		for (UserGuessWord guess : userGuessWordMap.values()){
+//			if (guess.isCorrect)
+//				correctCount ++;
+//		}
+//		
+//		return (correctCount >= guessUserCount);
 	}
 
 	public void calculateDrawUserCoins(String userId) {

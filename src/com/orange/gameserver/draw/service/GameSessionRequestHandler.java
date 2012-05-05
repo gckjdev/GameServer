@@ -198,14 +198,15 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 				reason = GameCompleteReason.REASON_ONLY_ONE_USER;
 				completeGameTurn = true;			
 			}
-			else if (session.isAllUserGuessWord(sessionUserCount)){
+			else if (sessionManager.isAllUserGuessWord(session)){
 				reason = GameCompleteReason.REASON_ALL_USER_GUESS;
 				completeGameTurn = true;			
 			}
 		}
 		
 		boolean completeGame = false;
-		if (sessionUserManager.getSessionUserCount(sessionId) == 0){
+		int userCount = sessionUserManager.getSessionUserCount(sessionId);
+		if (userCount == 0){
 			completeGame = true;
 		}
 		
@@ -222,6 +223,11 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			// broadcast user exit message to all other users
 			GameNotification.broadcastUserQuitNotification(session, message.getUserId(), gameEvent);			
 		}	
+
+		if (!completeGame && userCount == 1){
+			sessionManager.prepareRobotTimer(session);
+		}
+		
 		
 	}
 	
