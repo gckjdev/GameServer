@@ -94,8 +94,8 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		sessionUserManager.addUserIntoSession(user, gameSession);
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
-		// reset start expire timer
-		gameSession.resetStartExpireTimer();
+		// reset start expire timer for current play user
+		gameSession.startStartExpireTimerIfNeeded();
 		
 		// schedule robot timer if needed
 		GameSessionManager.getInstance().prepareRobotTimer(gameSession);

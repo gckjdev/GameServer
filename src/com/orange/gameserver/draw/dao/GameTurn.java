@@ -37,7 +37,7 @@ public class GameTurn {
 	final int		sessionId;
 	final int 		language;
 	
-	TurnStatus status;
+	TurnStatus status = TurnStatus.PICK_WORD;
 	
 	GameCompleteReason completeReason = GameCompleteReason.REASON_NOT_COMPLETE;
 	

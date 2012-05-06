@@ -53,7 +53,8 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 			GameLog.info((int)message.getSessionId(), "recv KEEP ALIVE for user " + message.getUserId());
 
 			// if receive some message, then keep user not time out...
-			ChannelUserManager.getInstance().resetUserTimeOut(e.getChannel());
+			// rem by Benson to avoid user dead leave, to be improved
+//			ChannelUserManager.getInstance().resetUserTimeOut(e.getChannel());
 			return;
 		}				
 		

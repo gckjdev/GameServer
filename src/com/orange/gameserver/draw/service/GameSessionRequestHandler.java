@@ -228,6 +228,9 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			sessionManager.prepareRobotTimer(session);
 		}
 		
+		if (!completeGameTurn){
+			session.startStartExpireTimerIfNeeded();
+		}
 		
 	}
 	

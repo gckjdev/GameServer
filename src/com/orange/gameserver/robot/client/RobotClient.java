@@ -39,7 +39,7 @@ import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 public class RobotClient implements Runnable {
 
-	private static final int MIN_SESSION_USER_COUNT = 4;
+	private static final int MIN_SESSION_USER_COUNT = 3;
 	final int sessionId;
 	final String userId;
 	final String nickName;
@@ -354,7 +354,8 @@ public class RobotClient implements Runnable {
 					}
 					
 					String guessWord = null;
-					boolean isMatchWordLen = (language == DrawGameServer.LANGUAGE_CHINESE) ? false : true;
+//					boolean isMatchWordLen = (language == DrawGameServer.LANGUAGE_CHINESE) ? false : true;
+					boolean isMatchWordLen = true;
 					String randomWord = WordManager.getInstance().randomGetWord(language, word.length(), isMatchWordLen);
 					if (guessCount >= 3){
 						guessWord = (RandomUtil.random(1) == 0) ? word : randomWord;

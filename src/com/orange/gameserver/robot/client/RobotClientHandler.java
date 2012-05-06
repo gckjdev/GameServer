@@ -66,6 +66,10 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 	
 	private void handleStartGameResponse(GameMessage message) {
 //		service.sendStartDraw(user, "杯子", 1);
+		if (message.getResultCode() != GameResultCode.SUCCESS){
+			GameLog.info(robotClient.sessionId, "start game but response code is "+message.getResultCode());
+			robotClient.disconnect();
+		}
 	}
 	
 	@Override
@@ -111,6 +115,12 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 		robotClient.updateByNotification(message.getNotification());		
 		robotClient.resetPlayData();
 		
+		if (robotClient.canQuitNow()){
+			GameLog.info(robotClient.sessionId, "reach min user for session, robot can escape now!");
+			robotClient.disconnect();
+			return;
+		}
+		
 		robotClient.checkStart();
 
 	}
@@ -141,13 +151,7 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 
 	private void handleUserJoinNotification(GameMessage message) {
 		
-		robotClient.updateByNotification(message.getNotification());		
-		
-		if (robotClient.canQuitNow()){
-			GameLog.info(robotClient.sessionId, "reach min user for session, robot can escape now!");
-			robotClient.disconnect();
-		}
-		
+		robotClient.updateByNotification(message.getNotification());						
 		robotClient.checkStart();		
 	}
 

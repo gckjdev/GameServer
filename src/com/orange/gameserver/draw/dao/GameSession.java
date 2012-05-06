@@ -104,7 +104,7 @@ public class GameSession {
 
 	public void startGame(){
 		status = SessionStatus.PLAYING;
-		clearStartExpireTimer();		
+		clearStartExpireTimer();
 		GameLog.info(sessionId, "start game, set status to " + status);
 	}
 	
@@ -136,11 +136,14 @@ public class GameSession {
 			currentTurn = new GameTurn(sessionId, currentTurn.getRound() + 1, word, level, language, this.currentPlayUser.getUserId());
 		}		
 		GameLog.info(sessionId, "start new game turn "+currentTurn.getRound(), "word=" + word);
+		
+//		this.clearStartExpireTimer();
 	}
 	
 	public synchronized boolean isGameTurnPlaying(){
-		if (currentTurn == null)
-			return false;
+		if (currentTurn == null){			
+			return (this.status == SessionStatus.PLAYING);
+		}
 		
 		return currentTurn.isTurnPlaying();
 	}	
@@ -213,25 +216,45 @@ public class GameSession {
 
 			@Override
 			public void run() {
-				GameLog.info(sessionId, "Fire start expire timer on userId="+userId);
-				User user = UserManager.getInstance().findUserById(userId);
-				if (user == null){
-					// user already disconnect?
-					GameService.getInstance().fireUserTimeOutEvent(sessionId, userId, null);					
+				try{
+					GameLog.info(sessionId, "Fire start expire timer on userId="+userId);
+					User user = UserManager.getInstance().findUserById(userId);
+					if (user == null){
+						// user already disconnect?
+						GameService.getInstance().fireUserTimeOutEvent(sessionId, userId, null);					
+					}
+					else{
+						GameService.getInstance().fireUserTimeOutEvent(sessionId, userId, user.getChannel());
+					}
 				}
-				else{
-					GameService.getInstance().fireUserTimeOutEvent(sessionId, userId, user.getChannel());
+				catch (Exception e){
+					GameLog.error(sessionId, e, "Exception while fire start expire timer on userId="+userId);
 				}
+				
+				startExpireTimer = null;
 			}
 			
 		}, DEFAULT_START_EXPIRE_TIMER);
 	}
-	
+		
+//	public void startExpireTimerIfNeeded() {
+//		if (this.currentPlayUser != null && startExpireTimer == null){
+//			scheduleStartExpireTimer(currentPlayUser.getUserId());
+//		}
+//	}
+
 	public void resetStartExpireTimer() {
 		if (this.currentPlayUser != null){
 			scheduleStartExpireTimer(currentPlayUser.getUserId());
 		}
-	}	
+	}
+	
+	public void startStartExpireTimerIfNeeded() {
+		if (startExpireTimer == null){
+			scheduleStartExpireTimer(currentPlayUser.getUserId());
+		}
+	}
+	
 	
 	public synchronized void setCurrentPlayUser(User user){
 		this.currentPlayUser = user;
@@ -358,5 +381,6 @@ public class GameSession {
 		
 		currentTurn.appendCleanDrawAction();
 	}
+
 	
 }
