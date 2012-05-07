@@ -5,7 +5,10 @@ import com.orange.common.mongodb.MongoDBClient;
 public class DrawDBClient {
 
 	public static final String DB_NAME = "game";
+	
 	public static final String T_DRAW = "draw";
+	public static final String T_GUESS = "guess";
+
 	public static final String F_USER_ID = "user_id";
 	public static final String F_WORD = "word";
 	public static final String F_LEVEL = "level";
@@ -14,6 +17,7 @@ public class DrawDBClient {
 	public static final String F_DRAW_DATA = "data";
 	public static final String F_RANDOM = "random";
 	public static final String F_VIEW_USER_LIST = "view_users";
+	public static final String F_GUESS_WORD_LIST = "guess_list";
 	
 	MongoDBClient mongoClient = new MongoDBClient(DB_NAME);
 	

@@ -355,12 +355,20 @@ public class RobotClient implements Runnable {
 					
 					String guessWord = null;
 //					boolean isMatchWordLen = (language == DrawGameServer.LANGUAGE_CHINESE) ? false : true;
+					
+										
 					boolean isMatchWordLen = true;
-					String randomWord = WordManager.getInstance().randomGetWord(language, word.length(), isMatchWordLen);
-					if (guessCount >= 3){
-						guessWord = (RandomUtil.random(1) == 0) ? word : randomWord;
+					String randomWord = null;
+					
+					if (guessCount >= 3 && RandomUtil.random(1) == 0){
+						guessWord = word;
 					}
 					else{
+						randomWord = DrawStorageService.getInstance().randomGetWord(language, word);
+						if (randomWord == null){
+							randomWord = WordManager.getInstance().randomGetWord(language, word.length(), isMatchWordLen);
+						}
+
 						guessWord = randomWord;
 					}
 					

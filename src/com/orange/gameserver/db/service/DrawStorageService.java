@@ -1,6 +1,10 @@
 package com.orange.gameserver.db.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,13 +13,14 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.orange.common.mongodb.MongoDBClient;
+import com.orange.common.utils.RandomUtil;
 import com.orange.gameserver.db.DrawDBClient;
 import com.orange.gameserver.draw.utils.GameLog;
 
 public class DrawStorageService {
 
 	
-	protected static final int MIN_DRAW_DATA_LEN = 100;
+	protected static final int MIN_DRAW_DATA_LEN = 1000;
 	// thread-safe singleton implementation
     private static DrawStorageService manager = new DrawStorageService();     
     private DrawStorageService(){		
@@ -128,5 +133,85 @@ public class DrawStorageService {
     	GameLog.info(sessionId, "random fetch data from DB, data bytes="+data.length);
     	return (BasicDBObject)obj;
     }
+    
+	public void storeGuessWord(final int sessionId, final String word, final int language,
+			final Collection<String> collection) {
+		
+		executor.execute(new Runnable(){
+
+			@Override
+			public void run() {
+				
+				if (word == null || collection == null || collection.size() == 0)
+					return;
+				
+				String wordText = word.toUpperCase();
+				
+				// insert data into mongo DB here
+				MongoDBClient dbClient = DrawDBClient.getInstance().getMongoClient();
+				
+				BasicDBObject query = new BasicDBObject();
+				query.put(DrawDBClient.F_WORD, wordText);
+				
+				BasicDBList eachValueList = new BasicDBList();
+				eachValueList.addAll(collection);
+				
+				BasicDBObject eachValue = new BasicDBObject();
+		    	eachValue.put("$each", eachValueList);
+		    	
+		    	BasicDBObject addToSetValue = new BasicDBObject (); 
+		    	addToSetValue.put(DrawDBClient.F_GUESS_WORD_LIST, eachValue);
+		    	
+		    	BasicDBObject setValue = new BasicDBObject();
+		    	setValue.put(DrawDBClient.F_WORD, wordText);
+		    	
+		    	BasicDBObject update = new BasicDBObject ();
+		    	update.put("$addToSet", addToSetValue);
+		    	update.put("$set", setValue);
+		    					
+		    	GameLog.info(sessionId, "<storeGuessWord> query="+query.toString()+", update="+update.toString());
+				GameLog.info(sessionId, "save guess word data into DB, word count ="+collection.size());
+				dbClient.updateOrInsert(DrawDBClient.T_GUESS, query, update);				
+			}
+    	
+    	});
+		
+	}
+	
+	public String randomGetWord(int language, String word) {
+		
+		if (word == null){
+			return null;
+		}
+		
+		// insert data into mongo DB here
+		MongoDBClient dbClient = DrawDBClient.getInstance().getMongoClient();
+		
+		BasicDBObject query = new BasicDBObject();
+		query.put(DrawDBClient.F_WORD, word.toUpperCase());
+				
+		DBObject obj = dbClient.findOne(DrawDBClient.T_GUESS, query);
+		if (obj == null)
+			return null;
+		
+		BasicDBList list = (BasicDBList)obj.get(DrawDBClient.F_GUESS_WORD_LIST);
+		if (list == null || list.size() == 0)
+			return null;
+		
+		int wordLen = word.length();
+		List<String> candidateSet = new ArrayList<String>();
+		for (Object candidate : list){
+			String s = (String)candidate;
+			if (s.length() == wordLen){
+				candidateSet.add(s);
+			}
+		}
+		
+		if (candidateSet.size() == 0)
+			return null;
+		
+		int randomIndex = RandomUtil.random(candidateSet.size()); 		
+		return candidateSet.get(randomIndex);
+	}
     
 }

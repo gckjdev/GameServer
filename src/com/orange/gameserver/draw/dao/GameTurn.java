@@ -2,10 +2,13 @@ package com.orange.gameserver.draw.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -45,7 +48,7 @@ public class GameTurn {
 	int drawUserCoins = 0;
 	ConcurrentMap<String, UserGuessWord> userGuessWordMap = new ConcurrentHashMap<String, UserGuessWord>();
 	List<DrawAction> drawActionList = new ArrayList<DrawAction>();
-
+	Set<String> guessWordSet = new HashSet<String>();
 	
 	public GameTurn(int sessionId, int round, String word, int level, int language, String currentPlayUserId) {
 		this.sessionId = sessionId;
@@ -91,6 +94,11 @@ public class GameTurn {
 	public void userGuessWord(String userId, String guessWord){
 		if (userId == null || guessWord == null)
 			return;
+		
+		if (!RobotManager.isRobotUser(userId) &&
+			 !guessWord.equalsIgnoreCase(wordText)){
+			guessWordSet.add(guessWord);
+		}
 		
 		UserGuessWord guess = userGuessWordMap.get(userId);
 		if (guess == null){
@@ -218,11 +226,17 @@ public class GameTurn {
 
 //		PBDraw drawData = PBDrawAction.newBuilder()
 		
+		// step 1: store draw word
+		DrawStorageService.getInstance().storeGuessWord(sessionId, wordText, 
+				language, Collections.synchronizedCollection(guessWordSet));
+		
 		if (RobotManager.isRobotUser(drawUserId)){
 			GameLog.info(sessionId, "skip store draw data due to robot draw user");
 			return;
 		}
-				
+						
+		// step 2: store draw data
+		
 		List<PBDrawAction> pbDrawDataList = new ArrayList<PBDrawAction>();
 		for (DrawAction action : drawActionList){
 			if (action.actionType == DrawAction.DRAW_ACTION_TYPE_CLEAN){

@@ -86,14 +86,14 @@ public class RobotManager {
     		if (iter != null && iter.hasNext()){
     			index = iter.next().intValue();
     		}
-
-    		GameLog.info(0, "alloc robot, random count = "+randomCount+ ", alloc index="+index);
     		
     		if (index == -1)
     			return -1;
     		
     		allocSet.add(index);
     		freeSet.remove(index);
+
+    		GameLog.info(0, "alloc robot, alloc index="+index + ", active robot count = "+allocSet.size());
     		return index;
     }
     
@@ -106,7 +106,7 @@ public class RobotManager {
     		freeSet.add(index);
     		allocSet.remove(index);
     	
-    	GameLog.info(0, "dealloc robot, index="+index);
+    	GameLog.info(0, "dealloc robot, index="+index + ", active robot count = "+allocSet.size());
     }
     
     public RobotClient allocNewClient(int sessionId) {        	

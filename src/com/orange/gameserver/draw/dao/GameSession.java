@@ -104,7 +104,6 @@ public class GameSession {
 
 	public void startGame(){
 		status = SessionStatus.PLAYING;
-		clearStartExpireTimer();
 		GameLog.info(sessionId, "start game, set status to " + status);
 	}
 	

@@ -64,6 +64,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 					
 		// start game
 		session.startGame();
+		session.clearStartExpireTimer();
 		GameSessionManager.getInstance().adjustSessionSetForPlaying(session); // adjust set so that it's not allowed to join
 				
 		// send reponse
