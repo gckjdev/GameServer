@@ -198,6 +198,7 @@ public class DrawStorageService {
 		if (list == null || list.size() == 0)
 			return null;
 		
+		/*
 		int wordLen = word.length();
 		List<String> candidateSet = new ArrayList<String>();
 		for (Object candidate : list){
@@ -209,9 +210,12 @@ public class DrawStorageService {
 		
 		if (candidateSet.size() == 0)
 			return null;
+		*/
+		
+		List<Object> candidateSet = list; 
 		
 		int randomIndex = RandomUtil.random(candidateSet.size()); 		
-		return candidateSet.get(randomIndex);
+		return (String)candidateSet.get(randomIndex);
 	}
     
 }

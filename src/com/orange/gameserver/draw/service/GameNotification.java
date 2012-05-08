@@ -217,8 +217,9 @@ public class GameNotification {
 			GameEvent gameEvent, String userId) {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
-		for (User user : list){		
-			if (user.getUserId().equalsIgnoreCase(userId))
+		for (User user : list){	
+			String toUserId = user.getUserId();
+			if (toUserId.equalsIgnoreCase(userId))
 				continue;
 			
 			// send notification for the user			
@@ -244,14 +245,23 @@ public class GameNotification {
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 
 		List<User> list = sessionUserManager.getUserListBySession(session.getSessionId());	
+		List<String> toUserIdList = chatRequest.getToUserIdList();
+		boolean hasTargetUser = (toUserIdList != null && toUserIdList.size() > 0);
 		for (User user : list){		
+			String toUserId = user.getUserId();
+			
 			// don't send to request user, he knows it!
-			if (user.getUserId().equalsIgnoreCase(userId))
+			if (toUserId.equalsIgnoreCase(userId))
 				continue;
+			
+			// if user is not in target user list, skip
+			if (hasTargetUser && !toUserIdList.contains(toUserId)){				
+				continue;
+			}
 			
 			// send notification for the user
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
-				.addAllChatToUserId(chatRequest.getToUserIdList())
+				.addAllChatToUserId(toUserIdList)
 				.setChatContent(chatRequest.getContent())
 				.build();
 

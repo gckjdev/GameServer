@@ -160,8 +160,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		if (chatRequest == null)
 			return;				
 		
-		String userId = gameEvent.getMessage().getUserId();
-		if (session.getCurrentPlayUserId().equals(userId)){
+		String fromUserId = gameEvent.getMessage().getUserId();
+		if (session.getCurrentPlayUserId().equals(fromUserId)){
 			session.resetStartExpireTimer();
 		}
 		
