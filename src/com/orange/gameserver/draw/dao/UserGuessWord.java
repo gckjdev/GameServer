@@ -4,16 +4,23 @@ import java.util.Date;
 
 public class UserGuessWord {
 
-	String userId;
+	final String userId;
+	final int guessDifficultLevel;
 	String lastWord;
 	boolean isCorrect = false;
 	int guessTimes = 0;
 	Date lastDate;
 	int finalCoins = 0;
 	
-	public UserGuessWord(String userId){
+	public UserGuessWord(String userId, int guessDifficultLevel){
 		super();
 		this.userId = userId;
+		if (guessDifficultLevel <= 0){
+			this.guessDifficultLevel = 1;
+		}
+		else{
+			this.guessDifficultLevel = guessDifficultLevel;			
+		}
 	}
 	
 	public void guess(String newWord, boolean isCorrect, int coins){

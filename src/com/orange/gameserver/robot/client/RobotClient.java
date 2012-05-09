@@ -229,7 +229,7 @@ public class RobotClient implements Runnable {
 			return;
 		}
 		
-		User user = new User(newUserId, nickName2, userAvatar2, userGender, null, sessionId);
+		User user = new User(newUserId, nickName2, userAvatar2, userGender, null, sessionId, 1);
 		userList.put(newUserId, user);
 	}
 
@@ -417,7 +417,7 @@ public class RobotClient implements Runnable {
 		userList.clear();
 		for (PBGameUser pbUser : pbUserList){
 			User user = new User(pbUser.getUserId(), pbUser.getNickName(), 
-					pbUser.getAvatar(), pbUser.getGender(), null, sessionId);
+					pbUser.getAvatar(), pbUser.getGender(), null, sessionId, 1);
 			userList.put(pbUser.getUserId(), user);
 		}
 	}

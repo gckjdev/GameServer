@@ -91,7 +91,10 @@ public class GameTurn {
 		}
 	}
 
-	public void userGuessWord(String userId, String guessWord){
+	public void userGuessWord(User user, String guessWord){
+		String userId = user.getUserId();
+		int guessDifficultLevel = user.guessDifficultLevel;
+		
 		if (userId == null || guessWord == null)
 			return;
 		
@@ -102,7 +105,7 @@ public class GameTurn {
 		
 		UserGuessWord guess = userGuessWordMap.get(userId);
 		if (guess == null){
-			guess = new UserGuessWord(userId);
+			guess = new UserGuessWord(userId, guessDifficultLevel);
 			userGuessWordMap.put(userId, guess);
 		}
 		
@@ -134,7 +137,11 @@ public class GameTurn {
 				break;
 			}
 			
-			GameLog.info(sessionId, "<userGuessWord> correct, gain coins = " + finalCoins);
+			if (guessDifficultLevel > 0){
+				finalCoins = finalCoins * guess.guessDifficultLevel;
+			}
+
+			GameLog.info(sessionId, "<userGuessWord> correct, gain coins = " + finalCoins + ", diff level="+guess.guessDifficultLevel);
 		}
 
 		guess.guess(guessWord, isCorrect, finalCoins);

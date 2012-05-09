@@ -179,12 +179,13 @@ public class GameSession {
 	}
 
 
-	public void userGuessWord(String guessUserId, String guessWord) {
-		if (currentTurn == null)
+	public void userGuessWord(User user, String guessWord) {
+		if (currentTurn == null || user == null)
 			return;
 		
+		String guessUserId = user.getUserId();
 		GameLog.info(sessionId, "user " + guessUserId + " guess " + guessWord);			
-		currentTurn.userGuessWord(guessUserId, guessWord);
+		currentTurn.userGuessWord(user, guessWord);
 	}
 
 	public synchronized boolean isCurrentPlayUser(String userId) {

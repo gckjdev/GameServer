@@ -13,10 +13,11 @@ public class User {
 	final Channel channel;
 	final boolean gender;
 	final boolean isRobot;
+	final int guessDifficultLevel;
 
 	int currentSessionId = -1;		// TODO change to final or not?
 	
-	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId) {
+	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId, int guessLevel) {
 		super();
 		this.userId = userId;
 		this.nickName = nickName;
@@ -25,9 +26,13 @@ public class User {
 		this.gender = gender;
 		this.setCurrentSessionId(sessionId);
 		this.isRobot = false;
+		if (guessLevel <= 0)
+			this.guessDifficultLevel = 1;
+		else
+			this.guessDifficultLevel = guessLevel;
 	}
 	
-	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId, boolean isRobot) {
+	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId, boolean isRobot, int guessLevel) {
 		super();
 		this.userId = userId;
 		this.nickName = nickName;
@@ -36,6 +41,10 @@ public class User {
 		this.gender = gender;
 		this.setCurrentSessionId(sessionId);
 		this.isRobot = isRobot;
+		if (guessLevel <= 0)
+			this.guessDifficultLevel = 1;
+		else
+			this.guessDifficultLevel = guessLevel;
 	}
 
 	public String getUserId() {

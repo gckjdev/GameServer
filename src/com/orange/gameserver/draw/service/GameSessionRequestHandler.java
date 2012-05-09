@@ -131,7 +131,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		}
 		
 		if (drawRequest.hasGuessWord()){
-			session.userGuessWord(drawRequest.getGuessUserId(), drawRequest.getGuessWord());
+			User guessUser = userManager.findUserById(drawRequest.getGuessUserId());
+			session.userGuessWord(guessUser, drawRequest.getGuessWord());
 		}				
 				
 		// broast draw data to all other users in the session
@@ -259,6 +260,9 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		String nickName = request.getNickName();
 		String avatar = request.getAvatar();
 		boolean gender = request.getGender();
+		int guessDifficultLevel = 1;
+		if (request.hasGuessDifficultLevel())
+			guessDifficultLevel = request.getGuessDifficultLevel(); 		
 
 		// user quit session
 		userQuitSession(gameEvent, session);
@@ -276,7 +280,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// alloc user to new room
 		int sessionId = GameSessionManager.getInstance().allocGameSessionForUser(message.getUserId(), 
-				nickName, avatar, gender, gameEvent.getChannel(), excludeSessionSet);
+				nickName, avatar, gender, guessDifficultLevel, gameEvent.getChannel(), excludeSessionSet);
 		if (sessionId != -1){
 						
 			JoinGameRequest joinRequest = GameMessageProtos.JoinGameRequest.newBuilder(message.getJoinGameRequest())

@@ -128,7 +128,7 @@ public class GameSessionManager {
 	}
 	
 	public GameResultCode directPutUserIntoSession(String userId,
-			String nickName, String avatar, boolean gender, Channel channel, boolean isRobot,
+			String nickName, String avatar, boolean gender, int guessDifficultLevel, Channel channel, boolean isRobot,
 			int targetSessionId) {
 
 		synchronized(sessionUserLock){
@@ -144,7 +144,7 @@ public class GameSessionManager {
 				return GameResultCode.ERROR_SESSIONID_NULL;
 			}
 			
-			int userCount = addUserIntoSession(userId, nickName, avatar, gender, isRobot, channel, session);
+			int userCount = addUserIntoSession(userId, nickName, avatar, gender, guessDifficultLevel, isRobot, channel, session);
 			
 			// adjust candidate and full set, also add user
 			if (isForFull(userCount)){
@@ -162,13 +162,13 @@ public class GameSessionManager {
 			
 		}		
 		
-		UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, channel, targetSessionId);		
+		UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, guessDifficultLevel, channel, targetSessionId);		
 		ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);				
 		
 		return GameResultCode.SUCCESS;
 	}
 	
-	public int allocGameSessionForUser(String userId, String nickName, String avatar, boolean gender, 
+	public int allocGameSessionForUser(String userId, String nickName, String avatar, boolean gender, int guessDifficultLevel, 
 			Channel channel, Set<Integer> excludeSessionSet) {		
 		int sessionId = NO_SESSION_MATCH_FOR_USER;
 		synchronized(sessionUserLock){
@@ -199,7 +199,7 @@ public class GameSessionManager {
 				
 				// add user into game session
 				GameSession session = this.findGameSessionById(sessionId);
-				int userCount = addUserIntoSession(userId, nickName, avatar, gender, false, channel, session);
+				int userCount = addUserIntoSession(userId, nickName, avatar, gender, guessDifficultLevel,  false, channel, session);
 				
 				// adjust candidate and full set, also add user
 				if (isForFull(userCount)){
@@ -224,7 +224,7 @@ public class GameSessionManager {
 		}		
 		
 		if (sessionId != -1){
-			UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, channel, sessionId);
+			UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, guessDifficultLevel, channel, sessionId);
 		}
 		
 		ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);		
@@ -310,11 +310,14 @@ public class GameSessionManager {
 			UserManager.getInstance().removeOnlineUserById(userId);
 	}
 	
-	private int addUserIntoSession(String userId, String nickName, String avatar, boolean gender,
-			boolean isRobot,
+	private int addUserIntoSession(String userId, String nickName, 
+			String avatar, 
+			boolean gender,
+			int guessDifficultLevel,
+			boolean isRobot,			
 			Channel channel, 
 			GameSession session){
-		User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId(), isRobot);
+		User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId(), isRobot, guessDifficultLevel);
 		return sessionUserManager.addUserIntoSession(user, session);
 	}			
 	

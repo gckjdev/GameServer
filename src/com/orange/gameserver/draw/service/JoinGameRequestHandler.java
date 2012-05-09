@@ -40,6 +40,10 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String nickName = request.getJoinGameRequest().getNickName();			
 		String avatar = request.getJoinGameRequest().getAvatar();
 		boolean gender = request.getJoinGameRequest().getGender();
+		int guessDifficultLevel = 1;
+		if (request.getJoinGameRequest().hasGuessDifficultLevel())
+			guessDifficultLevel = request.getJoinGameRequest().getGuessDifficultLevel(); 		
+		
 		int gameSessionId = -1;
 		
 		if (request.getJoinGameRequest().hasTargetSessionId()){
@@ -50,6 +54,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 			}
 			
 			GameResultCode result = gameManager.directPutUserIntoSession(userId, nickName, avatar, gender, 
+					guessDifficultLevel,
 					messageEvent.getChannel(), isRobot, gameSessionId);
 			if (result != GameResultCode.SUCCESS){
 				HandlerUtils.sendErrorResponse(request, result, messageEvent.getChannel());
@@ -57,7 +62,8 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 			}					
 		}
 		else{		
-			gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender, messageEvent.getChannel(), null);
+			gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender,
+					guessDifficultLevel, messageEvent.getChannel(), null);
 			if (gameSessionId == -1){
 				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
 				return;
@@ -82,6 +88,9 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String nickName = request.getJoinGameRequest().getNickName();
 		String avatar = request.getJoinGameRequest().getAvatar();
 		boolean gender = request.getJoinGameRequest().getGender();
+		int guessDifficultLevel = 1;
+		if (request.getJoinGameRequest().hasGuessDifficultLevel())
+			guessDifficultLevel = request.getJoinGameRequest().getGuessDifficultLevel(); 		
 		
 		if (request.getJoinGameRequest().hasSessionToBeChange()){
 			GameSessionRequestHandler.handleChangeRoomRequest(gameEvent, gameSession);
@@ -90,7 +99,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		
 		// add user
 		int sessionId = gameSession.getSessionId();
-		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId);
+		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId, guessDifficultLevel);
 		sessionUserManager.addUserIntoSession(user, gameSession);
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
