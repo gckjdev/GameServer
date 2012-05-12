@@ -128,11 +128,11 @@ public class GameSession {
 	
 	public synchronized void startNewTurn(String word, int level, int language){
 		if (currentTurn == null){
-			currentTurn = new GameTurn(sessionId, 1, word, level, language, this.currentPlayUser.getUserId());
+			currentTurn = new GameTurn(sessionId, 1, word, level, language, this.currentPlayUser);
 		}
 		else{
 			currentTurn.storeDrawData();
-			currentTurn = new GameTurn(sessionId, currentTurn.getRound() + 1, word, level, language, this.currentPlayUser.getUserId());
+			currentTurn = new GameTurn(sessionId, currentTurn.getRound() + 1, word, level, language, this.currentPlayUser);
 		}		
 		GameLog.info(sessionId, "start new game turn "+currentTurn.getRound(), "word=" + word);
 		
@@ -295,7 +295,7 @@ public class GameSession {
 			return;
 		}
 		
-		currentTurn.calculateDrawUserCoins(this.currentPlayUser.userId);
+		currentTurn.calculateDrawUserCoins(this.currentPlayUser);
 	}
 	
 	public int getDrawUserCoins(){

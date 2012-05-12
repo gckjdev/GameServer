@@ -45,19 +45,20 @@ public class GameTurn {
 	GameCompleteReason completeReason = GameCompleteReason.REASON_NOT_COMPLETE;
 	
 	String drawUserId = null;
+	User drawUser;
 	int drawUserCoins = 0;
 	ConcurrentMap<String, UserGuessWord> userGuessWordMap = new ConcurrentHashMap<String, UserGuessWord>();
 	List<DrawAction> drawActionList = new ArrayList<DrawAction>();
 	Set<String> guessWordSet = new HashSet<String>();
 	
-	public GameTurn(int sessionId, int round, String word, int level, int language, String currentPlayUserId) {
+	public GameTurn(int sessionId, int round, String word, int level, int language, User currentPlayUser) {
 		this.sessionId = sessionId;
 		this.round = round;
 		this.wordLevel = level;
 		this.wordText = word;
 		this.status = TurnStatus.PICK_WORD;
 		this.language = language;
-		this.drawUserId = currentPlayUserId;
+		this.drawUser = currentPlayUser;
 	}
 
 	public void addDrawAction(DrawAction action){
@@ -177,8 +178,9 @@ public class GameTurn {
 //		return (correctCount >= guessUserCount);
 	}
 
-	public void calculateDrawUserCoins(String userId) {
-		this.drawUserId  = userId;
+	public void calculateDrawUserCoins(User drawUser) {
+		this.drawUserId  = drawUser.getUserId();
+		this.drawUser = drawUser;
 		Collection<UserGuessWord> list = userGuessWordMap.values();
 		int correctCount  = 0;
 		for (UserGuessWord uw : list){
@@ -272,7 +274,7 @@ public class GameTurn {
 		byte[] data = draw.toByteArray();		
 		
 		
-		DrawStorageService.getInstance().storeDraw(sessionId, drawUserId, wordText, wordLevel, 
+		DrawStorageService.getInstance().storeDraw(sessionId, drawUser, wordText, wordLevel, 
 				language, data);
 		
 	}

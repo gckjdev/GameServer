@@ -15,6 +15,7 @@ import com.mongodb.DBObject;
 import com.orange.common.mongodb.MongoDBClient;
 import com.orange.common.utils.RandomUtil;
 import com.orange.gameserver.db.DrawDBClient;
+import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.draw.utils.GameLog;
 
 public class DrawStorageService {
@@ -31,7 +32,7 @@ public class DrawStorageService {
 	
     ExecutorService executor = Executors.newFixedThreadPool(3);
     
-    public void storeDraw(final int sessionId, final String drawUserId, final String wordText, final int wordLevel,
+    public void storeDraw(final int sessionId, final User user, final String wordText, final int wordLevel,
     		final int language, final byte[] data) {
 		
     	executor.execute(new Runnable(){
@@ -47,15 +48,18 @@ public class DrawStorageService {
 				// insert data into mongo DB here
 				MongoDBClient dbClient = DrawDBClient.getInstance().getMongoClient();
 				BasicDBObject docObject = new BasicDBObject();
-				docObject.put(DrawDBClient.F_USER_ID, drawUserId);
+				docObject.put(DrawDBClient.F_USER_ID, user.getUserId());
+				docObject.put(DrawDBClient.F_NICK_NAME, user.getNickName());
+				docObject.put(DrawDBClient.F_AVATAR, user.getAvatar());
 				docObject.put(DrawDBClient.F_WORD, wordText);
 				docObject.put(DrawDBClient.F_LEVEL, wordLevel);
 				docObject.put(DrawDBClient.F_LANGUAGE, language);
 				docObject.put(DrawDBClient.F_CREATE_DATE, new Date());
 				docObject.put(DrawDBClient.F_DRAW_DATA, data);
+				docObject.put(DrawDBClient.F_DRAW_DATA_LEN, data.length);
 				docObject.put(DrawDBClient.F_RANDOM, Math.random());
 				BasicDBList list = new BasicDBList();
-				list.add(drawUserId);
+				list.add(user.getUserId());
 				docObject.put(DrawDBClient.F_VIEW_USER_LIST, list);
 				
 				dbClient.insert(DrawDBClient.T_DRAW, docObject);

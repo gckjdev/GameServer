@@ -29,26 +29,32 @@ public class RobotManager {
     
     public static final Logger log = Logger.getLogger(RobotManager.class.getName()); 
 
-    public static final int MAX_ROBOT_USER = 10;
+    public static final int MAX_ROBOT_USER = 8;
     
-    final String USER_NAME_LIST[] = {"Jenny", "Mike", "Tina", "Robert", "Nancy", "Vivian", "Andy", "Cindy", "Judy", "Julie"};
-    final boolean USER_GENDER_LIST[] = {false, true, false, true, false, false, true, false, false, false};
+    final String USER_NAME_LIST[] = {"Lily@Moon", "LikeAFox", "Tina", "Hugo", "Jan Vans", "Vivian", "Johnson", "Allen J"}; //, "Miaotiao", "Julie"};
+    final boolean USER_GENDER_LIST[] = {false, true, false, true, true, false, true, false, false, false};
     final String USER_AVATAR_LIST[] = {
-    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220531.jpg", 
+//    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220531.jpg", 
     		
-    		"http://www.ttoou.com/qqtouxiang/allimg/111113/3-111113230948.jpg", 
+    		"http://www.ttoou.com/qqtouxiang/allimg/120504/co120504104A9-1-lp.jpg", 
     		
-    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220533.jpg",
+//    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220533.jpg",
+
+    		"http://www.ttoou.com/qqtouxiang/allimg/120407/co12040FZ942-5-lp.jpg",
     		
-    		"http://www.ttoou.com/qqtouxiang/allimg/111113/3-111113230957.jpg",
+//    		"http://www.ttoou.com/qqtouxiang/allimg/111113/3-111113230957.jpg",
     		
-    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220541.jpg",
+    		"http://www.ttoou.com/qqtouxiang/allimg/111107/3-11110H30558.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/120416/co120416093105-0-lp.jpg",
+    		
+    		"http://www.ttoou.com/qqtouxiang/allimg/120421/co120421091P1-6-lp.jpg",
     		
     		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G647.jpg",
     		
-    		"http://www.ttoou.com/qqtouxiang/allimg/111224/1-111224200641.jpg",
+    		"http://www.ttoou.com/qqtouxiang/allimg/120421/co120421091P1-5-lp.jpg",
     		
-    		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160GA3.jpg",
+    		"http://www.ttoou.com/qqtouxiang/allimg/120404/co120404100521-6-lp.jpg",
     		
     		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G648.jpg",
     		
@@ -116,8 +122,8 @@ public class RobotManager {
     		return null;
     	}
     	
-    	String userId = ROBOT_USER_ID_PREFIX + index;
     	String nickName = USER_NAME_LIST[index];
+    	String userId = ROBOT_USER_ID_PREFIX + index + "_" + nickName;
     	String avatar = USER_AVATAR_LIST[index];
     	boolean gender = USER_GENDER_LIST[index];
     	
