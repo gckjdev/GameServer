@@ -13,10 +13,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.cassandra.cli.CliParser.newColumnFamily_return;
-import org.apache.cassandra.thrift.Cassandra.system_add_column_family_args;
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.util.log.Log;
 import org.jboss.netty.channel.Channel;
 
 import com.orange.gameserver.draw.dao.DrawGameSession;
@@ -32,7 +29,6 @@ import com.orange.network.game.protocol.constants.GameConstantsProtos.GameComple
 import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 
-import com.sun.java_cup.internal.runtime.Symbol;
 
 public class GameService {
 
