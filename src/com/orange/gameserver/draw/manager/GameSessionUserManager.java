@@ -133,6 +133,7 @@ public class GameSessionUserManager {
 																				.setUserId(user.getUserId())																				
 																				.setNickName(user.getNickName())
 																				.setAvatar(user.getAvatar())
+																				.setGender(user.getGender())
 																				.build();
 			list.add(gameUser);
 		}
