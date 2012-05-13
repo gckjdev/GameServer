@@ -162,7 +162,7 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 		}
 		
 		robotClient.removeUserByUserId(userId);
-		if (robotClient.sessionUserCount() <= 1){
+		if (robotClient.sessionRealUserCount() <= 0){
 			// no other users, quit robot
 			robotClient.sendQuitGameRequest();
 			RobotService.getInstance().finishRobot(robotClient);

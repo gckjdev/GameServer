@@ -2,6 +2,7 @@ package com.orange.gameserver.robot.client;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -39,7 +40,7 @@ import com.orange.network.game.protocol.model.GameBasicProtos.PBGameUser;
 
 public class RobotClient implements Runnable {
 
-	private static final int MIN_SESSION_USER_COUNT = 3;
+	private static final int MIN_SESSION_USER_COUNT = 2;
 	final int sessionId;
 	final String userId;
 	final String nickName;
@@ -165,9 +166,11 @@ public class RobotClient implements Runnable {
 		userList.remove(userIdForRemove);
 	}
 
-	public int sessionUserCount() {
+	/*
+	public int sessionUserCount() {		
 		return userList.size();
 	}
+	*/
 
 	public void sendQuitGameRequest() {
 		disconnect();
@@ -238,12 +241,23 @@ public class RobotClient implements Runnable {
 	}
 
 	public boolean canQuitNow() {
-		if (this.sessionUserCount() >= MIN_SESSION_USER_COUNT){
+		if (this.sessionRealUserCount() >= MIN_SESSION_USER_COUNT){
 			return true;
 		}
 		else{
 			return false;
 		}
+	}
+
+	public int sessionRealUserCount() {
+		Collection<User> list = userList.values();
+		int userCount = 0;
+		for (User user : list){
+			if (!RobotManager.isRobotUser(user.getUserId())){
+				userCount ++;
+			}
+		}
+		return userCount;
 	}
 
 	public void updateTurnData(GeneralNotification notification) {

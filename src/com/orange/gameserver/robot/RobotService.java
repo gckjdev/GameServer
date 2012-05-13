@@ -36,15 +36,28 @@ public class RobotService {
     		return;
     	}
     	
-    	RobotClient client = robotManager.allocNewClient(sessionId); 
-    	if (client == null){
-    		GameLog.info(sessionId, "start new robot but no robot client available");
-    		return;
+    	int robotCount = getRobotCountPerTime();
+    	
+    	for (int i=0; i<robotCount; i++){
+	    	RobotClient client = robotManager.allocNewClient(sessionId); 
+	    	if (client == null){
+	    		GameLog.info(sessionId, "start new robot but no robot client available");
+	    		return;
+	    	}
+
+	    	executor.execute(client);
     	}
     	
-    	executor.execute(client);
 	}
     
+	private int getRobotCountPerTime() {
+		String robot = System.getProperty("config.robot_count");
+		if (robot != null && !robot.isEmpty()){
+			return Integer.parseInt(robot);
+		}
+		return 1; // default
+	}
+	
 	public void finishRobot(final RobotClient robotClient) {		
 		executor.execute(new Runnable(){
 			@Override
