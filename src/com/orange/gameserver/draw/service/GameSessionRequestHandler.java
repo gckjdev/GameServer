@@ -7,8 +7,6 @@ import java.util.Set;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.MessageEvent;
 
-import sun.tools.tree.ThisExpression;
-
 import com.orange.common.statemachine.Event;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
