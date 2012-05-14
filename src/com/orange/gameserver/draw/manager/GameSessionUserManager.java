@@ -49,6 +49,22 @@ public class GameSessionUserManager {
     	return manager; 
     } 
 
+    public void setUserPlaying(GameSession session){
+    	int sessionId = session.getSessionId();
+    	CopyOnWriteArrayList<User> userList = sessionUserMap.get(sessionId);
+    	for (User user : userList){
+    		user.setPlaying(true);
+    	}
+    }
+
+    public void clearUserPlaying(GameSession session){
+    	int sessionId = session.getSessionId();
+    	CopyOnWriteArrayList<User> userList = sessionUserMap.get(sessionId);
+    	for (User user : userList){
+    		user.setPlaying(false);
+    	}
+    }
+    
     public int addUserIntoSession(User user, GameSession session){    	
 
     	int sessionId = session.getSessionId();

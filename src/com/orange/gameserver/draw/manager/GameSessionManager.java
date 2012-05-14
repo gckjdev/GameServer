@@ -36,6 +36,7 @@ public class GameSessionManager {
 
 	public static final int NO_SESSION_MATCH_FOR_USER = -1; 
 	public static final int GAME_SESSION_COUNT = 1000;
+	public static final int FRIEND_GAME_SESSION_INDEX = GAME_SESSION_COUNT + 100000;
 
 	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
 	ScheduledExecutorService scheduleService = Executors.newScheduledThreadPool(5);
@@ -331,7 +332,7 @@ public class GameSessionManager {
 		List<String> userIdList = new ArrayList<String>();
 		List<User> userList = sessionUserManager.getUserListBySession(session.getSessionId());
 		for (User user : userList){
-			if (user != session.getCurrentPlayUser()){
+			if (user.isPlaying() && user != session.getCurrentPlayUser()){
 				userIdList.add(user.getUserId());
 			}
 		}

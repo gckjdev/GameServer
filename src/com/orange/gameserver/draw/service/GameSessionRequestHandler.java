@@ -64,7 +64,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		session.startGame();
 		session.clearStartExpireTimer();
 		GameSessionManager.getInstance().adjustSessionSetForPlaying(session); // adjust set so that it's not allowed to join
-				
+		sessionUserManager.setUserPlaying(session);
+		
 		// send reponse
 		GameMessageProtos.StartGameResponse gameResponse = GameMessageProtos.StartGameResponse.newBuilder()
 			.setCurrentPlayUserId(session.getCurrentPlayUserId())
@@ -313,6 +314,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		sessionUserManager.chooseNewPlayUser(session);		
 		sessionManager.adjustSessionSetForTurnComplete(session);
 //		session.chooseNewPlayUser();
+		
+		sessionUserManager.clearUserPlaying(session);
 		
 		GameNotification.broadcastNotification(session, gameEvent, "", 
 				GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST);

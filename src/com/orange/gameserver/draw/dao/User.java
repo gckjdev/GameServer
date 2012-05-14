@@ -16,6 +16,7 @@ public class User {
 	final int guessDifficultLevel;
 
 	int currentSessionId = -1;		// TODO change to final or not?
+	volatile boolean isPlaying = false;
 	
 	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId, int guessLevel) {
 		super();
@@ -104,11 +105,15 @@ public class User {
 	public String toString() {
 		return "User [nickName=" + nickName
 				+ ", userId=" + userId + "]";
+	}	
+
+	public boolean isPlaying(){
+		return this.isPlaying;
 	}
 	
-	
-	
-	
+	public void setPlaying(boolean value){
+		this.isPlaying = value;
+	}	
 }
 
 

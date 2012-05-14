@@ -11,6 +11,7 @@ import com.orange.gameserver.draw.manager.GameSessionUserManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
+import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos;
@@ -142,6 +143,13 @@ public class GameNotification {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){			
+			
+			if (!user.isPlaying()){
+				GameLog.info(gameSession.getSessionId(), "send START game notificaiton but user "+
+						user.getNickName()+" not in play state");
+				continue;
+			}
+			
 			// send notification for the user
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
@@ -182,7 +190,14 @@ public class GameNotification {
 		}
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
-		for (User user : list){		
+		for (User user : list){
+			
+			if (!user.isPlaying()){
+				GameLog.info(gameSession.getSessionId(), "send DRAW REQUEST but user "+
+						user.getNickName()+" not in play state");
+				continue;
+			}			
+			
 			if (!guessCorrect && user.getUserId().equalsIgnoreCase(userId))
 				continue;
 			
@@ -218,6 +233,13 @@ public class GameNotification {
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
 		for (User user : list){	
+			
+			if (!user.isPlaying()){
+				GameLog.info(gameSession.getSessionId(), "send CLEANDRAW but user "+
+						user.getNickName()+" not in play state");
+				continue;
+			}	
+			
 			String toUserId = user.getUserId();
 			if (toUserId.equalsIgnoreCase(userId))
 				continue;
