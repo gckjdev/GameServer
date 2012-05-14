@@ -30,7 +30,7 @@ public class RobotService {
 		return false; // default
 	}	
 	
-    public void startNewRobot(int sessionId) {
+    public void startNewRobot(int sessionId, String roomId) {
     	if (!isEnableRobot()){
     		GameLog.info(sessionId, "Robot not enabled for launch");
     		return;
@@ -40,6 +40,7 @@ public class RobotService {
     	
     	for (int i=0; i<robotCount; i++){
 	    	RobotClient client = robotManager.allocNewClient(sessionId); 
+	    	client.setRoomId(roomId);
 	    	if (client == null){
 	    		GameLog.info(sessionId, "start new robot but no robot client available");
 	    		return;

@@ -11,4 +11,6 @@ public class DrawGameSession extends GameSession {
 		drawingData = null;
 	}
 
+	
+
 }

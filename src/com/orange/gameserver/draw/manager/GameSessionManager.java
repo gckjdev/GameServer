@@ -39,6 +39,8 @@ public class GameSessionManager {
 	public static final int FRIEND_GAME_SESSION_INDEX = GAME_SESSION_COUNT + 100000;
 
 	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
+	private static final RoomSessionManager roomSessionManager = RoomSessionManager.getInstance();
+	
 	ScheduledExecutorService scheduleService = Executors.newScheduledThreadPool(5);
 	
 	//use three sets to classify the game sessions
@@ -51,6 +53,7 @@ public class GameSessionManager {
 	
 	// lock candidate/free/full set
 	Object sessionUserLock = new Object();
+	Object sessionRoomLock = new Object();
 	
 	// a map to store game session
 	ConcurrentMap<Integer, GameSession> gameCollection = new ConcurrentHashMap<Integer, GameSession>();
@@ -81,6 +84,50 @@ public class GameSessionManager {
 		
 	public GameSession findGameSessionById(int id) {
 		return gameCollection.get(id);		
+	}		
+	
+	public GameSession allocFriendRoom(String roomId, String roomName){
+		synchronized(sessionRoomLock){
+			int sessionId = roomSessionManager.getSessionIdByRoom(roomId);
+			if (sessionId == -1){
+				// session ID not found
+				sessionId = roomSessionManager.addRoomSession(roomId);
+				if (sessionId == -1)
+					return null;
+				
+				GameLog.info(sessionId, "<allocFriendRoom> create new session");
+				
+				GameSession session = new GameSession(sessionId, roomName, null, roomId);
+				gameCollection.put(sessionId, session);
+				return session;
+			}
+			else{
+				// found, update room name
+				GameSession session = this.findGameSessionById(sessionId);
+				if (session != null){
+					// TODO set room name
+					// session.setRoomName(roomName);
+
+					GameLog.info(sessionId, "<allocFriendRoom> return exist session ");				
+				}
+				
+				return session;
+			}		
+		}
+	}
+	
+	public void deallocFriendRoom(GameSession session){
+		int sessionId = session.getSessionId();
+		String roomId = session.getFriendRoomId();
+		synchronized(sessionRoomLock){
+			if (sessionId == -1)
+				return;
+			
+			GameLog.info(sessionId, "<deallocFriendRoom>");
+
+			roomSessionManager.removeRoomSession(roomId, sessionId);
+			gameCollection.remove(sessionId);
+		}		
 	}
 	
 	private boolean isForFree(int count){
@@ -389,6 +436,7 @@ public class GameSessionManager {
 	public void prepareRobotTimer(GameSession gameSession) {
 		
 		final int sessionId = gameSession.getSessionId();
+		final String roomId = gameSession.getFriendRoomId();
 		int userCount = sessionUserManager.getSessionUserCount(sessionId);
 		if (userCount != ROBOT_USER_COUNT){
 			return;
@@ -401,7 +449,7 @@ public class GameSessionManager {
 					int userCount = sessionUserManager.getSessionUserCount(sessionId);
 					if (userCount == ROBOT_USER_COUNT){
 						GameLog.info(sessionId, "Fire robot timer, start robot now");
-						RobotService.getInstance().startNewRobot(sessionId);
+						RobotService.getInstance().startNewRobot(sessionId, roomId);
 					}
 					else{
 						GameLog.info(sessionId, "Fire robot timer but user count <> 1");					

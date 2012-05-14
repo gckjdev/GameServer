@@ -58,6 +58,7 @@ public class RobotClient implements Runnable {
 	ConcurrentHashMap<String, User> userList = new ConcurrentHashMap<String, User>();
 	ClientState state = ClientState.WAITING;	
 	String currentPlayUserId = null;
+	String friendRoomId = null;
 	int round = -1;
 	String word = null;
 	int level = 0;
@@ -132,14 +133,28 @@ public class RobotClient implements Runnable {
 		JoinGameRequest request = null;
 		GameMessage message = null;
 			
-		request = JoinGameRequest.newBuilder().setUserId(userId)
-				.setNickName(nickName)
-				.setGender(gender).
-				setAvatar(userAvatar)
-				.setIsRobot(true)
-				.setTargetSessionId(sessionId)
-				.setGameId("").build();
-
+		if (friendRoomId == null){
+			request = JoinGameRequest.newBuilder().setUserId(userId)
+					.setNickName(nickName)
+					.setGender(gender).
+					setAvatar(userAvatar)
+					.setIsRobot(true)
+					.setTargetSessionId(sessionId)
+					.setGameId("")
+					.build();
+		}
+		else{
+			request = JoinGameRequest.newBuilder().setUserId(userId)
+			.setNickName(nickName)
+			.setGender(gender).
+			setAvatar(userAvatar)
+			.setIsRobot(true)
+			.setTargetSessionId(sessionId)
+			.setGameId("")
+			.setRoomId(friendRoomId)
+			.build();			
+		}
+				
 		message = GameMessage.newBuilder().setMessageId(messageId.getAndIncrement())
 				.setCommand(GameCommandType.JOIN_GAME_REQUEST)
 				.setJoinGameRequest(request).build();
@@ -574,5 +589,9 @@ public class RobotClient implements Runnable {
 			}
 			
 		}, START_DRAW_WAITING_INTERVAL*1000+1000, START_DRAW_WAITING_INTERVAL*1000+1000);
+	}
+
+	public void setRoomId(String roomId) {
+		this.friendRoomId = roomId;
 	}	
 }

@@ -33,6 +33,7 @@ public class GameSession {
 	};
 	
 	final int   sessionId;
+	final String friendRoomId;
 	final String name;
 	final String createBy;
 	final String host;
@@ -50,8 +51,20 @@ public class GameSession {
 		this.createBy = userId;
 		this.host = userId;
 		this.createDate = new Date();	
+		this.friendRoomId = null;
 		
 		currentState = GameStartState.defaultState;
+	}
+	
+	public GameSession(int sessionId, String roomName, String userId, String roomId) {
+		this.sessionId = sessionId;
+		this.name = roomName;
+		this.createBy = userId;
+		this.host = userId;
+		this.createDate = new Date();	
+		this.friendRoomId = roomId;
+		
+		currentState = GameStartState.defaultState;		
 	}
 
 	public int getSessionId() {
@@ -196,7 +209,7 @@ public class GameSession {
 	}
 
 	Timer startExpireTimer = null;
-	static final int DEFAULT_START_EXPIRE_TIMER = 30*1000;
+	static final int DEFAULT_START_EXPIRE_TIMER = 32*1000;
 	
 	public void clearStartExpireTimer(){
 		if (startExpireTimer != null){
@@ -380,6 +393,10 @@ public class GameSession {
 			return;
 		
 		currentTurn.appendCleanDrawAction();
+	}
+
+	public String getFriendRoomId() {
+		return this.friendRoomId;
 	}
 
 	

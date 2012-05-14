@@ -19,14 +19,15 @@ public class RoomSessionManager {
     	return manager; 
     } 
 
-    public void addRoomSession(String roomId){
+    public int addRoomSession(String roomId){
     	if (roomId == null)
-    		return;
+    		return -1;
     	
     	int sessionId = roomIndex.getAndIncrement();
     	roomSessionMap.put(roomId, Integer.valueOf(sessionId));
     	
     	GameLog.info(sessionId, "<addRoomSession> roomId="+roomId);
+    	return sessionId;
     }
 
     public void removeRoomSession(String roomId, int sessionId){
@@ -42,5 +43,8 @@ public class RoomSessionManager {
     		return sessionId.intValue();
     }
     
+    public static boolean isFriendRoom(int sessionId){
+    	return (sessionId >= GameSessionManager.FRIEND_GAME_SESSION_INDEX);
+    }
     
 }

@@ -19,6 +19,7 @@ import com.orange.network.game.protocol.message.GameMessageProtos;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
+import com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest;
 import com.orange.network.game.protocol.model.GameBasicProtos;
 
 public class JoinGameRequestHandler extends AbstractRequestHandler {
@@ -35,22 +36,24 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 	@Override
 	public void handleRequest(GameMessage request) {
 		
-		String userId = request.getJoinGameRequest().getUserId();
-		String gameId = request.getJoinGameRequest().getGameId();
-		String nickName = request.getJoinGameRequest().getNickName();			
-		String avatar = request.getJoinGameRequest().getAvatar();
-		boolean gender = request.getJoinGameRequest().getGender();
+		JoinGameRequest joinRequest = request.getJoinGameRequest();
+		
+		String userId = joinRequest.getUserId();
+		String gameId = joinRequest.getGameId();
+		String nickName = joinRequest.getNickName();			
+		String avatar = joinRequest.getAvatar();
+		boolean gender = joinRequest.getGender();
 		int guessDifficultLevel = 1;
-		if (request.getJoinGameRequest().hasGuessDifficultLevel())
-			guessDifficultLevel = request.getJoinGameRequest().getGuessDifficultLevel(); 		
+		if (joinRequest.hasGuessDifficultLevel())
+			guessDifficultLevel = joinRequest.getGuessDifficultLevel(); 		
 		
 		int gameSessionId = -1;
 		
-		if (request.getJoinGameRequest().hasTargetSessionId()){
-			gameSessionId = request.getJoinGameRequest().getTargetSessionId();
+		if (joinRequest.hasTargetSessionId()){
+			gameSessionId = joinRequest.getTargetSessionId();
 			boolean isRobot = false;
-			if (request.getJoinGameRequest().hasIsRobot()){
-				isRobot = request.getJoinGameRequest().getIsRobot();
+			if (joinRequest.hasIsRobot()){
+				isRobot = joinRequest.getIsRobot();
 			}
 			
 			GameResultCode result = gameManager.directPutUserIntoSession(userId, nickName, avatar, gender, 
@@ -60,6 +63,18 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 				HandlerUtils.sendErrorResponse(request, result, messageEvent.getChannel());
 				return;
 			}					
+		}
+		else if (joinRequest.hasRoomId()){
+			String roomId = joinRequest.getRoomId();
+			String roomName = joinRequest.getRoomName();
+			GameSession session = gameManager.allocFriendRoom(roomId, roomName);
+			if (session == null){
+				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
+				return;
+			}
+			else{
+				gameSessionId = session.getSessionId();
+			}						
 		}
 		else{		
 			gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender,

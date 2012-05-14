@@ -107,11 +107,11 @@ public class User {
 				+ ", userId=" + userId + "]";
 	}	
 
-	public boolean isPlaying(){
+	public synchronized boolean isPlaying(){
 		return this.isPlaying;
 	}
 	
-	public void setPlaying(boolean value){
+	public synchronized void setPlaying(boolean value){
 		this.isPlaying = value;
 	}	
 }
