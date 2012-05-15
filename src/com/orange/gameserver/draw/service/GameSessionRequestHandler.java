@@ -131,6 +131,8 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		}
 		
 		if (drawRequest.hasGuessWord()){
+//			GameLog.info(session.getSessionId(), "user "+drawRequest.getGuessUserId()+ 
+//					" guess "+drawRequest.getGuessWord());
 			User guessUser = userManager.findUserById(drawRequest.getGuessUserId());
 			session.userGuessWord(guessUser, drawRequest.getGuessWord());
 		}				

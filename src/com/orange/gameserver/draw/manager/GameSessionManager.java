@@ -86,7 +86,9 @@ public class GameSessionManager {
 		return gameCollection.get(id);		
 	}		
 	
-	public GameSession allocFriendRoom(String roomId, String roomName){
+	public GameSession allocFriendRoom(String roomId, String roomName, 
+			String userId, String nickName, String avatar, boolean gender, int guessDifficultLevel, 
+			Channel channel){
 		synchronized(sessionRoomLock){
 			int sessionId = roomSessionManager.getSessionIdByRoom(roomId);
 			if (sessionId == -1){
@@ -99,6 +101,12 @@ public class GameSessionManager {
 				
 				GameSession session = new GameSession(sessionId, roomName, null, roomId);
 				gameCollection.put(sessionId, session);
+				
+				if (sessionId != -1){
+					UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, guessDifficultLevel, channel, sessionId);
+				}
+				
+				ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);						
 				return session;
 			}
 			else{
@@ -111,6 +119,11 @@ public class GameSessionManager {
 					GameLog.info(sessionId, "<allocFriendRoom> return exist session ");				
 				}
 				
+				if (sessionId != -1){
+					UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, guessDifficultLevel, channel, sessionId);
+				}
+				
+				ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);										
 				return session;
 			}		
 		}

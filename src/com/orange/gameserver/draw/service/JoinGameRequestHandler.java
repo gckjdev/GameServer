@@ -49,7 +49,20 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		
 		int gameSessionId = -1;
 		
-		if (joinRequest.hasTargetSessionId()){
+		if (joinRequest.hasRoomId()){
+			String roomId = joinRequest.getRoomId();
+			String roomName = joinRequest.getRoomName();
+			GameSession session = gameManager.allocFriendRoom(roomId, roomName, userId, nickName, avatar, gender,
+					guessDifficultLevel, messageEvent.getChannel());
+			if (session == null){
+				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
+				return;
+			}
+			else{
+				gameSessionId = session.getSessionId();
+			}						
+		}
+		else if (joinRequest.hasTargetSessionId()){
 			gameSessionId = joinRequest.getTargetSessionId();
 			boolean isRobot = false;
 			if (joinRequest.hasIsRobot()){
@@ -63,18 +76,6 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 				HandlerUtils.sendErrorResponse(request, result, messageEvent.getChannel());
 				return;
 			}					
-		}
-		else if (joinRequest.hasRoomId()){
-			String roomId = joinRequest.getRoomId();
-			String roomName = joinRequest.getRoomName();
-			GameSession session = gameManager.allocFriendRoom(roomId, roomName);
-			if (session == null){
-				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
-				return;
-			}
-			else{
-				gameSessionId = session.getSessionId();
-			}						
 		}
 		else{		
 			gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender,
