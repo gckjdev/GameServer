@@ -30,6 +30,7 @@ import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.gameserver.robot.RobotService;
+import com.orange.gameserver.robot.manager.RobotManager;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
 
@@ -378,7 +379,8 @@ public class GameSessionManager {
 			UserManager.getInstance().removeOnlineUserById(userId);
 			
 			// update room if it's friend room
-			if (RoomSessionManager.isFriendRoom(session.getSessionId())){
+			if (RoomSessionManager.isFriendRoom(session.getSessionId()) &&
+					!RobotManager.isRobotUser(userId)){
 				// TODO move to executor thread
 				RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
 						session.getFriendRoomId(), userId, null, null, null, RoomUser.STATUS_JOINED, new Date(), false);
@@ -394,7 +396,8 @@ public class GameSessionManager {
 			GameSession session){
 		
 		// update room if it's friend room
-		if (RoomSessionManager.isFriendRoom(session.getSessionId())){
+		if (RoomSessionManager.isFriendRoom(session.getSessionId()) &&
+				!RobotManager.isRobotUser(userId)){
 			// TODO move to executor thread			
 			RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
 					session.getFriendRoomId(), 
