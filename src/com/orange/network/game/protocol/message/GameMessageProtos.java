@@ -2523,6 +2523,10 @@ public final class GameMessageProtos {
     // optional string content = 2;
     boolean hasContent();
     String getContent();
+    
+    // optional int32 chatType = 3 [default = 0];
+    boolean hasChatType();
+    int getChatType();
   }
   public static final class GameChatRequest extends
       com.google.protobuf.GeneratedMessage
@@ -2599,9 +2603,20 @@ public final class GameMessageProtos {
       }
     }
     
+    // optional int32 chatType = 3 [default = 0];
+    public static final int CHATTYPE_FIELD_NUMBER = 3;
+    private int chatType_;
+    public boolean hasChatType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getChatType() {
+      return chatType_;
+    }
+    
     private void initFields() {
       toUserId_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       content_ = "";
+      chatType_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2620,6 +2635,9 @@ public final class GameMessageProtos {
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeBytes(2, getContentBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(3, chatType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2642,6 +2660,10 @@ public final class GameMessageProtos {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, getContentBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, chatType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2771,6 +2793,8 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00000001);
         content_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
+        chatType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       
@@ -2819,6 +2843,10 @@ public final class GameMessageProtos {
           to_bitField0_ |= 0x00000001;
         }
         result.content_ = content_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.chatType_ = chatType_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2847,6 +2875,9 @@ public final class GameMessageProtos {
         }
         if (other.hasContent()) {
           setContent(other.getContent());
+        }
+        if (other.hasChatType()) {
+          setChatType(other.getChatType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2887,6 +2918,11 @@ public final class GameMessageProtos {
             case 18: {
               bitField0_ |= 0x00000002;
               content_ = input.readBytes();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              chatType_ = input.readInt32();
               break;
             }
           }
@@ -2985,6 +3021,27 @@ public final class GameMessageProtos {
         bitField0_ |= 0x00000002;
         content_ = value;
         onChanged();
+      }
+      
+      // optional int32 chatType = 3 [default = 0];
+      private int chatType_ ;
+      public boolean hasChatType() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public int getChatType() {
+        return chatType_;
+      }
+      public Builder setChatType(int value) {
+        bitField0_ |= 0x00000004;
+        chatType_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearChatType() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        chatType_ = 0;
+        onChanged();
+        return this;
       }
       
       // @@protoc_insertion_point(builder_scope:game.GameChatRequest)
@@ -4609,6 +4666,10 @@ public final class GameMessageProtos {
     boolean hasChatContent();
     String getChatContent();
     
+    // optional int32 chatType = 53;
+    boolean hasChatType();
+    int getChatType();
+    
     // optional int32 turnGainCoins = 61;
     boolean hasTurnGainCoins();
     int getTurnGainCoins();
@@ -5113,11 +5174,21 @@ public final class GameMessageProtos {
       }
     }
     
+    // optional int32 chatType = 53;
+    public static final int CHATTYPE_FIELD_NUMBER = 53;
+    private int chatType_;
+    public boolean hasChatType() {
+      return ((bitField0_ & 0x00100000) == 0x00100000);
+    }
+    public int getChatType() {
+      return chatType_;
+    }
+    
     // optional int32 turnGainCoins = 61;
     public static final int TURNGAINCOINS_FIELD_NUMBER = 61;
     private int turnGainCoins_;
     public boolean hasTurnGainCoins() {
-      return ((bitField0_ & 0x00100000) == 0x00100000);
+      return ((bitField0_ & 0x00200000) == 0x00200000);
     }
     public int getTurnGainCoins() {
       return turnGainCoins_;
@@ -5146,6 +5217,7 @@ public final class GameMessageProtos {
       guessGainCoins_ = 0;
       chatToUserId_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       chatContent_ = "";
+      chatType_ = 0;
       turnGainCoins_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -5231,6 +5303,9 @@ public final class GameMessageProtos {
         output.writeBytes(52, getChatContentBytes());
       }
       if (((bitField0_ & 0x00100000) == 0x00100000)) {
+        output.writeInt32(53, chatType_);
+      }
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
         output.writeInt32(61, turnGainCoins_);
       }
       getUnknownFields().writeTo(output);
@@ -5346,6 +5421,10 @@ public final class GameMessageProtos {
           .computeBytesSize(52, getChatContentBytes());
       }
       if (((bitField0_ & 0x00100000) == 0x00100000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(53, chatType_);
+      }
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(61, turnGainCoins_);
       }
@@ -5517,8 +5596,10 @@ public final class GameMessageProtos {
         bitField0_ = (bitField0_ & ~0x00100000);
         chatContent_ = "";
         bitField0_ = (bitField0_ & ~0x00200000);
-        turnGainCoins_ = 0;
+        chatType_ = 0;
         bitField0_ = (bitField0_ & ~0x00400000);
+        turnGainCoins_ = 0;
+        bitField0_ = (bitField0_ & ~0x00800000);
         return this;
       }
       
@@ -5651,6 +5732,10 @@ public final class GameMessageProtos {
         if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
           to_bitField0_ |= 0x00100000;
         }
+        result.chatType_ = chatType_;
+        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
+          to_bitField0_ |= 0x00200000;
+        }
         result.turnGainCoins_ = turnGainCoins_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -5747,6 +5832,9 @@ public final class GameMessageProtos {
         }
         if (other.hasChatContent()) {
           setChatContent(other.getChatContent());
+        }
+        if (other.hasChatType()) {
+          setChatType(other.getChatType());
         }
         if (other.hasTurnGainCoins()) {
           setTurnGainCoins(other.getTurnGainCoins());
@@ -5901,8 +5989,13 @@ public final class GameMessageProtos {
               chatContent_ = input.readBytes();
               break;
             }
-            case 488: {
+            case 424: {
               bitField0_ |= 0x00400000;
+              chatType_ = input.readInt32();
+              break;
+            }
+            case 488: {
+              bitField0_ |= 0x00800000;
               turnGainCoins_ = input.readInt32();
               break;
             }
@@ -6598,22 +6691,43 @@ public final class GameMessageProtos {
         onChanged();
       }
       
+      // optional int32 chatType = 53;
+      private int chatType_ ;
+      public boolean hasChatType() {
+        return ((bitField0_ & 0x00400000) == 0x00400000);
+      }
+      public int getChatType() {
+        return chatType_;
+      }
+      public Builder setChatType(int value) {
+        bitField0_ |= 0x00400000;
+        chatType_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearChatType() {
+        bitField0_ = (bitField0_ & ~0x00400000);
+        chatType_ = 0;
+        onChanged();
+        return this;
+      }
+      
       // optional int32 turnGainCoins = 61;
       private int turnGainCoins_ ;
       public boolean hasTurnGainCoins() {
-        return ((bitField0_ & 0x00400000) == 0x00400000);
+        return ((bitField0_ & 0x00800000) == 0x00800000);
       }
       public int getTurnGainCoins() {
         return turnGainCoins_;
       }
       public Builder setTurnGainCoins(int value) {
-        bitField0_ |= 0x00400000;
+        bitField0_ |= 0x00800000;
         turnGainCoins_ = value;
         onChanged();
         return this;
       }
       public Builder clearTurnGainCoins() {
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00800000);
         turnGainCoins_ = 0;
         onChanged();
         return this;
@@ -8923,46 +9037,47 @@ public final class GameMessageProtos {
       "nse\022(\n\013gameSession\030\001 \002(\0132\023.game.PBGameSe",
       "ssion\"\022\n\020StartGameRequest\"F\n\021StartGameRe" +
       "sponse\022\031\n\021currentPlayUserId\030\005 \001(\t\022\026\n\016nex" +
-      "tPlayUserId\030\006 \001(\t\"4\n\017GameChatRequest\022\020\n\010" +
-      "toUserId\030\001 \003(\t\022\017\n\007content\030\002 \001(\t\"\022\n\020GameC" +
-      "hatResponse\"\264\001\n\023SendDrawDataRequest\022\014\n\004w" +
-      "ord\030\n \001(\t\022\r\n\005level\030\013 \001(\005\022\020\n\010language\030\014 \001" +
-      "(\005\022\022\n\006points\030\001 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n" +
-      "\005color\030\027 \001(\005\022\021\n\tguessWord\030) \001(\t\022\023\n\013guess" +
-      "UserId\030* \001(\t\022\024\n\014guessCorrect\030+ \001(\010\"\026\n\024Se" +
-      "ndDrawDataResponse\"\335\003\n\023GeneralNotificati",
-      "on\022\023\n\013sessionHost\030\003 \001(\t\022\025\n\rsessionStatus" +
-      "\030\004 \001(\005\022\031\n\021currentPlayUserId\030\005 \001(\t\022\026\n\016nex" +
-      "tPlayUserId\030\006 \001(\t\022\021\n\tnewUserId\030\007 \001(\t\022\022\n\n" +
-      "quitUserId\030\010 \001(\t\022\020\n\010nickName\030\t \001(\t\022\022\n\nus" +
-      "erAvatar\030\n \001(\t\022\022\n\nuserGender\030\013 \001(\010\022\022\n\006po" +
-      "ints\030\025 \003(\005B\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027" +
-      " \001(\005\022\014\n\004word\030\037 \001(\t\022\r\n\005level\030  \001(\005\022\r\n\005rou" +
-      "nd\030! \001(\005\022\020\n\010language\030\" \001(\005\022\021\n\tguessWord\030" +
-      ") \001(\t\022\023\n\013guessUserId\030* \001(\t\022\024\n\014guessCorre" +
-      "ct\030+ \001(\010\022\026\n\016guessGainCoins\030, \001(\005\022\024\n\014chat",
-      "ToUserId\0303 \003(\t\022\023\n\013chatContent\0304 \001(\t\022\025\n\rt" +
-      "urnGainCoins\030= \001(\005\"\322\005\n\013GameMessage\022&\n\007co" +
-      "mmand\030\001 \002(\0162\025.game.GameCommandType\022\021\n\tme" +
-      "ssageId\030\002 \002(\005\0221\n\nresultCode\030\003 \001(\0162\024.game" +
-      ".GameResultCode:\007SUCCESS\022\016\n\006userId\030\004 \001(\t" +
-      "\022\024\n\tsessionId\030\005 \001(\003:\0010\022\r\n\005round\030\006 \001(\005\0220\n" +
-      "\016completeReason\030\007 \001(\0162\030.game.GameComplet" +
-      "eReason\022\027\n\017onlineUserCount\030\010 \001(\005\022\020\n\010toUs" +
-      "erId\030\t \001(\t\022.\n\017joinGameRequest\030\013 \001(\0132\025.ga" +
-      "me.JoinGameRequest\0220\n\020joinGameResponse\030\014",
-      " \001(\0132\026.game.JoinGameResponse\0220\n\020startGam" +
-      "eRequest\030\r \001(\0132\026.game.StartGameRequest\0222" +
-      "\n\021startGameResponse\030\016 \001(\0132\027.game.StartGa" +
-      "meResponse\0226\n\023sendDrawDataRequest\030\025 \001(\0132" +
-      "\031.game.SendDrawDataRequest\0228\n\024sendDrawDa" +
-      "taResponse\030\026 \001(\0132\032.game.SendDrawDataResp" +
-      "onse\022*\n\013chatRequest\030\027 \001(\0132\025.game.GameCha" +
-      "tRequest\022,\n\014chatResponse\030\030 \001(\0132\026.game.Ga" +
-      "meChatResponse\022/\n\014notification\0303 \001(\0132\031.g" +
-      "ame.GeneralNotificationB=\n(com.orange.ne",
-      "twork.game.protocol.messageB\021GameMessage" +
-      "Protos"
+      "tPlayUserId\030\006 \001(\t\"I\n\017GameChatRequest\022\020\n\010" +
+      "toUserId\030\001 \003(\t\022\017\n\007content\030\002 \001(\t\022\023\n\010chatT" +
+      "ype\030\003 \001(\005:\0010\"\022\n\020GameChatResponse\"\264\001\n\023Sen" +
+      "dDrawDataRequest\022\014\n\004word\030\n \001(\t\022\r\n\005level\030" +
+      "\013 \001(\005\022\020\n\010language\030\014 \001(\005\022\022\n\006points\030\001 \003(\005B" +
+      "\002\020\001\022\r\n\005width\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\022\021\n\tgue" +
+      "ssWord\030) \001(\t\022\023\n\013guessUserId\030* \001(\t\022\024\n\014gue" +
+      "ssCorrect\030+ \001(\010\"\026\n\024SendDrawDataResponse\"",
+      "\357\003\n\023GeneralNotification\022\023\n\013sessionHost\030\003" +
+      " \001(\t\022\025\n\rsessionStatus\030\004 \001(\005\022\031\n\021currentPl" +
+      "ayUserId\030\005 \001(\t\022\026\n\016nextPlayUserId\030\006 \001(\t\022\021" +
+      "\n\tnewUserId\030\007 \001(\t\022\022\n\nquitUserId\030\010 \001(\t\022\020\n" +
+      "\010nickName\030\t \001(\t\022\022\n\nuserAvatar\030\n \001(\t\022\022\n\nu" +
+      "serGender\030\013 \001(\010\022\022\n\006points\030\025 \003(\005B\002\020\001\022\r\n\005w" +
+      "idth\030\026 \001(\002\022\r\n\005color\030\027 \001(\005\022\014\n\004word\030\037 \001(\t\022" +
+      "\r\n\005level\030  \001(\005\022\r\n\005round\030! \001(\005\022\020\n\010languag" +
+      "e\030\" \001(\005\022\021\n\tguessWord\030) \001(\t\022\023\n\013guessUserI" +
+      "d\030* \001(\t\022\024\n\014guessCorrect\030+ \001(\010\022\026\n\016guessGa",
+      "inCoins\030, \001(\005\022\024\n\014chatToUserId\0303 \003(\t\022\023\n\013c" +
+      "hatContent\0304 \001(\t\022\020\n\010chatType\0305 \001(\005\022\025\n\rtu" +
+      "rnGainCoins\030= \001(\005\"\322\005\n\013GameMessage\022&\n\007com" +
+      "mand\030\001 \002(\0162\025.game.GameCommandType\022\021\n\tmes" +
+      "sageId\030\002 \002(\005\0221\n\nresultCode\030\003 \001(\0162\024.game." +
+      "GameResultCode:\007SUCCESS\022\016\n\006userId\030\004 \001(\t\022" +
+      "\024\n\tsessionId\030\005 \001(\003:\0010\022\r\n\005round\030\006 \001(\005\0220\n\016" +
+      "completeReason\030\007 \001(\0162\030.game.GameComplete" +
+      "Reason\022\027\n\017onlineUserCount\030\010 \001(\005\022\020\n\010toUse" +
+      "rId\030\t \001(\t\022.\n\017joinGameRequest\030\013 \001(\0132\025.gam",
+      "e.JoinGameRequest\0220\n\020joinGameResponse\030\014 " +
+      "\001(\0132\026.game.JoinGameResponse\0220\n\020startGame" +
+      "Request\030\r \001(\0132\026.game.StartGameRequest\0222\n" +
+      "\021startGameResponse\030\016 \001(\0132\027.game.StartGam" +
+      "eResponse\0226\n\023sendDrawDataRequest\030\025 \001(\0132\031" +
+      ".game.SendDrawDataRequest\0228\n\024sendDrawDat" +
+      "aResponse\030\026 \001(\0132\032.game.SendDrawDataRespo" +
+      "nse\022*\n\013chatRequest\030\027 \001(\0132\025.game.GameChat" +
+      "Request\022,\n\014chatResponse\030\030 \001(\0132\026.game.Gam" +
+      "eChatResponse\022/\n\014notification\0303 \001(\0132\031.ga",
+      "me.GeneralNotificationB=\n(com.orange.net" +
+      "work.game.protocol.messageB\021GameMessageP" +
+      "rotos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -9006,7 +9121,7 @@ public final class GameMessageProtos {
           internal_static_game_GameChatRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GameChatRequest_descriptor,
-              new java.lang.String[] { "ToUserId", "Content", },
+              new java.lang.String[] { "ToUserId", "Content", "ChatType", },
               com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GameChatRequest.Builder.class);
           internal_static_game_GameChatResponse_descriptor =
@@ -9038,7 +9153,7 @@ public final class GameMessageProtos {
           internal_static_game_GeneralNotification_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_game_GeneralNotification_descriptor,
-              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "QuitUserId", "NickName", "UserAvatar", "UserGender", "Points", "Width", "Color", "Word", "Level", "Round", "Language", "GuessWord", "GuessUserId", "GuessCorrect", "GuessGainCoins", "ChatToUserId", "ChatContent", "TurnGainCoins", },
+              new java.lang.String[] { "SessionHost", "SessionStatus", "CurrentPlayUserId", "NextPlayUserId", "NewUserId", "QuitUserId", "NickName", "UserAvatar", "UserGender", "Points", "Width", "Color", "Word", "Level", "Round", "Language", "GuessWord", "GuessUserId", "GuessCorrect", "GuessGainCoins", "ChatToUserId", "ChatContent", "ChatType", "TurnGainCoins", },
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.class,
               com.orange.network.game.protocol.message.GameMessageProtos.GeneralNotification.Builder.class);
           internal_static_game_GameMessage_descriptor =

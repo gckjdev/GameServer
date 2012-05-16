@@ -377,6 +377,75 @@ public final class GameConstantsProtos {
     // @@protoc_insertion_point(enum_scope:game.GameCompleteReason)
   }
   
+  public enum GameChatType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    CHAT_GROUP(0, 0),
+    CHAT_PRIVATE(1, 1),
+    ;
+    
+    public static final int CHAT_GROUP_VALUE = 0;
+    public static final int CHAT_PRIVATE_VALUE = 1;
+    
+    
+    public final int getNumber() { return value; }
+    
+    public static GameChatType valueOf(int value) {
+      switch (value) {
+        case 0: return CHAT_GROUP;
+        case 1: return CHAT_PRIVATE;
+        default: return null;
+      }
+    }
+    
+    public static com.google.protobuf.Internal.EnumLiteMap<GameChatType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<GameChatType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<GameChatType>() {
+            public GameChatType findValueByNumber(int number) {
+              return GameChatType.valueOf(number);
+            }
+          };
+    
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return com.orange.network.game.protocol.constants.GameConstantsProtos.getDescriptor().getEnumTypes().get(3);
+    }
+    
+    private static final GameChatType[] VALUES = {
+      CHAT_GROUP, CHAT_PRIVATE, 
+    };
+    
+    public static GameChatType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+    
+    private final int index;
+    private final int value;
+    
+    private GameChatType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+    
+    // @@protoc_insertion_point(enum_scope:game.GameChatType)
+  }
+  
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -432,9 +501,10 @@ public final class GameConstantsProtos {
       "MPLETE\020\000\022\031\n\025REASON_ALL_USER_GUESS\020\001\022\030\n\024R" +
       "EASON_ALL_USER_QUIT\020\013\022\031\n\025REASON_DRAW_USE" +
       "R_QUIT\020\014\022\030\n\024REASON_ONLY_ONE_USER\020\r\022\022\n\016RE" +
-      "ASON_EXPIRED\020\025BA\n*com.orange.network.gam" +
-      "e.protocol.constantsB\023GameConstantsProto" +
-      "s"
+      "ASON_EXPIRED\020\025*0\n\014GameChatType\022\016\n\nCHAT_G" +
+      "ROUP\020\000\022\020\n\014CHAT_PRIVATE\020\001BA\n*com.orange.n" +
+      "etwork.game.protocol.constantsB\023GameCons" +
+      "tantsProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

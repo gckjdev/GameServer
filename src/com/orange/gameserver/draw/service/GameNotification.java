@@ -285,6 +285,7 @@ public class GameNotification {
 			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
 				.addAllChatToUserId(toUserIdList)
 				.setChatContent(chatRequest.getContent())
+				.setChatType(chatRequest.getChatType())				
 				.build();
 
 			// send notification for the user			
