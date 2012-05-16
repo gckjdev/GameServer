@@ -115,8 +115,10 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		
 		// add user
 		int sessionId = gameSession.getSessionId();
-		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId, guessDifficultLevel);
-		sessionUserManager.addUserIntoSession(user, gameSession);
+//		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId, guessDifficultLevel);
+//		sessionUserManager.addUserIntoSession(user, gameSession);
+		sessionManager.addUserIntoSession(userId, nickName, avatar, gender, guessDifficultLevel, 
+				request.getJoinGameRequest().getIsRobot(), gameEvent.getChannel(), gameSession);
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
 		// reset start expire timer for current play user

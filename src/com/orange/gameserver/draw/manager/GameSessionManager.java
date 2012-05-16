@@ -1,6 +1,7 @@
 package com.orange.gameserver.draw.manager;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +21,9 @@ import org.eclipse.jetty.util.log.Log;
 import org.jboss.netty.channel.Channel;
 
 import com.orange.common.utils.RandomUtil;
+import com.orange.game.model.dao.RoomUser;
+import com.orange.game.model.manager.RoomManager;
+import com.orange.gameserver.db.DrawDBClient;
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
@@ -101,6 +105,9 @@ public class GameSessionManager {
 				
 				GameSession session = new GameSession(sessionId, roomName, null, roomId);
 				gameCollection.put(sessionId, session);
+				
+				// TODO move to executor thread
+				RoomManager.resetRoomUser(DrawDBClient.getInstance().getMongoClient(), roomId);
 				
 				if (sessionId != -1){
 					UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, guessDifficultLevel, channel, sessionId);
@@ -369,15 +376,38 @@ public class GameSessionManager {
 			sessionUserManager.removeUserFromSession(userId, session.getSessionId());
 			adjustSessionSet(session);
 			UserManager.getInstance().removeOnlineUserById(userId);
+			
+			// update room if it's friend room
+			if (RoomSessionManager.isFriendRoom(session.getSessionId())){
+				// TODO move to executor thread
+				RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
+						session.getFriendRoomId(), userId, null, null, null, RoomUser.STATUS_JOINED, new Date(), false);
+			}
 	}
 	
-	private int addUserIntoSession(String userId, String nickName, 
+	public int addUserIntoSession(String userId, String nickName, 
 			String avatar, 
 			boolean gender,
 			int guessDifficultLevel,
 			boolean isRobot,			
 			Channel channel, 
 			GameSession session){
+		
+		// update room if it's friend room
+		if (RoomSessionManager.isFriendRoom(session.getSessionId())){
+			// TODO move to executor thread			
+			RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
+					session.getFriendRoomId(), 
+					userId, 
+					RoomUser.toGenderString(gender), 
+					nickName, 
+					avatar, 
+					RoomUser.STATUS_PLAYING, 
+					new Date(), 
+					true);
+			
+		}
+
 		User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId(), isRobot, guessDifficultLevel);
 		return sessionUserManager.addUserIntoSession(user, session);
 	}			
