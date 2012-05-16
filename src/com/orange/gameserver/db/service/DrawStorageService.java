@@ -1,9 +1,7 @@
 package com.orange.gameserver.db.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -14,6 +12,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.orange.common.mongodb.MongoDBClient;
 import com.orange.common.utils.RandomUtil;
+import com.orange.game.constants.DBConstants;
 import com.orange.gameserver.db.DrawDBClient;
 import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.draw.utils.GameLog;
@@ -48,21 +47,21 @@ public class DrawStorageService {
 				// insert data into mongo DB here
 				MongoDBClient dbClient = DrawDBClient.getInstance().getMongoClient();
 				BasicDBObject docObject = new BasicDBObject();
-				docObject.put(DrawDBClient.F_USER_ID, user.getUserId());
-				docObject.put(DrawDBClient.F_NICK_NAME, user.getNickName());
-				docObject.put(DrawDBClient.F_AVATAR, user.getAvatar());
-				docObject.put(DrawDBClient.F_WORD, wordText);
-				docObject.put(DrawDBClient.F_LEVEL, wordLevel);
-				docObject.put(DrawDBClient.F_LANGUAGE, language);
-				docObject.put(DrawDBClient.F_CREATE_DATE, new Date());
-				docObject.put(DrawDBClient.F_DRAW_DATA, data);
-				docObject.put(DrawDBClient.F_DRAW_DATA_LEN, data.length);
-				docObject.put(DrawDBClient.F_RANDOM, Math.random());
+				docObject.put(DBConstants.F_DRAW_USER_ID, user.getUserId());
+				docObject.put(DBConstants.F_DRAW_NICK_NAME, user.getNickName());
+				docObject.put(DBConstants.F_DRAW_AVATAR, user.getAvatar());
+				docObject.put(DBConstants.F_DRAW_WORD, wordText);
+				docObject.put(DBConstants.F_DRAW_LEVEL, wordLevel);
+				docObject.put(DBConstants.F_DRAW_LANGUAGE, language);
+				docObject.put(DBConstants.F_DRAW_CREATE_DATE, new Date());
+				docObject.put(DBConstants.F_DRAW_DATA, data);
+				docObject.put(DBConstants.F_DRAW_DATA_LEN, data.length);
+				docObject.put(DBConstants.F_DRAW_RANDOM, Math.random());
 				BasicDBList list = new BasicDBList();
 				list.add(user.getUserId());
-				docObject.put(DrawDBClient.F_VIEW_USER_LIST, list);
+				docObject.put(DBConstants.F_DRAW_VIEW_USER_LIST, list);
 				
-				dbClient.insert(DrawDBClient.T_DRAW, docObject);
+				dbClient.insert(DBConstants.T_DRAW, docObject);
 				
 				GameLog.info(sessionId, "save data into DB, data bytes="+data.length);
 			}
@@ -76,14 +75,14 @@ public class DrawStorageService {
     	BasicDBObject query = new BasicDBObject();
     	BasicDBObject gte = new BasicDBObject();
     	gte.put("$gte", rand);
-    	query.put(DrawDBClient.F_RANDOM, gte);
-    	query.put(DrawDBClient.F_LANGUAGE, language);
+    	query.put(DBConstants.F_DRAW_RANDOM, gte);
+    	query.put(DBConstants.F_DRAW_LANGUAGE, language);
     	
     	BasicDBObject notInCondition = new BasicDBObject();
     	BasicDBList excludeList = new BasicDBList();
     	excludeList.addAll(excludeUserIdList);
     	notInCondition.put("$nin", excludeList);
-    	query.put(DrawDBClient.F_VIEW_USER_LIST, notInCondition);
+    	query.put(DBConstants.F_DRAW_VIEW_USER_LIST, notInCondition);
     	    	
     	BasicDBObject update = new BasicDBObject();
     	BasicDBObject pushValue = new BasicDBObject();
@@ -93,26 +92,26 @@ public class DrawStorageService {
     	BasicDBObject eachValue = new BasicDBObject();
     	eachValue.put("$each", pushList);
     	
-    	pushValue.put(DrawDBClient.F_VIEW_USER_LIST, eachValue);
+    	pushValue.put(DBConstants.F_DRAW_VIEW_USER_LIST, eachValue);
     	update.put("$addToSet", pushValue);
     	
     	GameLog.info(sessionId, "<randomGetDraw> query = "+query.toString());
-    	DBObject obj = dbClient.findOne(DrawDBClient.T_DRAW, query);
+    	DBObject obj = dbClient.findOne(DBConstants.T_DRAW, query);
 
     	if (obj == null){
     		// try random from lte
     		BasicDBObject lte = new BasicDBObject();
     		lte.put("lte", rand);
     		query.clear();
-    		query.put(DrawDBClient.F_RANDOM, lte);
-        	query.put(DrawDBClient.F_LANGUAGE, language);    		
+    		query.put(DBConstants.F_DRAW_RANDOM, lte);
+        	query.put(DBConstants.F_DRAW_LANGUAGE, language);    		
 
         	notInCondition = new BasicDBObject();
         	notInCondition.put("$nin", excludeList);
-        	query.put(DrawDBClient.F_VIEW_USER_LIST, notInCondition);
+        	query.put(DBConstants.F_DRAW_VIEW_USER_LIST, notInCondition);
     		
         	GameLog.info(sessionId, "<randomGetDraw> query = "+query.toString());
-    		obj = dbClient.findOne(DrawDBClient.T_DRAW, query);
+    		obj = dbClient.findOne(DBConstants.T_DRAW, query);
     		
     	}
     	
@@ -120,7 +119,7 @@ public class DrawStorageService {
 			BasicDBObject keyQuery = new BasicDBObject();
 			keyQuery.put("_id", obj.get("_id"));
 			GameLog.info(sessionId, "<randomGetDraw> update = "+keyQuery.toString() + ", update="+update.toString());
-			dbClient.findAndModify(DrawDBClient.T_DRAW, keyQuery, update);
+			dbClient.findAndModify(DBConstants.T_DRAW, keyQuery, update);
 		}
 
 		if (obj == null){
@@ -128,7 +127,7 @@ public class DrawStorageService {
     		return null;
     	}
     	
-    	byte[] data = (byte[])obj.get(DrawDBClient.F_DRAW_DATA);
+    	byte[] data = (byte[])obj.get(DBConstants.F_DRAW_DATA);
     	if (data == null){
     		GameLog.info(sessionId, "random fetch data from DB, but draw data null?");
     		return null;    		
@@ -155,7 +154,7 @@ public class DrawStorageService {
 				MongoDBClient dbClient = DrawDBClient.getInstance().getMongoClient();
 				
 				BasicDBObject query = new BasicDBObject();
-				query.put(DrawDBClient.F_WORD, wordText);
+				query.put(DBConstants.F_DRAW_WORD, wordText);
 				
 				BasicDBList eachValueList = new BasicDBList();
 				eachValueList.addAll(collection);
@@ -164,10 +163,10 @@ public class DrawStorageService {
 		    	eachValue.put("$each", eachValueList);
 		    	
 		    	BasicDBObject addToSetValue = new BasicDBObject (); 
-		    	addToSetValue.put(DrawDBClient.F_GUESS_WORD_LIST, eachValue);
+		    	addToSetValue.put(DBConstants.F_GUESS_WORD_LIST, eachValue);
 		    	
 		    	BasicDBObject setValue = new BasicDBObject();
-		    	setValue.put(DrawDBClient.F_WORD, wordText);
+		    	setValue.put(DBConstants.F_DRAW_WORD, wordText);
 		    	
 		    	BasicDBObject update = new BasicDBObject ();
 		    	update.put("$addToSet", addToSetValue);
@@ -175,7 +174,7 @@ public class DrawStorageService {
 		    					
 		    	GameLog.info(sessionId, "<storeGuessWord> query="+query.toString()+", update="+update.toString());
 				GameLog.info(sessionId, "save guess word data into DB, word count ="+collection.size());
-				dbClient.updateOrInsert(DrawDBClient.T_GUESS, query, update);				
+				dbClient.updateOrInsert(DBConstants.T_GUESS, query, update);				
 			}
     	
     	});
@@ -192,13 +191,13 @@ public class DrawStorageService {
 		MongoDBClient dbClient = DrawDBClient.getInstance().getMongoClient();
 		
 		BasicDBObject query = new BasicDBObject();
-		query.put(DrawDBClient.F_WORD, word.toUpperCase());
+		query.put(DBConstants.F_DRAW_WORD, word.toUpperCase());
 				
-		DBObject obj = dbClient.findOne(DrawDBClient.T_GUESS, query);
+		DBObject obj = dbClient.findOne(DBConstants.T_GUESS, query);
 		if (obj == null)
 			return null;
 		
-		BasicDBList list = (BasicDBList)obj.get(DrawDBClient.F_GUESS_WORD_LIST);
+		BasicDBList list = (BasicDBList)obj.get(DBConstants.F_GUESS_WORD_LIST);
 		if (list == null || list.size() == 0)
 			return null;
 		
