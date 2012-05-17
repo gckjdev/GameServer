@@ -21,6 +21,7 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.mongodb.BasicDBObject;
 import com.orange.common.utils.RandomUtil;
+import com.orange.game.constants.DBConstants;
 import com.orange.gameserver.db.DrawDBClient;
 import com.orange.gameserver.db.service.DrawStorageService;
 import com.orange.gameserver.draw.dao.DrawAction;
@@ -515,7 +516,7 @@ public class RobotClient implements Runnable {
 						return;					
 					}
 	
-					byte[] data = (byte[])obj.get(DrawDBClient.F_DRAW_DATA);
+					byte[] data = (byte[])obj.get(DBConstants.F_DRAW_DATA);
 					if (data == null){
 						GameLog.warn(sessionId, "robot cannot find any draw for simulation! have to quit");
 						disconnect();
@@ -530,9 +531,9 @@ public class RobotClient implements Runnable {
 						return;					
 					}
 					
-					String word = obj.getString(DrawDBClient.F_WORD);
-					int level = obj.getInt(DrawDBClient.F_LEVEL);
-					int language = obj.getInt(DrawDBClient.F_LANGUAGE);
+					String word = obj.getString(DBConstants.F_DRAW_WORD);
+					int level = obj.getInt(DBConstants.F_DRAW_LEVEL);
+					int language = obj.getInt(DBConstants.F_DRAW_LANGUAGE);
 					
 					sendStartGame();
 					sendStartDraw(word, level, language);				

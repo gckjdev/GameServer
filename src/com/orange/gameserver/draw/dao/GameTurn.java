@@ -243,6 +243,10 @@ public class GameTurn {
 			GameLog.info(sessionId, "skip store draw data due to robot draw user");
 			return;
 		}
+		
+		if (drawUser == null){
+			return;
+		}
 						
 		// step 2: store draw data
 		
@@ -268,6 +272,8 @@ public class GameTurn {
 			.setLanguage(language)
 			.setCreateDate((int)System.currentTimeMillis()/1000)
 			.addAllDrawData(pbDrawDataList)
+			.setNickName(drawUser.nickName)
+			.setAvatar(drawUser.avatar)
 			.build();
 		
 		// write data here...
