@@ -383,7 +383,7 @@ public class GameSessionManager {
 					!RobotManager.isRobotUser(userId)){
 				// TODO move to executor thread
 				RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
-						session.getFriendRoomId(), userId, null, null, null, RoomUser.STATUS_JOINED, new Date(), false);
+						session.getFriendRoomId(), userId, null, null, null, RoomUser.STATUS_ACCEPTED, new Date(), false);
 			}
 	}
 	
