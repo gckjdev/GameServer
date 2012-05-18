@@ -1,11 +1,13 @@
 package com.orange.gameserver.draw.manager;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.robot.manager.RobotManager;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBSNSUser;
 
 public class UserManager {
 	
@@ -36,13 +38,14 @@ public class UserManager {
 	}
 	
 	public void addOnlineUser(String userId, String nickName, String avatar, boolean gender, 
+			String location, List<PBSNSUser> snsUser,
 			int guessDifficultLevel, Channel channel,
 			int sessionId) {
 		
 		if (userId == null || channel == null)
 			return;
 		
-		User user = new User(userId, nickName, avatar, gender, channel, sessionId, guessDifficultLevel);		
+		User user = new User(userId, nickName, avatar, gender, location, snsUser, channel, sessionId, guessDifficultLevel);		
 		User userFound = onlineUserMap.putIfAbsent(userId, user);
 		if (userFound != null)
 			user = userFound;

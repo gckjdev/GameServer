@@ -91,6 +91,8 @@ public class GameNotification {
 				.setUserGender(user.getGender())
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
 				.setNextPlayUserId("")
+				.setLocation(user.getLocation())
+				.addAllSnsUsers(user.getSnsUser())
 				.build();
 			
 			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()

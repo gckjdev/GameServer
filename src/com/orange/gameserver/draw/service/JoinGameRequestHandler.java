@@ -21,6 +21,7 @@ import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResult
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest;
 import com.orange.network.game.protocol.model.GameBasicProtos;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBSNSUser;
 
 public class JoinGameRequestHandler extends AbstractRequestHandler {
 
@@ -43,6 +44,9 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String nickName = joinRequest.getNickName();			
 		String avatar = joinRequest.getAvatar();
 		boolean gender = joinRequest.getGender();
+		String location = joinRequest.getLocation();
+		List<PBSNSUser> snsUser = joinRequest.getSnsUsersList();
+
 		int guessDifficultLevel = 1;
 		if (joinRequest.hasGuessDifficultLevel())
 			guessDifficultLevel = joinRequest.getGuessDifficultLevel(); 		
@@ -53,6 +57,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 			String roomId = joinRequest.getRoomId();
 			String roomName = joinRequest.getRoomName();
 			GameSession session = gameManager.allocFriendRoom(roomId, roomName, userId, nickName, avatar, gender,
+					location, snsUser,
 					guessDifficultLevel, messageEvent.getChannel());
 			if (session == null){
 				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
@@ -70,6 +75,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 			}
 			
 			GameResultCode result = gameManager.directPutUserIntoSession(userId, nickName, avatar, gender, 
+					location, snsUser,
 					guessDifficultLevel,
 					messageEvent.getChannel(), isRobot, gameSessionId);
 			if (result != GameResultCode.SUCCESS){
@@ -79,6 +85,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		}
 		else{		
 			gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender,
+					location, snsUser,
 					guessDifficultLevel, messageEvent.getChannel(), null);
 			if (gameSessionId == -1){
 				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, messageEvent.getChannel());
@@ -104,6 +111,9 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String nickName = request.getJoinGameRequest().getNickName();
 		String avatar = request.getJoinGameRequest().getAvatar();
 		boolean gender = request.getJoinGameRequest().getGender();
+		String location = request.getJoinGameRequest().getLocation();
+		List<PBSNSUser> snsUser = request.getJoinGameRequest().getSnsUsersList();
+		
 		int guessDifficultLevel = 1;
 		if (request.getJoinGameRequest().hasGuessDifficultLevel())
 			guessDifficultLevel = request.getJoinGameRequest().getGuessDifficultLevel(); 		
@@ -117,7 +127,9 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		int sessionId = gameSession.getSessionId();
 //		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId, guessDifficultLevel);
 //		sessionUserManager.addUserIntoSession(user, gameSession);
-		sessionManager.addUserIntoSession(userId, nickName, avatar, gender, guessDifficultLevel, 
+		sessionManager.addUserIntoSession(userId, nickName, avatar, gender,
+				location, snsUser,
+				guessDifficultLevel, 
 				request.getJoinGameRequest().getIsRobot(), gameEvent.getChannel(), gameSession);
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		

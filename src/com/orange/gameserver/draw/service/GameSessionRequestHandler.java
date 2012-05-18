@@ -26,6 +26,7 @@ import com.orange.network.game.protocol.message.GameMessageProtos.GameChatReques
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.message.GameMessageProtos.JoinGameRequest;
 import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBSNSUser;
 
 public class GameSessionRequestHandler extends AbstractRequestHandler {
 
@@ -261,6 +262,9 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 
 		String nickName = request.getNickName();
 		String avatar = request.getAvatar();
+		String location = request.getLocation();
+		List<PBSNSUser> snsUser = request.getSnsUsersList();
+		
 		boolean gender = request.getGender();
 		int guessDifficultLevel = 1;
 		if (request.hasGuessDifficultLevel())
@@ -282,7 +286,9 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		
 		// alloc user to new room
 		int sessionId = GameSessionManager.getInstance().allocGameSessionForUser(message.getUserId(), 
-				nickName, avatar, gender, guessDifficultLevel, gameEvent.getChannel(), excludeSessionSet);
+				nickName, avatar, gender,
+				location, snsUser,
+				guessDifficultLevel, gameEvent.getChannel(), excludeSessionSet);
 		if (sessionId != -1){
 						
 			JoinGameRequest joinRequest = GameMessageProtos.JoinGameRequest.newBuilder(message.getJoinGameRequest())

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.jboss.netty.channel.Channel;
 
+import com.orange.network.game.protocol.model.GameBasicProtos.PBSNSUser;
+
 public class User {
 	
 	final String userId;
@@ -14,11 +16,15 @@ public class User {
 	final boolean gender;
 	final boolean isRobot;
 	final int guessDifficultLevel;
+	final String location;
+	final List<PBSNSUser> snsUser;
 
 	int currentSessionId = -1;		// TODO change to final or not?
 	volatile boolean isPlaying = false;
 	
-	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId, int guessLevel) {
+	public User(String userId, String nickName, String avatar, boolean gender, 
+			String location, List<PBSNSUser> snsUser,
+			Channel channel, int sessionId, int guessLevel) {
 		super();
 		this.userId = userId;
 		this.nickName = nickName;
@@ -27,13 +33,17 @@ public class User {
 		this.gender = gender;
 		this.setCurrentSessionId(sessionId);
 		this.isRobot = false;
+		this.location = location;
+		this.snsUser = snsUser;
 		if (guessLevel <= 0)
 			this.guessDifficultLevel = 1;
 		else
 			this.guessDifficultLevel = guessLevel;
 	}
 	
-	public User(String userId, String nickName, String avatar, boolean gender, Channel channel, int sessionId, boolean isRobot, int guessLevel) {
+	public User(String userId, String nickName, String avatar, boolean gender,
+			String location, List<PBSNSUser> snsUser,
+			Channel channel, int sessionId, boolean isRobot, int guessLevel) {
 		super();
 		this.userId = userId;
 		this.nickName = nickName;
@@ -42,10 +52,20 @@ public class User {
 		this.gender = gender;
 		this.setCurrentSessionId(sessionId);
 		this.isRobot = isRobot;
+		this.location = location;
+		this.snsUser = snsUser;
 		if (guessLevel <= 0)
 			this.guessDifficultLevel = 1;
 		else
 			this.guessDifficultLevel = guessLevel;
+	}		
+
+	public String getLocation() {
+		return location;
+	}
+
+	public List<PBSNSUser> getSnsUser() {
+		return snsUser;
 	}
 
 	public String getUserId() {

@@ -152,6 +152,8 @@ public class GameSessionUserManager {
 																				.setNickName(user.getNickName())
 																				.setAvatar(user.getAvatar())
 																				.setGender(user.getGender())
+																				.setLocation(user.getLocation())
+																				.addAllSnsUsers(user.getSnsUser())
 																				.build();
 			list.add(gameUser);
 		}
