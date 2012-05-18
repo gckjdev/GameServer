@@ -1,9 +1,11 @@
 package com.orange.gameserver.db.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,19 +23,38 @@ public class DrawStorageService {
 
 	
 	protected static final int MIN_DRAW_DATA_LEN = 1000;
+	protected static final int EXECUTOR_POOL_NUM = 5;
+	
 	// thread-safe singleton implementation
     private static DrawStorageService manager = new DrawStorageService();     
     private DrawStorageService(){		
+    	for (int i=0; i<EXECUTOR_POOL_NUM; i++){
+    		ExecutorService executor = Executors.newFixedThreadPool(1);
+    		executorList.add(executor);
+    	}
 	} 	    
     public static DrawStorageService getInstance() { 
     	return manager; 
     }
 	
-    ExecutorService executor = Executors.newFixedThreadPool(3);
+//    ExecutorService executor = Executors.newFixedThreadPool(3);
+    CopyOnWriteArrayList<ExecutorService> executorList = new CopyOnWriteArrayList<ExecutorService>();
+    
+    public void executeDB(final int sessionId, Runnable runnable){
+    	ExecutorService executor = getExecutor(sessionId);
+    	executor.execute(runnable);    	
+    }
+    
+    private ExecutorService getExecutor(int sessionId) {
+    	int index = sessionId % EXECUTOR_POOL_NUM;    	
+		return executorList.get(index);
+	}
     
     public void storeDraw(final int sessionId, final User user, final String wordText, final int wordLevel,
     		final int language, final byte[] data) {
 		
+    	ExecutorService executor = getExecutor(sessionId);
+    	
     	executor.execute(new Runnable(){
 
 			@Override
@@ -69,7 +90,7 @@ public class DrawStorageService {
     	});
 	} 
   
-    public BasicDBObject randomGetDraw(int sessionId, int language, Set<String> excludeUserIdList){
+	public BasicDBObject randomGetDraw(int sessionId, int language, Set<String> excludeUserIdList){
     	double rand = Math.random();
     	MongoDBClient dbClient = DrawDBClient.getInstance().getMongoClient();
     	BasicDBObject query = new BasicDBObject();
@@ -139,6 +160,8 @@ public class DrawStorageService {
     
 	public void storeGuessWord(final int sessionId, final String word, final int language,
 			final Collection<String> collection) {
+		
+    	ExecutorService executor = getExecutor(sessionId);
 		
 		executor.execute(new Runnable(){
 

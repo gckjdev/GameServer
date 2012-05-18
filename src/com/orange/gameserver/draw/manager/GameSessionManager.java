@@ -24,6 +24,7 @@ import com.orange.common.utils.RandomUtil;
 import com.orange.game.model.dao.RoomUser;
 import com.orange.game.model.manager.RoomManager;
 import com.orange.gameserver.db.DrawDBClient;
+import com.orange.gameserver.db.service.DrawStorageService;
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
@@ -91,7 +92,7 @@ public class GameSessionManager {
 		return gameCollection.get(id);		
 	}		
 	
-	public GameSession allocFriendRoom(String roomId, String roomName, 
+	public GameSession allocFriendRoom(final String roomId, String roomName, 
 			String userId, String nickName, String avatar, boolean gender, int guessDifficultLevel, 
 			Channel channel){
 		synchronized(sessionRoomLock){
@@ -108,7 +109,13 @@ public class GameSessionManager {
 				gameCollection.put(sessionId, session);
 				
 				// TODO move to executor thread
-				RoomManager.resetRoomUser(DrawDBClient.getInstance().getMongoClient(), roomId);
+				DrawStorageService.getInstance().executeDB(sessionId, new Runnable(){
+					@Override
+					public void run() {
+						RoomManager.resetRoomUser(DrawDBClient.getInstance().getMongoClient(), roomId);
+					}					
+				});
+				
 				
 				if (sessionId != -1){
 					UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, guessDifficultLevel, channel, sessionId);
@@ -124,6 +131,11 @@ public class GameSessionManager {
 					// TODO set room name
 					// session.setRoomName(roomName);
 
+					if (sessionUserManager.isSessionFull(sessionId)){
+						GameLog.info(sessionId, "<allocFriendRoom> but session full");						
+						return null;
+					}
+					
 					GameLog.info(sessionId, "<allocFriendRoom> return exist session ");				
 				}
 				
@@ -373,22 +385,32 @@ public class GameSessionManager {
 		}
 	}
 	
-	public void removeUserFromSession(String userId, GameSession session){
+	public void removeUserFromSession(final String userId, GameSession session){
 			sessionUserManager.removeUserFromSession(userId, session.getSessionId());
 			adjustSessionSet(session);
 			UserManager.getInstance().removeOnlineUserById(userId);
 			
+			
 			// update room if it's friend room
 			if (RoomSessionManager.isFriendRoom(session.getSessionId()) &&
 					!RobotManager.isRobotUser(userId)){
-				// TODO move to executor thread
-				RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
-						session.getFriendRoomId(), userId, null, null, null, RoomUser.STATUS_ACCEPTED, new Date(), false);
+				
+				final String roomId = session.getFriendRoomId();
+				DrawStorageService.getInstance().executeDB(session.getSessionId(), new Runnable(){
+					@Override
+					public void run() {
+						RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
+								roomId, userId, null, null, null, 
+								RoomUser.STATUS_ACCEPTED, new Date(), false);
+					}
+				});
+
 			}
 	}
 	
-	public int addUserIntoSession(String userId, String nickName, 
-			String avatar, 
+	public int addUserIntoSession(final String userId, 
+			final String nickName, 
+			final String avatar, 
 			boolean gender,
 			int guessDifficultLevel,
 			boolean isRobot,			
@@ -398,17 +420,28 @@ public class GameSessionManager {
 		// update room if it's friend room
 		if (RoomSessionManager.isFriendRoom(session.getSessionId()) &&
 				!RobotManager.isRobotUser(userId)){
-			// TODO move to executor thread			
+			// TODO move to executor thread
+
+			final String roomId = session.getFriendRoomId();
+			final String genderString = RoomUser.toGenderString(gender);
+			
+			DrawStorageService.getInstance().executeDB(session.getSessionId(), new Runnable(){
+				@Override
+				public void run() {
+			
 			RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
-					session.getFriendRoomId(), 
+					roomId, 
 					userId, 
-					RoomUser.toGenderString(gender), 
+					genderString, 
 					nickName, 
 					avatar, 
 					RoomUser.STATUS_PLAYING, 
 					new Date(), 
 					true);
 			
+				}
+			});
+
 		}
 
 		User user = new User(userId, nickName, avatar, gender, channel, session.getSessionId(), isRobot, guessDifficultLevel);
