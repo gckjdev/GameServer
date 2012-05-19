@@ -32,6 +32,7 @@ public class RobotManager {
     public static final int MAX_ROBOT_USER = 8;
     
     final String USER_NAME_LIST[] = {"Lily@Moon", "LikeAFox", "Tina", "Hugo", "Jan Vans", "Vivian", "Johnson", "Allen J"}; //, "Miaotiao", "Julie"};
+    final String USER_LOCATION_LIST[] = {"UK", "LA USA", "New York, USA", "UK", "LA USA", "UK", "New York, USA", "LA USAJ"}; //, "Miaotiao", "Julie"};
     final boolean USER_GENDER_LIST[] = {false, true, false, true, true, false, true, false, false, false};
     final String USER_AVATAR_LIST[] = {
 //    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220531.jpg", 
@@ -126,8 +127,9 @@ public class RobotManager {
     	String userId = ROBOT_USER_ID_PREFIX + index + "_" + nickName;
     	String avatar = USER_AVATAR_LIST[index];
     	boolean gender = USER_GENDER_LIST[index];
+    	String location = USER_LOCATION_LIST[index];
     	
-    	RobotClient client = new RobotClient(userId, nickName, avatar, gender, sessionId, index);    	
+    	RobotClient client = new RobotClient(userId, nickName, avatar, gender, location, sessionId, index);    	
 		return client;
 	}
 	

@@ -47,6 +47,7 @@ public class RobotClient implements Runnable {
 	final String nickName;
 	final boolean gender;
 	final String userAvatar;
+	final String location;
 	final int robotIndex;
 	
 	enum ClientState{
@@ -79,8 +80,11 @@ public class RobotClient implements Runnable {
 	// message
 	AtomicInteger messageId = new AtomicInteger(1);
 	
-	public RobotClient(String userId, String nickName, String avatar, boolean gender, int sessionId, int index){
+	public RobotClient(String userId, String nickName, String avatar, boolean gender,
+			String location,
+			int sessionId, int index){
 		this.sessionId = sessionId;
+		this.location = location;
 		this.userAvatar = avatar;
 		this.userId = userId;
 		this.gender = gender;
@@ -139,6 +143,7 @@ public class RobotClient implements Runnable {
 					.setNickName(nickName)
 					.setGender(gender).
 					setAvatar(userAvatar)
+					.setLocation(location)
 					.setIsRobot(true)
 					.setTargetSessionId(sessionId)
 					.setGameId("")
@@ -149,6 +154,7 @@ public class RobotClient implements Runnable {
 			.setNickName(nickName)
 			.setGender(gender).
 			setAvatar(userAvatar)
+			.setLocation(location)
 			.setIsRobot(true)
 			.setTargetSessionId(sessionId)
 			.setGameId("")
@@ -249,7 +255,7 @@ public class RobotClient implements Runnable {
 		}
 		
 		User user = new User(newUserId, nickName2, userAvatar2, userGender, 
-				"UK", null, null, sessionId, 1);
+				"New York, USA", null, null, sessionId, 1);
 		userList.put(newUserId, user);
 	}
 
