@@ -148,7 +148,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 										.setHost(gameSession.getHost())
 										.setName(gameSession.getName())
 										.setSessionId(gameSession.getSessionId())
-										.addAllUsers(pbGameUserList)
+										.addAllUsers(pbGameUserList)										
 										.build();
 
 		GameMessageProtos.JoinGameResponse joinGameResponse = GameMessageProtos.JoinGameResponse.newBuilder()

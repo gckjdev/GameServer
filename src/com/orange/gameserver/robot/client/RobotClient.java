@@ -249,7 +249,7 @@ public class RobotClient implements Runnable {
 		}
 		
 		User user = new User(newUserId, nickName2, userAvatar2, userGender, 
-				null, null, null, sessionId, 1);
+				"UK", null, null, sessionId, 1);
 		userList.put(newUserId, user);
 	}
 

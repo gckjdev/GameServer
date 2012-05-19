@@ -19,6 +19,7 @@ import com.orange.network.game.protocol.message.GameMessageProtos.GameChatReques
 import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.message.GameMessageProtos.SendDrawDataRequest;
 import com.orange.network.game.protocol.model.GameBasicProtos;
+import com.orange.network.game.protocol.model.GameBasicProtos.PBSNSUser;
 
 public class GameNotification {
 
@@ -75,6 +76,8 @@ public class GameNotification {
 		
 		String newUserNickName = request.getJoinGameRequest().getNickName();
 		String newUserAvatar = request.getJoinGameRequest().getAvatar();
+		String newUserLocation = request.getJoinGameRequest().getLocation();
+		List<PBSNSUser> newUserSNSList = request.getJoinGameRequest().getSnsUsersList();
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
 		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
@@ -91,8 +94,8 @@ public class GameNotification {
 				.setUserGender(user.getGender())
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
 				.setNextPlayUserId("")
-				.setLocation(user.getLocation())
-				.addAllSnsUsers(user.getSnsUser())
+				.setLocation(newUserLocation)
+				.addAllSnsUsers(newUserSNSList)
 				.build();
 			
 			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
