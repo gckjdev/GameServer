@@ -77,6 +77,8 @@ public class GameNotification {
 		String newUserNickName = request.getJoinGameRequest().getNickName();
 		String newUserAvatar = request.getJoinGameRequest().getAvatar();
 		String newUserLocation = request.getJoinGameRequest().getLocation();
+		boolean newUserGender = request.getJoinGameRequest().getGender();
+		
 		List<PBSNSUser> newUserSNSList = request.getJoinGameRequest().getSnsUsersList();
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
@@ -91,11 +93,11 @@ public class GameNotification {
 				.setNewUserId(newUserId)
 				.setNickName(newUserNickName)
 				.setUserAvatar(newUserAvatar)
-				.setUserGender(user.getGender())
-				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
-				.setNextPlayUserId("")
+				.setUserGender(newUserGender)
 				.setLocation(newUserLocation)
 				.addAllSnsUsers(newUserSNSList)
+				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+				.setNextPlayUserId("")
 				.build();
 			
 			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
