@@ -263,7 +263,7 @@ public class GameSession {
 	}
 	
 	public void startStartExpireTimerIfNeeded() {
-		if (startExpireTimer == null){
+		if (startExpireTimer == null && this.status == SessionStatus.WAIT){
 			scheduleStartExpireTimer(currentPlayUser.getUserId());
 		}
 	}
