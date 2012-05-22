@@ -13,6 +13,7 @@ import org.jboss.netty.channel.Channel;
 
 import com.orange.common.statemachine.State;
 import com.orange.gameserver.draw.manager.GameSessionUserManager;
+import com.orange.gameserver.draw.manager.RoomSessionManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameStartState;
@@ -263,8 +264,10 @@ public class GameSession {
 	}
 	
 	public void startStartExpireTimerIfNeeded() {
-		if (startExpireTimer == null && this.status == SessionStatus.WAIT){
-			scheduleStartExpireTimer(currentPlayUser.getUserId());
+		if (startExpireTimer == null){
+			if (this.isGameTurnPlaying() == false){			
+				scheduleStartExpireTimer(currentPlayUser.getUserId());
+			}
 		}
 	}
 	
