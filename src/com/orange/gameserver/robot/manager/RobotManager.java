@@ -10,8 +10,14 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.eclipse.jetty.util.ConcurrentHashSet;
 
+import com.mongodb.DBObject;
+import com.orange.common.mongodb.MongoDBClient;
+import com.orange.game.constants.DBConstants;
+import com.orange.game.model.dao.User;
+import com.orange.gameserver.db.DrawDBClient;
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.gameserver.robot.client.RobotClient;
 
@@ -61,7 +67,7 @@ public class RobotManager {
     		
     		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G645-50.jpg",    		    		
     		};
-    public final static String ROBOT_USER_ID_PREFIX = "robot_$$_";     
+    public final static String ROBOT_USER_ID_PREFIX = "999999999999999999999";     
     
     ConcurrentHashSet<Integer> allocSet = new ConcurrentHashSet<Integer>();
     ConcurrentHashSet<Integer> freeSet  = new ConcurrentHashSet<Integer>();
@@ -123,12 +129,21 @@ public class RobotManager {
     		return null;
     	}
     	
-    	String nickName = USER_NAME_LIST[index];
-    	String userId = ROBOT_USER_ID_PREFIX + index + "_" + nickName;
-    	String avatar = USER_AVATAR_LIST[index];
-    	boolean gender = USER_GENDER_LIST[index];
-    	String location = USER_LOCATION_LIST[index];
+    	String nickName = "";
+    	String userId = ROBOT_USER_ID_PREFIX+"000";
+    	String avatar = "";
+    	boolean gender = false;
+    	String location = "";
     	
+    	User robotUser = findRobotByIndex(index);
+    	if (robotUser != null) {
+    		nickName = robotUser.getNickName();
+        	userId = robotUser.getUserId();
+        	avatar = robotUser.getAvatar();
+        	gender = (robotUser.getGender() == "m");
+        	location = robotUser.getLocation();
+		}
+    	   	
     	RobotClient client = new RobotClient(userId, nickName, avatar, gender, location, sessionId, index);    	
 		return client;
 	}
@@ -143,4 +158,21 @@ public class RobotManager {
 		
 		this.deallocIndex(robotClient.getClientIndex());				
 	} 
+	
+	public void initRobot() {
+		
+	}
+	
+	public User findRobotByIndex (int index) {
+		MongoDBClient mongoClient = DrawDBClient.getInstance().getMongoClient();
+		String userId = ROBOT_USER_ID_PREFIX+String.format("%03d", index);
+		if (mongoClient == null || userId == null || userId.length() <= 0 || index > 999)
+            return null;
+
+        DBObject obj = mongoClient.findOne(DBConstants.T_USER, DBConstants.F_USERID, new ObjectId(userId));
+        if (obj == null)
+            return null;
+
+        return new User(obj);
+	}
 }
