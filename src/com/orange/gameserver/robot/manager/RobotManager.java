@@ -29,7 +29,8 @@ public class RobotManager {
 	// thread-safe singleton implementation
     private static RobotManager manager = new RobotManager();     
     private RobotManager(){
-    	for (int i=0; i<getRobotCount(); i++)
+    	robotCount = getRobotCount();
+    	for (int i=0; i<robotCount; i++)
     		freeSet.add(i);
 	} 	    
     public static RobotManager getInstance() { 
@@ -39,38 +40,8 @@ public class RobotManager {
     public static final Logger log = Logger.getLogger(RobotManager.class.getName()); 
 
     public static final int MAX_ROBOT_USER = 8;
-  
-    
-//    final String USER_NAME_LIST[] = {"Lily@Moon", "LikeAFox", "Tina", "Hugo", "Jan Vans", "Vivian", "Johnson", "Allen J"}; //, "Miaotiao", "Julie"};
-//    final String USER_LOCATION_LIST[] = {"UK", "LA USA", "New York, USA", "UK", "LA USA", "UK", "New York, USA", "LA USAJ"}; //, "Miaotiao", "Julie"};
-//    final boolean USER_GENDER_LIST[] = {false, true, false, true, true, false, true, false, false, false};
-//    final String USER_AVATAR_LIST[] = {
-////    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220531.jpg", 
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/120504/co120504104A9-1-lp.jpg", 
-//    		
-////    		"http://www.ttoou.com/qqtouxiang/allimg/111111/3-111111220533.jpg",
-//
-//    		"http://www.ttoou.com/qqtouxiang/allimg/120407/co12040FZ942-5-lp.jpg",
-//    		
-////    		"http://www.ttoou.com/qqtouxiang/allimg/111113/3-111113230957.jpg",
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/111107/3-11110H30558.jpg",
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/120416/co120416093105-0-lp.jpg",
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/120421/co120421091P1-6-lp.jpg",
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G647.jpg",
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/120421/co120421091P1-5-lp.jpg",
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/120404/co120404100521-6-lp.jpg",
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G648.jpg",
-//    		
-//    		"http://www.ttoou.com/qqtouxiang/allimg/111216/1-1112160G645-50.jpg",    		    		
-//    		};
+    public static long robotCount = 0;
+
     public final static String ROBOT_USER_ID_PREFIX = "999999999999999999999";     
     
     ConcurrentHashSet<Integer> allocSet = new ConcurrentHashSet<Integer>();
@@ -115,7 +86,7 @@ public class RobotManager {
     }
     
     public void deallocIndex(int index){
-    	if (!isValidIndex(index) && index < getRobotCount()){
+    	if (!isValidIndex(index) && index < robotCount){
     		return;
     	}
     	
@@ -163,7 +134,7 @@ public class RobotManager {
 		this.deallocIndex(robotClient.getClientIndex());				
 	} 
 	
-	public static long getRobotCount() {
+	public long getRobotCount() {
 		MongoDBClient mongoClient = DrawDBClient.getInstance().getMongoClient();
 		long count = mongoClient.count(DBConstants.T_USER, new BasicDBObject(DBConstants.F_ISROBOT, 1));
 		return count;
