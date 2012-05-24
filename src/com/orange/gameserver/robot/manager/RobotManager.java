@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -16,6 +17,7 @@ import org.bson.types.ObjectId;
 import org.eclipse.jetty.util.ConcurrentHashSet;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.orange.common.mongodb.MongoDBClient;
 import com.orange.game.constants.DBConstants;
@@ -29,8 +31,8 @@ public class RobotManager {
 	// thread-safe singleton implementation
     private static RobotManager manager = new RobotManager();     
     private RobotManager(){
-    	robotCount = getRobotCount();
-    	for (int i=0; i<robotCount; i++)
+    	robotUserList = findRobots();
+    	for (int i=0; i<robotUserList.size(); i++)
     		freeSet.add(i);
 	} 	    
     public static RobotManager getInstance() { 
@@ -40,12 +42,12 @@ public class RobotManager {
     public static final Logger log = Logger.getLogger(RobotManager.class.getName()); 
 
     public static final int MAX_ROBOT_USER = 8;
-    public static long robotCount = 0;
 
     public final static String ROBOT_USER_ID_PREFIX = "999999999999999999999";     
     
     ConcurrentHashSet<Integer> allocSet = new ConcurrentHashSet<Integer>();
     ConcurrentHashSet<Integer> freeSet  = new ConcurrentHashSet<Integer>();
+    List<User> robotUserList = Collections.emptyList();
     Object allocLock = new Object();
     
     
@@ -86,7 +88,7 @@ public class RobotManager {
     }
     
     public void deallocIndex(int index){
-    	if (!isValidIndex(index) && index < robotCount){
+    	if (!isValidIndex(index) && index < robotUserList.size()){
     		return;
     	}
     	
@@ -134,22 +136,27 @@ public class RobotManager {
 		this.deallocIndex(robotClient.getClientIndex());				
 	} 
 	
-	public long getRobotCount() {
-		MongoDBClient mongoClient = DrawDBClient.getInstance().getMongoClient();
-		long count = mongoClient.count(DBConstants.T_USER, new BasicDBObject(DBConstants.F_ISROBOT, 1));
-		return count;
+	public User findRobotByIndex (int index) {
+		if (robotUserList != null && !robotUserList.isEmpty() && index < robotUserList.size()) {
+			return robotUserList.get(index);
+		}
+		return null;
 	}
 	
-	public User findRobotByIndex (int index) {
+	public List<User> findRobots () {
 		MongoDBClient mongoClient = DrawDBClient.getInstance().getMongoClient();
-		String userId = ROBOT_USER_ID_PREFIX+String.format("%03d", index);
-		if (mongoClient == null || userId == null || userId.length() <= 0 || index > 999)
-            return null;
-
-        DBObject obj = mongoClient.findOne(DBConstants.T_USER, DBConstants.F_USERID, new ObjectId(userId));
-        if (obj == null)
-            return null;
-
-        return new User(obj);
+		if (mongoClient == null)
+            return Collections.emptyList();
+		BasicDBObject query = new BasicDBObject(DBConstants.F_ISROBOT, 1);
+		BasicDBObject orderBy = new BasicDBObject(DBConstants.F_USERID, 1);
+		List<User> list = new ArrayList<User>();
+        DBCursor cursor = mongoClient.find(DBConstants.T_USER, query, orderBy, 0, 0);
+        if (cursor != null) {
+			while (cursor.hasNext()) {
+				DBObject dbObject = (DBObject) cursor.next();
+				list.add(new User(dbObject));
+			}
+		}
+        return list;
 	}
 }
