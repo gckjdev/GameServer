@@ -156,6 +156,7 @@ public class RobotManager {
 				DBObject dbObject = (DBObject) cursor.next();
 				list.add(new User(dbObject));
 			}
+			cursor.close();
 		}
         return list;
 	}
