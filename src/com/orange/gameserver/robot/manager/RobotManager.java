@@ -117,7 +117,7 @@ public class RobotManager {
     		nickName = robotUser.getNickName();
         	userId = robotUser.getUserId();
         	avatar = robotUser.getAvatar();
-        	gender = (robotUser.getGender() == "m");
+        	gender = (robotUser.getGender().equals("m"));
         	location = robotUser.getLocation();
 		}
     	   	
