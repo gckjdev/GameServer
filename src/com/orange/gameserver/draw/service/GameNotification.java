@@ -77,7 +77,10 @@ public class GameNotification {
 		String newUserNickName = request.getJoinGameRequest().getNickName();
 		String newUserAvatar = request.getJoinGameRequest().getAvatar();
 		String newUserLocation = request.getJoinGameRequest().getLocation();
-		boolean newUserGender = request.getJoinGameRequest().getGender();
+		boolean newUserGender = false;
+		if (request.getJoinGameRequest().hasGender()){
+			newUserGender = request.getJoinGameRequest().getGender();
+		}
 		
 		List<PBSNSUser> newUserSNSList = request.getJoinGameRequest().getSnsUsersList();
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();

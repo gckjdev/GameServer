@@ -19,7 +19,7 @@ public class User {
 	final String location;
 	final List<PBSNSUser> snsUser;
 
-	int currentSessionId = -1;		// TODO change to final or not?
+	volatile int currentSessionId = -1;		
 	volatile boolean isPlaying = false;
 	
 	public User(String userId, String nickName, String avatar, boolean gender, 
@@ -84,11 +84,11 @@ public class User {
 		return gender;
 	}
 
-	public synchronized int getCurrentSessionId() {
+	public int getCurrentSessionId() {
 		return currentSessionId;
 	}
 
-	public synchronized void setCurrentSessionId(int currentSessionId) {
+	public void setCurrentSessionId(int currentSessionId) {
 		this.currentSessionId = currentSessionId;
 	}
 
@@ -127,11 +127,11 @@ public class User {
 				+ ", userId=" + userId + "]";
 	}	
 
-	public synchronized boolean isPlaying(){
+	public boolean isPlaying(){
 		return this.isPlaying;
 	}
 	
-	public synchronized void setPlaying(boolean value){
+	public void setPlaying(boolean value){
 		this.isPlaying = value;
 	}	
 }

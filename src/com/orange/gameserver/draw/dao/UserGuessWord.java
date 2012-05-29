@@ -7,10 +7,10 @@ public class UserGuessWord {
 	final String userId;
 	final int guessDifficultLevel;
 	String lastWord;
-	boolean isCorrect = false;
-	int guessTimes = 0;
 	Date lastDate;
-	int finalCoins = 0;
+	volatile int finalCoins = 0;
+	volatile boolean isCorrect = false;
+	volatile int guessTimes = 0;
 	
 	public UserGuessWord(String userId, int guessDifficultLevel){
 		super();

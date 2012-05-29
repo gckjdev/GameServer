@@ -40,13 +40,13 @@ public class GameTurn {
 	final int		sessionId;
 	final int 		language;
 	
-	TurnStatus status = TurnStatus.PICK_WORD;
+	volatile TurnStatus status = TurnStatus.PICK_WORD;
 	
 	GameCompleteReason completeReason = GameCompleteReason.REASON_NOT_COMPLETE;
 	
 	String drawUserId = null;
 	User drawUser;
-	int drawUserCoins = 0;
+	volatile int drawUserCoins = 0;
 	ConcurrentMap<String, UserGuessWord> userGuessWordMap = new ConcurrentHashMap<String, UserGuessWord>();
 	List<DrawAction> drawActionList = new ArrayList<DrawAction>();
 	Set<String> guessWordSet = new HashSet<String>();
@@ -222,11 +222,11 @@ public class GameTurn {
 		return this.completeReason;
 	}
 	
-	public synchronized void setTurnStatus(TurnStatus newStatus){
+	public void setTurnStatus(TurnStatus newStatus){
 		this.status = newStatus;
 	}
 
-	public synchronized boolean isTurnPlaying() {
+	public boolean isTurnPlaying() {
 		return (status != TurnStatus.FINISH);
 	}
 	

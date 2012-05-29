@@ -24,6 +24,8 @@ public class DrawStorageService {
 	
 	protected static final int MIN_DRAW_DATA_LEN = 1000;
 	protected static final int EXECUTOR_POOL_NUM = 5;
+
+	CopyOnWriteArrayList<ExecutorService> executorList = new CopyOnWriteArrayList<ExecutorService>();
 	
 	// thread-safe singleton implementation
     private static DrawStorageService manager = new DrawStorageService();     
@@ -37,8 +39,6 @@ public class DrawStorageService {
     	return manager; 
     }
 	
-//    ExecutorService executor = Executors.newFixedThreadPool(3);
-    CopyOnWriteArrayList<ExecutorService> executorList = new CopyOnWriteArrayList<ExecutorService>();
     
     public void executeDB(final int sessionId, Runnable runnable){
     	ExecutorService executor = getExecutor(sessionId);

@@ -43,7 +43,11 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		String gameId = joinRequest.getGameId();
 		String nickName = joinRequest.getNickName();			
 		String avatar = joinRequest.getAvatar();
-		boolean gender = joinRequest.getGender();
+		boolean gender = false;
+		if (joinRequest.hasGender()){
+			gender = request.getJoinGameRequest().getGender();
+		}
+
 		String location = joinRequest.getLocation();
 		List<PBSNSUser> snsUser = joinRequest.getSnsUsersList();
 
