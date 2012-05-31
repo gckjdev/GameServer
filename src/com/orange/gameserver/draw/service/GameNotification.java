@@ -216,6 +216,7 @@ public class GameNotification {
 				.setColor(drawData.getColor())
 				.addAllPoints(drawData.getPointsList())
 				.setWidth(drawData.getWidth())
+				.setPenType(drawData.getPenType())
 				.setWord(drawData.getWord())
 				.setLevel(drawData.getLevel())	
 				.setLanguage(drawData.getLanguage())
