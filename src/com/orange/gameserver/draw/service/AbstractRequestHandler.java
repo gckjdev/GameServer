@@ -1,9 +1,12 @@
 package com.orange.gameserver.draw.service;
 
 import org.apache.log4j.Logger;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.MessageEvent;
 
 import com.orange.gameserver.draw.manager.GameSessionManager;
+import com.orange.gameserver.draw.manager.GameSessionUserManager;
+import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.gameserver.draw.statemachine.game.GameEventKey;
@@ -16,20 +19,33 @@ public abstract class AbstractRequestHandler {
 	
 	protected static final Logger logger = Logger.getLogger(AbstractRequestHandler.class.getName());
 	
+	
+	protected static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
+	protected static final GameSessionManager sessionManager = GameSessionManager.getInstance();
+	protected static final UserManager userManager = UserManager.getInstance();
+	
 	GameSessionManager gameManager = GameSessionManager.getInstance();	// use for game session management
-	MessageEvent messageEvent;	// use to get channel and send back response
-	GameMessage gameMessage;
+//	MessageEvent messageEvent;	// use to get channel and send back response
+	final Channel channel;
+	final GameMessage gameMessage;
 	GameService gameService = GameService.getInstance();
 	
 	public AbstractRequestHandler(MessageEvent messageEvent) {
-		this.messageEvent = messageEvent;		
+//		this.messageEvent = messageEvent;
+		this.channel = messageEvent.getChannel();
 		this.gameMessage = (GameMessage)messageEvent.getMessage();
 	}
 
+	public AbstractRequestHandler(GameEvent event) {
+//		this.messageEvent = messageEvent;
+		this.channel = event.getChannel();
+		this.gameMessage = event.getMessage();
+	}
+	
 	public abstract void handleRequest(GameMessage message);
 	
 	public void sendResponse(GameMessage response){
-		if (messageEvent == null || response == null)
+		if (channel == null || response == null)
 			return;
 
 		GameLog.debug((int)response.getSessionId(), "[SEND] ", response.toString());
@@ -37,7 +53,7 @@ public abstract class AbstractRequestHandler {
 				response.getCommand().toString(), 
 				response.getResultCode().toString());
 		
-		messageEvent.getChannel().write(response);
+		channel.write(response);
 	}
 	
 	public void sendErrorResponse(GameResultCode resultCode, GameMessage request){
@@ -49,7 +65,7 @@ public abstract class AbstractRequestHandler {
 	
 		GameLog.info((int)response.getSessionId(), "[SEND] ", 
 				response.getCommand().toString(), response.getResultCode().toString());
-		messageEvent.getChannel().write(response);
+		channel.write(response);
 	}
 	
 //	public void printRequest(GameMessage request){
@@ -65,7 +81,7 @@ public abstract class AbstractRequestHandler {
 				gameMessage.getCommand(), 
 				(int)gameMessage.getSessionId(), 
 				gameMessage, 
-				messageEvent.getChannel());
+				channel);
 	}
 
 }

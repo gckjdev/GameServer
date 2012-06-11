@@ -29,11 +29,15 @@ import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.draw.server.GameService;
+import com.orange.gameserver.draw.service.GameNotification;
+import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.gameserver.robot.RobotService;
 import com.orange.gameserver.robot.manager.RobotManager;
+import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameResultCode;
+import com.orange.network.game.protocol.message.GameMessageProtos.GameMessage;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBSNSUser;
 
 
@@ -500,6 +504,35 @@ public class GameSessionManager {
 		return GameCompleteReason.REASON_NOT_COMPLETE;
 	}
 	
+	public void selectCurrentPlayer(GameSession session) {
+		List<User> userList = GameSessionUserManager.getInstance().getUserListBySession(session.getSessionId());
+		int userCount = userList.size();
+		if (userList == null || userCount == 0)
+			return;
+		
+		if (userCount == 1){
+			// select the first user
+			session.setCurrentPlayUser(userList.get(0), 0);
+			return;		
+		}
+		
+		if (session.getCurrentPlayUser() == null){
+			// select the first user
+			session.setCurrentPlayUser(userList.get(0), 0);
+			return;
+		}
+		
+		int index = session.getCurrentPlayUserIndex();
+		if (index >= userCount-1){
+			// last user
+			session.setCurrentPlayUser(userList.get(0), 0);
+			return;						
+		}
+		
+		session.setCurrentPlayUser(userList.get(index+1), index+1);		
+	}
+
+	
 	public void adjustCurrentPlayerForUserQuit(GameSession session, String quitUserId) {
 		// TODO add log here
 		List<User> userList = GameSessionUserManager.getInstance().getUserListBySession(session.getSessionId());
@@ -576,6 +609,34 @@ public class GameSessionManager {
 	}
 	
 	
+	public void userQuitSession(String userId,
+			GameSession session) {
+				
+		int sessionId = session.getSessionId();
+		GameLog.info(sessionId, "user "+userId+" quit");
+
+		// remove user session
+		GameSessionManager.getInstance().removeUserFromSession(userId, session);
+		
+		GameCommandType command = null;		
+		if (session.isCurrentPlayUser(userId)){
+			command = GameCommandType.LOCAL_DRAW_USER_QUIT;			
+			session.setCompleteReason(GameCompleteReason.REASON_DRAW_USER_QUIT);
+		}
+		else if (sessionUserManager.getSessionUserCount(sessionId) <= 1){
+			command = GameCommandType.LOCAL_ALL_OTHER_USER_QUIT;			
+			session.setCompleteReason(GameCompleteReason.REASON_ONLY_ONE_USER);
+		}
+		else {
+			command = GameCommandType.LOCAL_OTHER_USER_QUIT;			
+		}			
+		
+		// broadcast user exit message to all other users
+		GameNotification.broadcastUserQuitNotification(session, userId);			
+		
+		// fire message
+		GameService.getInstance().fireAndDispatchEvent(command, sessionId, userId);		
+	}
 
 
 	

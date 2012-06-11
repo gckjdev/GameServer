@@ -28,6 +28,46 @@ public class GameNotification {
 	private static final GameSessionManager sessionManager = GameSessionManager.getInstance();
 	private static final GameService gameService = GameService.getInstance();
 	
+	
+	public static void broadcastNotification(GameSession gameSession, String excludeUserId, GameCommandType command) {
+		
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());	
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
+		
+		for (User user : list){		
+			if (excludeUserId != null && user.getUserId().equalsIgnoreCase(excludeUserId))
+				continue;
+			
+			GameMessageProtos.GeneralNotification notification;
+			
+			if (command == GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST){
+				notification = GameMessageProtos.GeneralNotification.newBuilder()		
+					.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+					.setTurnGainCoins(gameSession.getCurrentUserGainCoins(user.getUserId()))
+					.build();				
+			}
+			else{
+				notification = GameMessageProtos.GeneralNotification.newBuilder()		
+					.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+					.build();
+			}
+			
+			// send notification for the user			
+			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(command)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setSessionId(gameSession.getSessionId())
+				.setUserId(user.getUserId())
+				.setCompleteReason(gameSession.getCompleteReason())
+				.setNotification(notification)			
+				.setRound(gameSession.getCurrentRound())
+				.setOnlineUserCount(onlineUserCount)
+				.build();
+			
+			HandlerUtils.sendMessage(message, user.getChannel());
+		}
+	}
+	
 	public static void broadcastNotification(GameSession gameSession,
 			GameEvent gameEvent, String excludeUserId, GameCommandType command) {
 		
@@ -145,6 +185,37 @@ public class GameNotification {
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, response, user.getChannel());
+		}
+	}
+	
+	public static void broadcastUserQuitNotification(GameSession gameSession, String quitUserId) {
+		
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
+
+		for (User user : list){
+			if (user.getUserId().equalsIgnoreCase(quitUserId)){
+				continue;
+			}
+			
+			// send notification for the user
+			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
+				.setQuitUserId(quitUserId)
+				.setNextPlayUserId("")
+				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+				.setSessionHost(gameSession.getHost())
+				.build();
+			
+			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(GameCommandType.USER_QUIT_NOTIFICATION_REQUEST)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setNotification(notification)
+				.setSessionId(gameSession.getSessionId())
+				.setUserId(user.getUserId())
+				.setOnlineUserCount(onlineUserCount)
+				.build();
+			
+			HandlerUtils.sendMessage(response, user.getChannel());
 		}
 	}
 

@@ -15,8 +15,10 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 
+import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 public class ChannelUserManager {
 
@@ -116,16 +118,14 @@ public class ChannelUserManager {
 			future = null;
 		}
 	}
-	
+
 	public void processDisconnectChannel(Channel channel){
 		List<String> userIdList = findUsersInChannel(channel);
 		for (String userId : userIdList){
 			int sessionId = UserManager.getInstance().findGameSessionIdByUserId(userId);
-			GameService gameService = GameService.getInstance();
 			if (sessionId != -1){
-				// fire event to the game session
-				gameService.fireAndDispatchEvent(GameCommandType.LOCAL_CHANNEL_DISCONNECT,
-						sessionId, userId);
+				GameSession session = GameSessionManager.getInstance().findGameSessionById(sessionId);
+				GameSessionManager.getInstance().userQuitSession(userId, session);
 			}
 
 			UserManager.getInstance().removeOnlineUserById(userId);

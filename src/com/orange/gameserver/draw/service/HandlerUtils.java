@@ -22,6 +22,16 @@ public class HandlerUtils {
 		}
 	}
 	
+	public static void sendMessage(GameMessage message, Channel channel) {
+		if (message == null || channel == null)
+			return;
+		
+		GameLog.debug((int)message.getSessionId(), message.toString());
+		GameLog.info((int)message.getSessionId(), "SEND "+message.getCommand().toString(), 
+				"to user="+message.getUserId(), "resultCode="+message.getResultCode());
+		safeWrite(channel, message);
+	}
+	
 	public static void sendMessage(GameEvent gameEvent, GameMessage message, Channel channel) {
 		if (gameEvent == null || message == null || channel == null)
 			return;
@@ -42,8 +52,7 @@ public class HandlerUtils {
 		safeWrite(gameEvent.getChannel(), response);
 
 	}
-
-
+	
 	public static GameCommandType getResponseCommandByRequest(GameCommandType requestCommand){
 		return GameCommandType.valueOf(requestCommand.getNumber() + 1);
 	}

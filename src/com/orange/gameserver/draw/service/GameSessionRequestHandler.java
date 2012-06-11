@@ -320,12 +320,9 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		session.completeTurn(gameEvent.getMessage().getCompleteReason());
 		session.resetExpireTimer();
 		session.calculateDrawUserCoins();
-		sessionUserManager.chooseNewPlayUser(session);		
+		sessionUserManager.clearUserPlaying(session);		
 		sessionManager.adjustSessionSetForTurnComplete(session);
-//		session.chooseNewPlayUser();
-		
-		sessionUserManager.clearUserPlaying(session);
-		
+				
 		GameNotification.broadcastNotification(session, gameEvent, "", 
 				GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST);
 	}

@@ -34,15 +34,27 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	private static final Logger logger = Logger.getLogger(GameServerHandler.class
 			.getName()); 
 	
-	private GameService gameService = GameService.getInstance();
-	private GameSessionManager gameManager = GameSessionManager.getInstance();
-
 	@Override
-	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e)
-			throws Exception {
-		logger.debug(e.toString());
-		super.handleUpstream(ctx, e);
+	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e){
+		
+		try {
+			logger.debug(e.toString());
+			super.handleUpstream(ctx, e);
+		} catch (Exception exception) {
+			logger.error("<handleUpstream> catch unexpected exception at " + e.getChannel().toString() + ", cause=", exception.getCause());			
+			ChannelUserManager.getInstance().processDisconnectChannel(e.getChannel());
+		}
+
 	}
+	
+	public GameEvent toGameEvent(GameMessage gameMessage, MessageEvent messageEvent){
+		return new GameEvent(
+				gameMessage.getCommand(), 
+				(int)gameMessage.getSessionId(), 
+				gameMessage, 
+				messageEvent.getChannel());
+	}
+
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
@@ -59,22 +71,24 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		}				
 		
 		AbstractRequestHandler handler = null;
+		
+		
 		if (message.hasSessionId()){
 			handler = new GameSessionRequestHandler(e);
+			GameService.getInstance().dispatchEvent(toGameEvent(message, e));
 		}
 		else if (message.getCommand() == GameConstantsProtos.GameCommandType.JOIN_GAME_REQUEST){
 			handler = new JoinGameRequestHandler(e);
+			handler.handleRequest(message);			
 		}				
 		
-		if (handler == null){	
-			sendErrorResponse(e, message, GameConstantsProtos.GameResultCode.ERROR_SYSTEM_HANDLER_NOT_FOUND);
-			return;
-		}
+//		if (handler == null){	
+//			sendErrorResponse(e, message, GameConstantsProtos.GameResultCode.ERROR_SYSTEM_HANDLER_NOT_FOUND);
+//			return;
+//		}
 		
 		// if receive some message, then keep user not time out...
-		ChannelUserManager.getInstance().resetUserTimeOut(e.getChannel());
-		
-		handler.handleRequest(message);			
+		ChannelUserManager.getInstance().resetUserTimeOut(e.getChannel());		
 	}
 	
 	public void sendErrorResponse(MessageEvent messageEvent, GameMessage request, GameResultCode resultCode){
@@ -91,7 +105,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	
 	@Override
 	public void exceptionCaught( ChannelHandlerContext ctx, ExceptionEvent e) {
-		logger.error("GameServerHandler catch unexpected exception at " + e.getChannel().toString() + ", cause=", e.getCause());
+		logger.error("<exceptionCaught> catch unexpected exception at " + e.getChannel().toString() + ", cause=", e.getCause());
 		ChannelUserManager.getInstance().processDisconnectChannel(e.getChannel());
 	}				
 	
@@ -100,25 +114,13 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
             ChannelStateEvent e){
 
 		ChannelUserManager.getInstance().processDisconnectChannel(e.getChannel());
-		
-		/*
-		// find all users related to the channel and post a message to game session that this user is quit
-		Channel channel = e.getChannel();		
-		List<String> userIdList = ChannelUserManager.getInstance().findUsersInChannel(channel);
-		for (String userId : userIdList){
-			int sessionId = UserManager.getInstance().findGameSessionIdByUserId(userId);
-			if (sessionId != -1){
-				// fire event to the game session
-				gameService.fireAndDispatchEvent(GameCommandType.LOCAL_CHANNEL_DISCONNECT,
-						sessionId, userId);
-			}
+	}
+	
+	@Override
+	public void channelClosed(ChannelHandlerContext ctx,
+            ChannelStateEvent e){
 
-			UserManager.getInstance().removeOnlineUserById(userId);
-		}
-		
-		// remove channel
-		ChannelUserManager.getInstance().removeChannel(e.getChannel());
-		*/
+		ChannelUserManager.getInstance().processDisconnectChannel(e.getChannel());		
 	}
 	
 	@Override

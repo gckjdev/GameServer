@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
+
+import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.robot.manager.RobotManager;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBSNSUser;
@@ -65,5 +67,5 @@ public class UserManager {
 	public int getOnlineUserCount(){
 		return onlineUserMap.size() + RobotManager.MAX_ROBOT_USER;
 	}
-	
+		
 }

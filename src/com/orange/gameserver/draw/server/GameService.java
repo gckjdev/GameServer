@@ -21,6 +21,7 @@ import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
 import com.orange.gameserver.draw.manager.ChannelUserManager;
 import com.orange.gameserver.draw.manager.GameSessionManager;
+import com.orange.gameserver.draw.manager.GameSessionUserManager;
 import com.orange.gameserver.draw.manager.UserManager;
 import com.orange.gameserver.draw.statemachine.game.GameEvent;
 import com.orange.gameserver.draw.utils.GameLog;
@@ -196,6 +197,31 @@ public class GameService {
 		dispatchEvent(event);
 		
 	}
+
+ 
+	
+//	public void fireUserQuitEvent(int sessionId, String userId) {
+//		
+//		if (userId == null)
+//			return;
+//		
+//		GameSession session = GameSessionManager.getInstance().findGameSessionById(sessionId);
+//		if (session == null){
+//			GameLog.warn(sessionId, "<fireUserQuitEvent> but sessionId not found");
+//			return;
+//		}
+//		
+//		GameCommandType command = null;
+//		if (session.isCurrentPlayUser(userId)){
+//			command = GameCommandType.LOCAL_DRAW_USER_QUIT;
+//		}
+//		else {
+//			
+//			command = GameCommandType.LOCAL_OTHER_USER_QUIT;
+//		}
+//		
+//		this.fireAndDispatchEvent(command, sessionId, userId);		
+//	}
 	
 	
 

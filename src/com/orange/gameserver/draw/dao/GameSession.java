@@ -41,6 +41,7 @@ public class GameSession {
 	final Date   createDate;
 	State  currentState;
 	User currentPlayUser = null;
+	volatile int currentPlayUserIndex = 0;
 	SessionStatus status = SessionStatus.INIT;	
 
 	GameTurn currentTurn = null;	
@@ -98,6 +99,10 @@ public class GameSession {
 
 	public synchronized String getCurrentPlayUserId() {
 		return (currentPlayUser == null) ? "" : currentPlayUser.userId;
+	}
+	
+	public int getCurrentPlayUserIndex(){
+		return this.currentPlayUserIndex;
 	}
 
 	@Override
@@ -271,6 +276,16 @@ public class GameSession {
 		}
 	}
 	
+	public synchronized void setCurrentPlayUser(User user, int userIndex){
+		this.currentPlayUser = user;
+		this.currentPlayUserIndex = userIndex;
+		GameLog.info(sessionId, "current play user is set to "+user);		
+		
+//		if (user != null){
+//			// set a start timer here
+//			scheduleStartExpireTimer(user.getUserId());
+//		}
+	}
 	
 	public synchronized void setCurrentPlayUser(User user){
 		this.currentPlayUser = user;
@@ -337,11 +352,27 @@ public class GameSession {
 		currentTurn.completeTurn(completeReason);
 	}
 
+	public void completeTurn() {
+		if (this.currentTurn == null)
+			return;
+		
+		GameLog.info(sessionId, "<completeTurn> on session " + sessionId + " reason=" + 
+				currentTurn.getCompleteReason());
+		currentTurn.completeTurn(currentTurn.getCompleteReason());
+	}
+	
 	public GameCompleteReason getCompleteReason() {
 		if (this.currentTurn == null)
 			return GameCompleteReason.REASON_NOT_COMPLETE;
 
 		return currentTurn.completeReason;
+	}
+	
+	public void setCompleteReason(GameCompleteReason reason){
+		if (this.currentTurn == null)
+			return;
+		
+		currentTurn.setCompleteReason(reason);
 	}
 
 	public User getCurrentPlayUser() {

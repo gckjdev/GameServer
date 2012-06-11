@@ -218,10 +218,6 @@ public class GameTurn {
 		this.completeReason = reason;
 	}
 	
-	public GameCompleteReason getCompleteReason(){
-		return this.completeReason;
-	}
-	
 	public void setTurnStatus(TurnStatus newStatus){
 		this.status = newStatus;
 	}
@@ -293,6 +289,15 @@ public class GameTurn {
 	public void appendDrawData(List<Integer> pointsList, int color, float width) {
 		DrawAction action = new DrawAction(width, color, pointsList);
 		drawActionList.add(action);		
+	}
+
+	
+	public synchronized GameCompleteReason getCompleteReason(){
+		return this.completeReason;
+	}
+	
+	public synchronized void setCompleteReason(GameCompleteReason reason) {
+		completeReason = reason;
 	}
 
 }
