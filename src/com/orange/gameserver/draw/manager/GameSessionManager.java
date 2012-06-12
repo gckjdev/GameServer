@@ -52,6 +52,7 @@ public class GameSessionManager {
 	private static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
 	private static final RoomSessionManager roomSessionManager = RoomSessionManager.getInstance();
 	
+	// TODO move to game service
 	ScheduledExecutorService scheduleService = Executors.newScheduledThreadPool(5);
 	
 	//use three sets to classify the game sessions
@@ -610,7 +611,7 @@ public class GameSessionManager {
 	
 	
 	public void userQuitSession(String userId,
-			GameSession session) {
+			GameSession session, boolean needFireEvent) {
 				
 		int sessionId = session.getSessionId();
 		GameLog.info(sessionId, "user "+userId+" quit");
@@ -622,6 +623,8 @@ public class GameSessionManager {
 		if (session.isCurrentPlayUser(userId)){
 			command = GameCommandType.LOCAL_DRAW_USER_QUIT;			
 			session.setCompleteReason(GameCompleteReason.REASON_DRAW_USER_QUIT);
+			
+//			adjustCurrentPlayerForUserQuit(session, userId);
 		}
 		else if (sessionUserManager.getSessionUserCount(sessionId) <= 1){
 			command = GameCommandType.LOCAL_ALL_OTHER_USER_QUIT;			
@@ -635,7 +638,9 @@ public class GameSessionManager {
 		GameNotification.broadcastUserQuitNotification(session, userId);			
 		
 		// fire message
-		GameService.getInstance().fireAndDispatchEvent(command, sessionId, userId);		
+		if (needFireEvent){
+			GameService.getInstance().fireAndDispatchEvent(command, sessionId, userId);
+		}
 	}
 
 

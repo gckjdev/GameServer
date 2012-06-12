@@ -5,8 +5,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
@@ -47,6 +51,14 @@ public class GameSession {
 	GameTurn currentTurn = null;	
 	Timer expireTimer;
 	
+	ScheduledFuture<Object> commonTimerFuture = null;
+	public enum TimerType {
+		START,
+		PICK_WORD,
+		DRAW_GUESS,
+		USER_WAIT
+	};
+		
 	public GameSession(int sessionId, String gameName, String userId) {
 		this.sessionId = sessionId;
 		this.name = gameName;
@@ -432,6 +444,16 @@ public class GameSession {
 	public String getFriendRoomId() {
 		return this.friendRoomId;
 	}
+	
+	public void clearTimer() {
+		if (commonTimerFuture != null){
+			commonTimerFuture.cancel(false);
+			commonTimerFuture = null;
+		}
+	}
 
+	public void setTimer(ScheduledFuture<Object> future) {
+		this.commonTimerFuture = future;
+	}
 	
 }

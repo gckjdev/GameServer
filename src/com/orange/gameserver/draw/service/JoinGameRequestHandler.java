@@ -82,9 +82,27 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 			}					
 		}
 		else{		
+			
+			GameSession session = GameSessionManager.getInstance().findGameSessionById((int)request.getJoinGameRequest().getSessionToBeChange());
+			
+			Set<Integer> excludeSessionSet = new HashSet<Integer>();
+			if (request.getJoinGameRequest().hasSessionToBeChange()){
+				
+				// user quit current session
+				gameManager.userQuitSession(userId, session, true);
+
+				// create exclude session set
+				List<Long> list = joinRequest.getExcludeSessionIdList();
+				if (list != null){
+					for (Long i : list){
+						excludeSessionSet.add(i.intValue());
+					}
+				}
+			}
+			
 			gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender,
 					location, snsUser,
-					guessDifficultLevel, channel, null);
+					guessDifficultLevel, channel, excludeSessionSet);
 			if (gameSessionId == -1){
 				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, channel);
 				return;

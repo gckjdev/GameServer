@@ -3,6 +3,7 @@ package com.orange.gameserver.draw.service;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jboss.netty.channel.Channel;
 
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
@@ -337,6 +338,33 @@ public class GameNotification {
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
 		}
 	}
+	
+	public static void broadcastCleanDrawNotification(GameSession gameSession, String userId) {
+		
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		for (User user : list){	
+			
+			if (!user.isPlaying()){
+				GameLog.info(gameSession.getSessionId(), "send CLEANDRAW but user "+
+						user.getNickName()+" not in play state");
+				continue;
+			}	
+			
+			String toUserId = user.getUserId();
+			if (toUserId.equalsIgnoreCase(userId))
+				continue;
+			
+			// send notification for the user			
+			GameMessageProtos.GameMessage message = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(GameCommandType.CLEAN_DRAW_NOTIFICATION_REQUEST)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setSessionId(gameSession.getSessionId())
+				.setUserId(userId)
+				.build();
+			
+			HandlerUtils.sendMessage(message, user.getChannel());
+		}
+	}
 
 	public static void broadcastChatNotification(GameSession session,
 			GameEvent gameEvent, String userId) {		
@@ -385,4 +413,49 @@ public class GameNotification {
 		}
 	}
 
+	public static void broadcastChatNotification(GameSession session,
+			GameMessage message, String userId) {		
+		
+		if (message.getChatRequest() == null)
+			return;
+		
+		GameChatRequest chatRequest = message.getChatRequest();
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
+
+		List<User> list = sessionUserManager.getUserListBySession(session.getSessionId());	
+		List<String> toUserIdList = chatRequest.getToUserIdList();
+		boolean hasTargetUser = (toUserIdList != null && toUserIdList.size() > 0);
+		for (User user : list){		
+			String toUserId = user.getUserId();
+			
+			// don't send to request user, he knows it!
+			if (toUserId.equalsIgnoreCase(userId))
+				continue;
+			
+			// if user is not in target user list, skip
+			if (hasTargetUser && !toUserIdList.contains(toUserId)){				
+				continue;
+			}
+			
+			// send notification for the user
+			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
+				.addAllChatToUserId(toUserIdList)
+				.setChatContent(chatRequest.getContent())
+				.setChatType(chatRequest.getChatType())				
+				.build();
+
+			// send notification for the user			
+			GameMessageProtos.GameMessage m = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(GameCommandType.CHAT_NOTIFICATION_REQUEST)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setSessionId(session.getSessionId())
+				.setUserId(userId)
+				.setNotification(notification)
+				.setRound(message.getRound())
+				.setOnlineUserCount(onlineUserCount)
+				.build();
+			
+			HandlerUtils.sendMessage(m, user.getChannel());
+		}
+	}	
 }

@@ -16,8 +16,8 @@ public class DrawDataRequestHandler extends AbstractRequestHandler {
 		super(messageEvent);
 	}
 
-	public DrawDataRequestHandler(GameEvent event) {
-		super(event);		
+	public DrawDataRequestHandler(GameEvent event, GameSession session) {
+		super(event, session);		
 	}
 
 	@Override
@@ -57,6 +57,7 @@ public class DrawDataRequestHandler extends AbstractRequestHandler {
 			session.userGuessWord(guessUser, drawRequest.getGuessWord());						
 
 			if (sessionManager.isAllUserGuessWord(session)){
+				session.setCompleteReason(GameCompleteReason.REASON_ALL_USER_GUESS);
 				stateMachineCommandType = GameCommandType.LOCAL_ALL_USER_GUESS;
 			}		
 		}				

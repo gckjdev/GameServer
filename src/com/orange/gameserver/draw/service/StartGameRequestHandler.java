@@ -16,8 +16,8 @@ public class StartGameRequestHandler extends AbstractRequestHandler {
 		super(messageEvent);
 	}
 
-	public StartGameRequestHandler(GameEvent event) {
-		super(event);
+	public StartGameRequestHandler(GameEvent event, GameSession session) {
+		super(event, session);
 	}
 
 	private GameResultCode validateStartGameRequest(GameEvent gameEvent, GameSession session) {

@@ -17,6 +17,6 @@ public class GameStartState extends CommonGameState {
 
 	@Override
 	public void handleEvent(GameEvent event, GameSession session){
-		session.resetGame();
+//		session.resetGame();
 	}
 }

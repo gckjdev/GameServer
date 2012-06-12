@@ -13,12 +13,14 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.antlr.grammar.v3.ANTLRv3Parser.finallyClause_return;
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 
 import com.orange.gameserver.draw.dao.DrawGameSession;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.dao.User;
+import com.orange.gameserver.draw.dao.GameSession.TimerType;
 import com.orange.gameserver.draw.manager.ChannelUserManager;
 import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.GameSessionUserManager;
@@ -37,6 +39,8 @@ public class GameService {
 			.getName());
 
 	
+	// TODO share the schedule service later
+	private static ScheduledExecutorService scheduleService = Executors.newScheduledThreadPool(5);
 	
 	ConcurrentHashMap<Integer, GameWorkerThread> workerThreads = new ConcurrentHashMap<Integer, GameWorkerThread>();
 	int numberOfWorkerThread = 20;
@@ -223,6 +227,25 @@ public class GameService {
 //		this.fireAndDispatchEvent(command, sessionId, userId);		
 //	}
 	
+	public void startTimer(final GameSession session, final int timeOutSeconds, final GameSession.TimerType type) {
+		
+		session.clearTimer();
+		
+		final int sessionId = session.getSessionId();
+		
+		Callable<Object> callable = new Callable<Object>(){
+			@Override
+			public Object call()  {
+				GameLog.info(sessionId, type + " TIMER after "+timeOutSeconds+" fired");
+				fireAndDispatchEvent(GameCommandType.LOCAL_TIME_OUT, sessionId, "");
+				return null;
+			}			
+		};
+		
+		GameLog.info(sessionId, "set "+ type + " TIMER after "+timeOutSeconds+" seconds");
+		session.setTimer(scheduleService.schedule(callable, timeOutSeconds, TimeUnit.SECONDS));  			
+	}
 	
+
 
 }

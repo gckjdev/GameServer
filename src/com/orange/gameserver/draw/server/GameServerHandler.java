@@ -73,14 +73,14 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 		AbstractRequestHandler handler = null;
 		
 		
-		if (message.hasSessionId()){
+		if (message.getCommand() == GameConstantsProtos.GameCommandType.JOIN_GAME_REQUEST){
+			handler = new JoinGameRequestHandler(e);
+			handler.handleRequest(message);			
+		}
+		else if (message.hasSessionId()){
 			handler = new GameSessionRequestHandler(e);
 			GameService.getInstance().dispatchEvent(toGameEvent(message, e));
 		}
-		else if (message.getCommand() == GameConstantsProtos.GameCommandType.JOIN_GAME_REQUEST){
-			handler = new JoinGameRequestHandler(e);
-			handler.handleRequest(message);			
-		}				
 		
 //		if (handler == null){	
 //			sendErrorResponse(e, message, GameConstantsProtos.GameResultCode.ERROR_SYSTEM_HANDLER_NOT_FOUND);

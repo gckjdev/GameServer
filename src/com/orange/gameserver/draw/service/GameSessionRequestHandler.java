@@ -249,6 +249,69 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			GameSession session) {
 		session.resetGame();
 	}
+	
+	public static void handleChangeRoomRequest(GameMessage message, GameSession session, Channel channel) {
+		
+		JoinGameRequest request = message.getJoinGameRequest();
+		if (request == null){
+			GameLog.info(session.getSessionId(), "<handleChangeRoomRequest> but request null ");
+			HandlerUtils.sendErrorResponse(message, GameResultCode.ERROR_JOIN_GAME, channel);
+			return;			
+		}
+
+		String nickName = request.getNickName();
+		String avatar = request.getAvatar();
+		String location = request.getLocation();
+		List<PBSNSUser> snsUser = request.getSnsUsersList();
+		
+		boolean gender = request.getGender();
+		int guessDifficultLevel = 1;
+		if (request.hasGuessDifficultLevel())
+			guessDifficultLevel = request.getGuessDifficultLevel(); 		
+
+		// user quit session
+//		userQuitSession(gameEvent, session);
+		GameSessionManager.getInstance().userQuitSession(request.getUserId(), session, true);
+		
+//		GameMessage message = gameEvent.getMessage();		
+		
+		// create exclude session set
+		Set<Integer> excludeSessionSet = new HashSet<Integer>();
+		List<Long> list = message.getJoinGameRequest().getExcludeSessionIdList();
+		if (list != null){
+			for (Long i : list){
+				excludeSessionSet.add(i.intValue());
+			}
+		}
+		
+		// alloc user to new room
+		int sessionId = GameSessionManager.getInstance().allocGameSessionForUser(message.getUserId(), 
+				nickName, avatar, gender,
+				location, snsUser,
+				guessDifficultLevel, channel, excludeSessionSet);
+		if (sessionId != -1){
+						
+			JoinGameRequest joinRequest = GameMessageProtos.JoinGameRequest.newBuilder(message.getJoinGameRequest())
+					.clearSessionToBeChange()
+					.build();
+			
+			GameMessage newMessage = GameMessageProtos.GameMessage.newBuilder(message)
+					.setJoinGameRequest(joinRequest)
+					.build();
+
+			GameEvent event = new GameEvent(
+					GameCommandType.JOIN_GAME_REQUEST, 
+					sessionId, 
+					newMessage, 
+					channel);
+			
+			gameService.dispatchEvent(event);				
+		}
+		else{
+			// no session available, send back error response
+			HandlerUtils.sendErrorResponse(message, GameResultCode.ERROR_NO_SESSION_AVAILABLE, channel);
+		}
+	}
 
 	public static void handleChangeRoomRequest(GameEvent gameEvent,
 			GameSession session) {
@@ -300,7 +363,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 					.build();
 
 			GameEvent event = new GameEvent(
-					GameCommandType.JOIN_GAME_REQUEST, 
+					GameCommandType.LOCAL_NEW_USER_JOIN, 
 					sessionId, 
 					newMessage, 
 					gameEvent.getChannel());

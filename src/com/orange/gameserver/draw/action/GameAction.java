@@ -1,18 +1,35 @@
 package com.orange.gameserver.draw.action;
 
 import com.orange.common.statemachine.Action;
-import com.orange.gameclient.draw.test.dao.SessionManager;
 import com.orange.gameserver.draw.dao.GameSession;
+import com.orange.gameserver.draw.manager.ChannelUserManager;
 import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.GameSessionUserManager;
+import com.orange.gameserver.draw.server.GameService;
 import com.orange.gameserver.draw.service.GameNotification;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
 
 public class GameAction{
-	
-	
 
+	public static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
+	public static final GameSessionManager sessionManager = GameSessionManager.getInstance();
+
+	static final int PICK_WORD_TIMEOUT = 60;
+	static final int START_GAME_TIMEOUT = 60;
+	static final int USER_WAIT_TIMEOUT = 60*5;		// 5 minutes
+	static final int DRAW_GUESS_TIMEOUT = 60;
+
+	public static class PrepareRobot implements Action {
+
+		@Override
+		public void execute(Object context) {
+			GameSession session = (GameSession)context;
+			sessionManager.prepareRobotTimer(session);
+		}
+
+	}
+	
 	public static class StartGame implements Action {
 
 		@Override
@@ -23,8 +40,6 @@ public class GameAction{
 
 	}
 
-	public static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
-	public static final GameSessionManager sessionManager = GameSessionManager.getInstance();
 
 	public static class CompleteGame implements Action {
 
@@ -33,21 +48,52 @@ public class GameAction{
 			GameSession session = (GameSession)context;
 
 			session.calculateDrawUserCoins();
-			sessionManager.adjustSessionSetForTurnComplete(session);			
 			sessionUserManager.clearUserPlaying(session);
-			session.completeTurn();	// TODO set right reason here
+			session.completeTurn();
 			
 			GameNotification.broadcastNotification(session, null, GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST);
+
+			sessionManager.adjustSessionSetForTurnComplete(session);			
 		}
 
 	}
 
+	
+
+	public static class KickDrawUser implements Action {
+
+		@Override
+		public void execute(Object context) {
+			GameSession session = (GameSession)context;
+			com.orange.gameserver.draw.dao.User user = session.getCurrentPlayUser();
+			if (user != null){
+				GameSessionManager.getInstance().userQuitSession(user.getUserId(), session, false);
+				ChannelUserManager.getInstance().processDisconnectChannel(user.getChannel());
+			}
+		}
+
+	}
+	
+
+
+
+
+	public static class PlayGame implements Action {
+
+		@Override
+		public void execute(Object context) {
+			GameSession session = (GameSession)context;
+			
+			// TODO think about it
+		}
+
+	}
 	public static class ClearTimer implements Action {
 
 		@Override
 		public void execute(Object context) {
-			// TODO Auto-generated method stub
-
+			GameSession session = (GameSession)context;
+			session.clearTimer();
 		}
 
 	}
@@ -56,18 +102,9 @@ public class GameAction{
 
 		@Override
 		public void execute(Object context) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-
-	public static class KickDrawUser implements Action {
-
-		@Override
-		public void execute(Object context) {
-			// TODO Auto-generated method stub
-
+			GameSession session = (GameSession)context;
+			GameService.getInstance().startTimer(session, 
+					PICK_WORD_TIMEOUT, GameSession.TimerType.PICK_WORD);
 		}
 
 	}
@@ -76,8 +113,9 @@ public class GameAction{
 
 		@Override
 		public void execute(Object context) {
-			// TODO Auto-generated method stub
-
+			GameSession session = (GameSession)context;
+			GameService.getInstance().startTimer(session, 
+					START_GAME_TIMEOUT, GameSession.TimerType.START);
 		}
 
 	}
@@ -86,8 +124,20 @@ public class GameAction{
 
 		@Override
 		public void execute(Object context) {
-			// TODO Auto-generated method stub
+			GameSession session = (GameSession)context;
+			GameService.getInstance().startTimer(session, 
+					USER_WAIT_TIMEOUT, GameSession.TimerType.USER_WAIT);
+		}
 
+	}
+	
+	public static class SetDrawGuessTimer implements Action {
+
+		@Override
+		public void execute(Object context) {
+			GameSession session = (GameSession)context;
+			GameService.getInstance().startTimer(session, 
+					DRAW_GUESS_TIMEOUT, GameSession.TimerType.DRAW_GUESS);
 		}
 
 	}
