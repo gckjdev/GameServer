@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.MessageEvent;
 
+import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.manager.GameSessionUserManager;
 import com.orange.gameserver.draw.manager.UserManager;
@@ -27,6 +28,7 @@ public abstract class AbstractRequestHandler {
 	GameSessionManager gameManager = GameSessionManager.getInstance();	// use for game session management
 //	MessageEvent messageEvent;	// use to get channel and send back response
 	final Channel channel;
+	final GameSession session;
 	final GameMessage gameMessage;
 	GameService gameService = GameService.getInstance();
 	
@@ -34,12 +36,14 @@ public abstract class AbstractRequestHandler {
 //		this.messageEvent = messageEvent;
 		this.channel = messageEvent.getChannel();
 		this.gameMessage = (GameMessage)messageEvent.getMessage();
+		this.session = null;
 	}
 
-	public AbstractRequestHandler(GameEvent event) {
+	public AbstractRequestHandler(GameEvent event, GameSession session) {
 //		this.messageEvent = messageEvent;
 		this.channel = event.getChannel();
 		this.gameMessage = event.getMessage();
+		this.session = session;
 	}
 	
 	public abstract void handleRequest(GameMessage message);

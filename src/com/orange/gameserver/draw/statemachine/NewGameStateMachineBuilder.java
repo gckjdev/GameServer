@@ -37,10 +37,13 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		Action completeGame = new GameAction.CompleteGame();
 		Action selectDrawUser = new GameAction.SelectDrawUser();
 		Action kickDrawUser = new GameAction.KickDrawUser();
+		Action playGame = new GameAction.PlayGame();
+		Action prepareRobot = new GameAction.PrepareRobot();
 		
 		Action setOneUserWaitTimer = new GameAction.SetOneUserWaitTimer();
 		Action setStartGameTimer = new GameAction.SetStartGameTimer();
 		Action setWaitPickWordTimer = new GameAction.SetWaitPickWordTimer();
+		Action setDrawGuessTimer = new GameAction.SetDrawGuessTimer();
 		Action clearTimer = new GameAction.ClearTimer();
 
 		Condition checkUserCount = new GameCondition.CheckUserCount();
@@ -69,11 +72,11 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		
 		sm.addState(new GameState(GameStateKey.ONE_USER_WAITING))
 			.addAction(setOneUserWaitTimer)
-//			.addAction(prepareRobot)
+			.addAction(prepareRobot)
 			.addTransition(GameCommandType.LOCAL_NEW_USER_JOIN, GameStateKey.CHECK_USER_COUNT)
 			.addTransition(GameCommandType.LOCAL_DRAW_USER_QUIT, GameStateKey.CREATE)
 			.addTransition(GameCommandType.LOCAL_ALL_OTHER_USER_QUIT, GameStateKey.CREATE)	
-			.addTransition(GameCommandType.LOCAL_OTHER_USER_QUIT, GameStateKey.CREATE)	
+			.addTransition(GameCommandType.LOCAL_OTHER_USER_QUIT, GameStateKey.CREATE)
 			.addTransition(GameCommandType.LOCAL_TIME_OUT, GameStateKey.KICK_DRAW_USER)	
 			.addAction(clearTimer);
 		
@@ -84,6 +87,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 			.addEmptyTransition(GameCommandType.LOCAL_OTHER_USER_QUIT)
 			.addTransition(GameCommandType.LOCAL_START_GAME, GameStateKey.WAIT_PICK_WORD)
 			.addTransition(GameCommandType.LOCAL_TIME_OUT, GameStateKey.KICK_DRAW_USER)	
+			.addTransition(GameCommandType.LOCAL_DRAW_USER_CHAT, GameStateKey.WAIT_FOR_START_GAME)	
 			.addAction(clearTimer);
 		
 		sm.addState(new GameState(GameStateKey.KICK_DRAW_USER))
@@ -107,13 +111,14 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 			.addAction(clearTimer);
 		
 		sm.addState(new GameState(GameStateKey.DRAW_GUESS))
-//			.addAction(setDrawGuessTimer)
-//			.addAction(playGame)		
+			.addAction(setDrawGuessTimer)
+			.addAction(playGame)		
 			.addTransition(GameCommandType.LOCAL_DRAW_USER_QUIT, GameStateKey.COMPLETE_GAME)
 			.addTransition(GameCommandType.LOCAL_ALL_OTHER_USER_QUIT, GameStateKey.COMPLETE_GAME)	
 			.addTransition(GameCommandType.LOCAL_ALL_USER_GUESS, GameStateKey.COMPLETE_GAME)
 			.addEmptyTransition(GameCommandType.LOCAL_OTHER_USER_QUIT)
-			.addTransition(GameCommandType.LOCAL_TIME_OUT, GameStateKey.COMPLETE_GAME)	
+			.addEmptyTransition(GameCommandType.LOCAL_DRAW_USER_CHAT)
+			.addTransition(GameCommandType.LOCAL_TIME_OUT, GameStateKey.COMPLETE_GAME)				
 			.addAction(clearTimer);
 		
 		sm.addState(new GameState(GameStateKey.COMPLETE_GAME))

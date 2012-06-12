@@ -125,7 +125,7 @@ public class ChannelUserManager {
 			int sessionId = UserManager.getInstance().findGameSessionIdByUserId(userId);
 			if (sessionId != -1){
 				GameSession session = GameSessionManager.getInstance().findGameSessionById(sessionId);
-				GameSessionManager.getInstance().userQuitSession(userId, session);
+				GameSessionManager.getInstance().userQuitSession(userId, session, true);
 			}
 
 			UserManager.getInstance().removeOnlineUserById(userId);

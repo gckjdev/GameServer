@@ -13,6 +13,8 @@ import com.orange.common.statemachine.StateMachine;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.manager.GameSessionManager;
 import com.orange.gameserver.draw.service.AbstractRequestHandler;
+import com.orange.gameserver.draw.service.ChatRequestHandler;
+import com.orange.gameserver.draw.service.CleanDrawRequestHandler;
 import com.orange.gameserver.draw.service.DrawDataRequestHandler;
 import com.orange.gameserver.draw.service.HandlerUtils;
 import com.orange.gameserver.draw.service.StartGameRequestHandler;
@@ -52,7 +54,7 @@ public class GameWorkerThread extends Thread {
 					continue;
 				}
 				
-				boolean skipEvent = preHandleEvent(event);
+				boolean skipEvent = preHandleEvent(event, session);
 				if (skipEvent){
 					continue;
 				}
@@ -108,14 +110,20 @@ public class GameWorkerThread extends Thread {
 		
 	}
 	
-	private boolean preHandleEvent(GameEvent event) {
+	private boolean preHandleEvent(GameEvent event, GameSession session) {
 		AbstractRequestHandler handler = null;
 		switch ((GameCommandType)event.getKey()){
 		case START_GAME_REQUEST:
-			handler = new StartGameRequestHandler(event);
+			handler = new StartGameRequestHandler(event, session);
+			break;
+		case CLEAN_DRAW_REQUEST:
+			handler = new CleanDrawRequestHandler(event, session);
 			break;
 		case SEND_DRAW_DATA_REQUEST:
-			handler = new DrawDataRequestHandler(event);
+			handler = new DrawDataRequestHandler(event, session);
+			break;
+		case CHAT_REQUEST:
+			handler = new ChatRequestHandler(event, session);
 			break;
 		default:
 			return false;
