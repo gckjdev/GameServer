@@ -18,7 +18,6 @@ import org.jboss.netty.channel.Channel;
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.server.GameService;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 
 public class ChannelUserManager {
 

@@ -3,18 +3,13 @@ package com.orange.gameserver.draw.statemachine;
 import com.orange.common.statemachine.Action;
 import com.orange.common.statemachine.Condition;
 import com.orange.common.statemachine.DecisionPoint;
-import com.orange.common.statemachine.State;
 import com.orange.common.statemachine.StateMachine;
 import com.orange.common.statemachine.StateMachineBuilder;
-import com.orange.common.statemachine.test.MyStateMachineBuilder.MyStateKey;
 import com.orange.gameserver.draw.action.GameAction;
 import com.orange.gameserver.draw.action.GameCondition;
-import com.orange.gameserver.draw.statemachine.game.GameFinishState;
-import com.orange.gameserver.draw.statemachine.game.GamePlayingState;
 import com.orange.gameserver.draw.statemachine.game.GameStartState;
 import com.orange.gameserver.draw.statemachine.game.GameState;
 import com.orange.gameserver.draw.statemachine.game.GameStateKey;
-import com.orange.gameserver.draw.statemachine.game.GameWaitingState;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCommandType;
 
 public class NewGameStateMachineBuilder extends StateMachineBuilder {
