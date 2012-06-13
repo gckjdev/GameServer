@@ -153,6 +153,7 @@ public class GameSessionUserManager {
 																				.setAvatar(user.getAvatar())
 																				.setGender(user.getGender())
 																				.setLocation(user.getLocation())
+																				.setUserLevel(user.getUserLevel())
 																				.addAllSnsUsers(user.getSnsUser())
 																				.build();
 			list.add(gameUser);

@@ -118,6 +118,7 @@ public class GameNotification {
 		String newUserNickName = request.getJoinGameRequest().getNickName();
 		String newUserAvatar = request.getJoinGameRequest().getAvatar();
 		String newUserLocation = request.getJoinGameRequest().getLocation();
+		int newUserLevel = request.getJoinGameRequest().getUserLevel();
 		boolean newUserGender = false;
 		if (request.getJoinGameRequest().hasGender()){
 			newUserGender = request.getJoinGameRequest().getGender();
@@ -139,6 +140,7 @@ public class GameNotification {
 				.setUserAvatar(newUserAvatar)
 				.setUserGender(newUserGender)
 				.setLocation(newUserLocation)
+				.setUserLevel(newUserLevel)
 				.addAllSnsUsers(newUserSNSList)
 				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
 				.setNextPlayUserId("")
