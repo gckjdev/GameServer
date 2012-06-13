@@ -39,6 +39,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		Action kickDrawUser = new GameAction.KickDrawUser();
 		Action playGame = new GameAction.PlayGame();
 		Action prepareRobot = new GameAction.PrepareRobot();
+		Action calculateDrawUserCoins = new GameAction.CalculateDrawUserCoins();
 		
 		Action setOneUserWaitTimer = new GameAction.SetOneUserWaitTimer();
 		Action setStartGameTimer = new GameAction.SetStartGameTimer();
@@ -82,7 +83,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		
 		sm.addState(new GameState(GameStateKey.WAIT_FOR_START_GAME))
 			.addAction(setStartGameTimer)
-			.addTransition(GameCommandType.LOCAL_DRAW_USER_QUIT, GameStateKey.DRAW_USER_QUIT)
+			.addTransition(GameCommandType.LOCAL_DRAW_USER_QUIT, GameStateKey.CHECK_USER_COUNT)
 			.addTransition(GameCommandType.LOCAL_ALL_OTHER_USER_QUIT, GameStateKey.CHECK_USER_COUNT)	
 			.addEmptyTransition(GameCommandType.LOCAL_OTHER_USER_QUIT)
 			.addTransition(GameCommandType.LOCAL_START_GAME, GameStateKey.WAIT_PICK_WORD)
@@ -131,6 +132,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 			.addAction(clearTimer);
 		
 		sm.addState(new GameState(GameStateKey.COMPLETE_GAME))
+			.addAction(calculateDrawUserCoins)
 			.addAction(selectDrawUser)
 			.addAction(completeGame)
 //			.addAction(sendGameCompleteNotification)			

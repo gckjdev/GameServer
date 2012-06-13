@@ -48,6 +48,7 @@ public class GameTurn {
 	User drawUser;
 	volatile int drawUserCoins = 0;
 	ConcurrentMap<String, UserGuessWord> userGuessWordMap = new ConcurrentHashMap<String, UserGuessWord>();
+	ConcurrentMap<String,Integer> userCoins = new ConcurrentHashMap<String, Integer>();
 	List<DrawAction> drawActionList = new ArrayList<DrawAction>();
 	Set<String> guessWordSet = new HashSet<String>();
 	
@@ -144,7 +145,8 @@ public class GameTurn {
 
 			GameLog.info(sessionId, "<userGuessWord> correct, gain coins = " + finalCoins + ", diff level="+guess.guessDifficultLevel);
 		}
-
+		
+		userCoins.put(userId, finalCoins);
 		guess.guess(guessWord, isCorrect, finalCoins);
 		
 	}
@@ -183,9 +185,12 @@ public class GameTurn {
 		this.drawUser = drawUser;
 		Collection<UserGuessWord> list = userGuessWordMap.values();
 		int correctCount  = 0;
+		int maxDifficultLevel = 1;
 		for (UserGuessWord uw : list){
 			if (uw.isCorrect)
 				correctCount ++;
+			if (uw.guessDifficultLevel > maxDifficultLevel)
+				maxDifficultLevel = uw.guessDifficultLevel;
 			if (correctCount >= 1)
 				break;
 		}
@@ -197,20 +202,30 @@ public class GameTurn {
 			this.drawUserCoins = 0;
 		}
 		
+		drawUserCoins *= maxDifficultLevel;		
+		userCoins.put(drawUserId, drawUserCoins);
 		GameLog.info(sessionId, "drawUserCoins set to "+drawUserCoins);
 	}
 
 	public int getUserFinalCoins(String userId) {
-		if (drawUserId != null && drawUserId.equals(userId)){
-			return drawUserCoins;
-		}			
-		
-		UserGuessWord uw = userGuessWordMap.get(userId);
-		if (uw == null)
+//		if (drawUserId != null && drawUserId.equals(userId)){
+//			return drawUserCoins;
+//		}			
+//		
+//		UserGuessWord uw = userGuessWordMap.get(userId);
+//		if (uw == null)
+//			return 0;
+//		else
+//			return uw.finalCoins;
+
+		Integer value = userCoins.get(userId);
+		if (value == null){
 			return 0;
-		else
-			return uw.finalCoins;
-				
+		}
+		else {
+			GameLog.debug(sessionId, "get user coins = "+value.intValue());
+			return value.intValue();
+		}
 	}
 	
 	public void completeTurn(GameCompleteReason reason){

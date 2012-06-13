@@ -12,6 +12,16 @@ import com.orange.network.game.protocol.constants.GameConstantsProtos.GameComple
 
 public class GameAction{
 
+	public static class CalculateDrawUserCoins implements Action {
+
+		@Override
+		public void execute(Object context) {
+			GameSession session = (GameSession)context;
+			session.calculateDrawUserCoins();
+		}
+
+	}
+
 	public static final GameSessionUserManager sessionUserManager = GameSessionUserManager.getInstance();
 	public static final GameSessionManager sessionManager = GameSessionManager.getInstance();
 
@@ -46,11 +56,8 @@ public class GameAction{
 		@Override
 		public void execute(Object context) {
 			GameSession session = (GameSession)context;
-
-			session.calculateDrawUserCoins();
 			sessionUserManager.clearUserPlaying(session);
-			session.completeTurn();
-			
+			session.completeTurn();			
 			GameNotification.broadcastNotification(session, null, GameCommandType.GAME_TURN_COMPLETE_NOTIFICATION_REQUEST);
 
 			sessionManager.adjustSessionSetForTurnComplete(session);			

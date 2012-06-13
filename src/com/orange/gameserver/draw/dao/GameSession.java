@@ -237,6 +237,7 @@ public class GameSession {
 		}
 	}
 	
+	@Deprecated
 	public void scheduleStartExpireTimer(final String userId){
 				
 		clearStartExpireTimer();		
@@ -303,10 +304,10 @@ public class GameSession {
 		this.currentPlayUser = user;
 		GameLog.info(sessionId, "current play user is set to "+user);		
 		
-		if (user != null){
-			// set a start timer here
-			scheduleStartExpireTimer(user.getUserId());
-		}
+//		if (user != null){
+//			// set a start timer here
+//			scheduleStartExpireTimer(user.getUserId());
+//		}
 	}
 
 	public boolean isAllUserGuessWord(List<String> userIdList) {

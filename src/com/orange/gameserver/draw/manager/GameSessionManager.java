@@ -561,8 +561,8 @@ public class GameSessionManager {
 			index ++;
 		}
 		
-		if (userFound){
-			
+		if (!userFound && userList.size() > 0){
+			session.setCurrentPlayUser(userList.get(0));
 		}
 	}
 
@@ -615,16 +615,13 @@ public class GameSessionManager {
 				
 		int sessionId = session.getSessionId();
 		GameLog.info(sessionId, "user "+userId+" quit");
-
-		// remove user session
-		GameSessionManager.getInstance().removeUserFromSession(userId, session);
 		
 		GameCommandType command = null;		
 		if (session.isCurrentPlayUser(userId)){
 			command = GameCommandType.LOCAL_DRAW_USER_QUIT;			
 			session.setCompleteReason(GameCompleteReason.REASON_DRAW_USER_QUIT);
 			
-//			adjustCurrentPlayerForUserQuit(session, userId);
+			adjustCurrentPlayerForUserQuit(session, userId);
 		}
 		else if (sessionUserManager.getSessionUserCount(sessionId) <= 1){
 			command = GameCommandType.LOCAL_ALL_OTHER_USER_QUIT;			
@@ -634,6 +631,9 @@ public class GameSessionManager {
 			command = GameCommandType.LOCAL_OTHER_USER_QUIT;			
 		}			
 		
+		// remove user session
+		GameSessionManager.getInstance().removeUserFromSession(userId, session);
+
 		// broadcast user exit message to all other users
 		GameNotification.broadcastUserQuitNotification(session, userId);			
 		
