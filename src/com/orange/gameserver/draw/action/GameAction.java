@@ -63,9 +63,7 @@ public class GameAction{
 			sessionManager.adjustSessionSetForTurnComplete(session);			
 		}
 
-	}
-
-	
+	}	
 
 	public static class KickDrawUser implements Action {
 

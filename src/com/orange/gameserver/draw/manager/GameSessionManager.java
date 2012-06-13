@@ -532,6 +532,38 @@ public class GameSessionManager {
 		
 		session.setCurrentPlayUser(userList.get(index+1), index+1);		
 	}
+	
+	public void selectCurrentPlayer(GameSession session, String quitUserId) {
+		if (quitUserId == null){
+			selectCurrentPlayer(session);
+			return;
+		}
+		
+		List<User> userList = GameSessionUserManager.getInstance().getUserListBySession(session.getSessionId());
+		if (userList.size() == 0){
+			return;
+		}
+		
+		boolean found = false;
+		for (User user : userList){
+			if (user.getUserId().equals(quitUserId)){
+				found = true;
+				break;
+			}
+		}
+		
+		if (found){
+			selectCurrentPlayer(session);
+			return;
+		}
+		
+		// quit user not found, then no need to adjust
+		if (userList.size() > 0 && session.isCurrentPlayUser(quitUserId)){
+			// reset to first user
+			session.setCurrentPlayUser(userList.get(0), 0);
+			return;
+		}			
+	}
 
 	
 	public void adjustCurrentPlayerForUserQuit(GameSession session, String quitUserId) {
@@ -623,7 +655,9 @@ public class GameSessionManager {
 			command = GameCommandType.LOCAL_DRAW_USER_QUIT;			
 			session.setCompleteReason(GameCompleteReason.REASON_DRAW_USER_QUIT);
 			
-			adjustCurrentPlayerForUserQuit(session, userId);
+			
+			selectCurrentPlayer(session, userId);
+//			adjustCurrentPlayerForUserQuit(session, userId);
 		}
 		else if (sessionUserManager.getSessionUserCount(sessionId) <= 1){
 			command = GameCommandType.LOCAL_ALL_OTHER_USER_QUIT;			
