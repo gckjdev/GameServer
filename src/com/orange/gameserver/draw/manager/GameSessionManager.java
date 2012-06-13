@@ -98,11 +98,7 @@ public class GameSessionManager {
 		return gameCollection.get(id);		
 	}		
 	
-	public GameSession allocFriendRoom(final String roomId, String roomName, 
-			String userId, String nickName, String avatar, boolean gender,
-			String location, List<PBSNSUser> snsUser,
-			int guessDifficultLevel, 
-			Channel channel){
+	public GameSession allocFriendRoom(final String roomId, String roomName, User user){
 		synchronized(sessionRoomLock){
 			int sessionId = roomSessionManager.getSessionIdByRoom(roomId);
 			if (sessionId == -1){
@@ -126,12 +122,10 @@ public class GameSessionManager {
 				
 				
 				if (sessionId != -1){
-					UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender,
-							location, snsUser,
-							guessDifficultLevel, channel, sessionId);
+					UserManager.getInstance().addOnlineUser(user);
 				}
 				
-				ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);						
+				ChannelUserManager.getInstance().addUserIntoChannel(user.getChannel(), user.getUserId());						
 				return session;
 			}
 			else{
@@ -150,12 +144,10 @@ public class GameSessionManager {
 				}
 				
 				if (sessionId != -1){
-					UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender,
-							location, snsUser,
-							guessDifficultLevel, channel, sessionId);
+					UserManager.getInstance().addOnlineUser(user);
 				}
 				
-				ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);										
+				ChannelUserManager.getInstance().addUserIntoChannel(user.getChannel(), user.getUserId());						
 				return session;
 			}		
 		}
@@ -220,12 +212,9 @@ public class GameSessionManager {
 		return -1;
 	}
 	
-	public GameResultCode directPutUserIntoSession(String userId,
-			String nickName, String avatar, boolean gender, 
-			String location, List<PBSNSUser> snsUser,
-			int guessDifficultLevel, Channel channel, boolean isRobot,
-			int targetSessionId) {
+	public GameResultCode directPutUserIntoSession(User user, int targetSessionId) {
 
+		GameSession session = null;
 		synchronized(sessionUserLock){
 
 			if (fullSet.contains(targetSessionId)){
@@ -234,14 +223,12 @@ public class GameSessionManager {
 						
 				
 			// add user into game session
-			GameSession session = this.findGameSessionById(targetSessionId);
+			session = this.findGameSessionById(targetSessionId);
 			if (session == null){
 				return GameResultCode.ERROR_SESSIONID_NULL;
 			}
 			
-			int userCount = addUserIntoSession(userId, nickName, avatar, gender,
-					location, snsUser,
-					guessDifficultLevel, isRobot, channel, session);
+			int userCount = addUserIntoSession(user, session);
 			
 			// adjust candidate and full set, also add user
 			if (isForFull(userCount)){
@@ -259,18 +246,61 @@ public class GameSessionManager {
 			
 		}		
 		
-		UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender,
-				location, snsUser,
-				guessDifficultLevel, channel, targetSessionId);		
-		ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);				
+		UserManager.getInstance().addOnlineUser(user);		
+		ChannelUserManager.getInstance().addUserIntoChannel(user.getChannel(), user.getUserId());				
 		
 		return GameResultCode.SUCCESS;
 	}
+
 	
-	public int allocGameSessionForUser(String userId, String nickName, String avatar, boolean gender,
-			String location, List<PBSNSUser> snsUser,
-			int guessDifficultLevel, 
-			Channel channel, Set<Integer> excludeSessionSet) {		
+//	public GameResultCode directPutUserIntoSession(String userId,
+//			String nickName, String avatar, boolean gender, 
+//			String location, List<PBSNSUser> snsUser,
+//			int guessDifficultLevel, Channel channel, boolean isRobot,
+//			int targetSessionId) {
+//
+//		synchronized(sessionUserLock){
+//
+//			if (fullSet.contains(targetSessionId)){
+//				return GameResultCode.ERROR_SESSIONID_FULL;
+//			}
+//						
+//				
+//			// add user into game session
+//			GameSession session = this.findGameSessionById(targetSessionId);
+//			if (session == null){
+//				return GameResultCode.ERROR_SESSIONID_NULL;
+//			}
+//			
+//			int userCount = addUserIntoSession(userId, nickName, avatar, gender,
+//					location, snsUser,
+//					guessDifficultLevel, isRobot, channel, session);
+//			
+//			// adjust candidate and full set, also add user
+//			if (isForFull(userCount)){
+//				GameLog.info(targetSessionId, "direct alloc session, user count "+userCount+" reach max, remove from freeset/candidate set");
+//				freeSet.remove(targetSessionId);
+//				candidateSet.remove(targetSessionId);
+//				fullSet.add(targetSessionId);
+//			}
+//			else if (isForCandidate(userCount)){
+//				GameLog.info(targetSessionId, "direct alloc session, user count "+userCount+", move to candidate set");
+//				freeSet.remove(targetSessionId);
+//				fullSet.remove(targetSessionId);
+//				candidateSet.add(targetSessionId);					
+//			}			
+//			
+//		}		
+//		
+//		UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender,
+//				location, snsUser,
+//				guessDifficultLevel, channel, targetSessionId);		
+//		ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);				
+//		
+//		return GameResultCode.SUCCESS;
+//	}
+	
+	public int allocGameSessionForUser(User user, Set<Integer> excludeSessionSet) {		
 		int sessionId = NO_SESSION_MATCH_FOR_USER;
 		synchronized(sessionUserLock){
 			
@@ -300,9 +330,7 @@ public class GameSessionManager {
 				
 				// add user into game session
 				GameSession session = this.findGameSessionById(sessionId);
-				int userCount = addUserIntoSession(userId, nickName, avatar, gender,
-						location, snsUser,
-						guessDifficultLevel,  false, channel, session);
+				int userCount = addUserIntoSession(user, session);
 				
 				// adjust candidate and full set, also add user
 				if (isForFull(userCount)){
@@ -327,11 +355,10 @@ public class GameSessionManager {
 		}		
 		
 		if (sessionId != -1){
-			UserManager.getInstance().addOnlineUser(userId, nickName, avatar, gender, 
-					location, snsUser, guessDifficultLevel, channel, sessionId);
+			UserManager.getInstance().addOnlineUser(user);
 		}
 		
-		ChannelUserManager.getInstance().addUserIntoChannel(channel, userId);		
+		ChannelUserManager.getInstance().addUserIntoChannel(user.getChannel(), user.getUserId());		
 		return sessionId;
 	}
 	
@@ -431,24 +458,20 @@ public class GameSessionManager {
 			}
 	}
 	
-	public int addUserIntoSession(final String userId, 
-			final String nickName, 
-			final String avatar, 
-			boolean gender,
-			String location, 
-			List<PBSNSUser> snsUser,
-			int guessDifficultLevel,
-			boolean isRobot,			
-			Channel channel, 
-			GameSession session){
+	public int addUserIntoSession(User user, GameSession session){
+		
+		final String userId = user.getUserId();
+		final String nickName = user.getNickName();
+		final String avatar = user.getAvatar();
 		
 		// update room if it's friend room
 		if (RoomSessionManager.isFriendRoom(session.getSessionId()) &&
 				!RobotManager.isRobotUser(userId)){
+			
 			// TODO move to executor thread
 
 			final String roomId = session.getFriendRoomId();
-			final String genderString = RoomUser.toGenderString(gender);
+			final String genderString = RoomUser.toGenderString(user.getGender());
 			
 			DrawStorageService.getInstance().executeDB(session.getSessionId(), new Runnable(){
 				@Override
@@ -469,11 +492,57 @@ public class GameSessionManager {
 
 		}
 
-		User user = new User(userId, nickName, avatar, gender,
-				location, snsUser,
-				channel, session.getSessionId(), isRobot, guessDifficultLevel);
+//		User user = new User(userId, nickName, avatar, gender,
+//				location, snsUser,
+//				channel, session.getSessionId(), isRobot, guessDifficultLevel);
 		return sessionUserManager.addUserIntoSession(user, session);
 	}			
+
+	
+//	@Deprecated
+//	private int addUserIntoSession(final String userId, 
+//			final String nickName, 
+//			final String avatar, 
+//			boolean gender,
+//			String location, 
+//			List<PBSNSUser> snsUser,
+//			int guessDifficultLevel,
+//			boolean isRobot,			
+//			Channel channel, 
+//			GameSession session){
+//		
+//		// update room if it's friend room
+//		if (RoomSessionManager.isFriendRoom(session.getSessionId()) &&
+//				!RobotManager.isRobotUser(userId)){
+//			// TODO move to executor thread
+//
+//			final String roomId = session.getFriendRoomId();
+//			final String genderString = RoomUser.toGenderString(gender);
+//			
+//			DrawStorageService.getInstance().executeDB(session.getSessionId(), new Runnable(){
+//				@Override
+//				public void run() {
+//			
+//			RoomManager.updateRoomUser(DrawDBClient.getInstance().getMongoClient(), 
+//					roomId, 
+//					userId, 
+//					genderString, 
+//					nickName, 
+//					avatar, 
+//					RoomUser.STATUS_PLAYING, 
+//					new Date(), 
+//					true);
+//			
+//				}
+//			});
+//
+//		}
+//
+//		User user = new User(userId, nickName, avatar, gender,
+//				location, snsUser,
+//				channel, session.getSessionId(), isRobot, guessDifficultLevel, 0);
+//		return sessionUserManager.addUserIntoSession(user, session);
+//	}			
 	
 	public void printSets() {		
 		logger.info("<Free Set> : " + freeSet);

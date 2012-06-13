@@ -250,6 +250,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		session.resetGame();
 	}
 	
+	/*
 	public static void handleChangeRoomRequest(GameMessage message, GameSession session, Channel channel) {
 		
 		JoinGameRequest request = message.getJoinGameRequest();
@@ -285,6 +286,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		}
 		
 		// alloc user to new room
+		
 		int sessionId = GameSessionManager.getInstance().allocGameSessionForUser(message.getUserId(), 
 				nickName, avatar, gender,
 				location, snsUser,
@@ -375,6 +377,7 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 			HandlerUtils.sendErrorResponse(gameEvent, GameResultCode.ERROR_NO_SESSION_AVAILABLE);
 		}
 	}
+	*/
 
 	public static void handleTurnComplete(GameEvent gameEvent,
 			GameSession session) {

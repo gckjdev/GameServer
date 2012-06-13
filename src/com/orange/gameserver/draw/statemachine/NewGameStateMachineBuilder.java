@@ -41,11 +41,17 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		Action setWaitPickWordTimer = new GameAction.SetWaitPickWordTimer();
 		Action setDrawGuessTimer = new GameAction.SetDrawGuessTimer();
 		Action clearTimer = new GameAction.ClearTimer();
+		Action clearRobotTimer = new GameAction.ClearRobotTimer();
 
 		Condition checkUserCount = new GameCondition.CheckUserCount();
 		
 		sm.addState(GameStartState.defaultState)		
 			.addAction(initGame)
+			.addAction(clearTimer)
+			.addEmptyTransition(GameCommandType.LOCAL_DRAW_USER_QUIT)			
+			.addEmptyTransition(GameCommandType.LOCAL_ALL_OTHER_USER_QUIT)			
+			.addEmptyTransition(GameCommandType.LOCAL_OTHER_USER_QUIT)			
+			.addEmptyTransition(GameCommandType.LOCAL_TIME_OUT)			
 			.addTransition(GameCommandType.LOCAL_NEW_USER_JOIN, GameStateKey.CHECK_USER_COUNT)
 			.addAction(selectDrawUser);				
 		
@@ -74,7 +80,8 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 			.addTransition(GameCommandType.LOCAL_ALL_OTHER_USER_QUIT, GameStateKey.CREATE)	
 			.addTransition(GameCommandType.LOCAL_OTHER_USER_QUIT, GameStateKey.CREATE)
 			.addTransition(GameCommandType.LOCAL_TIME_OUT, GameStateKey.KICK_DRAW_USER)	
-			.addAction(clearTimer);
+			.addAction(clearTimer)
+			.addAction(clearRobotTimer);
 		
 		sm.addState(new GameState(GameStateKey.WAIT_FOR_START_GAME))
 			.addAction(setStartGameTimer)

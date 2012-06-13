@@ -34,7 +34,6 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		JoinGameRequest joinRequest = request.getJoinGameRequest();
 		
 		String userId = joinRequest.getUserId();
-		String gameId = joinRequest.getGameId();
 		String nickName = joinRequest.getNickName();			
 		String avatar = joinRequest.getAvatar();
 		boolean gender = false;
@@ -50,13 +49,14 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 			guessDifficultLevel = joinRequest.getGuessDifficultLevel(); 		
 		
 		int gameSessionId = -1;
+		User user = new User(userId, nickName, avatar, gender,
+				location, snsUser, channel, gameSessionId, 
+				joinRequest.getIsRobot(), guessDifficultLevel, joinRequest.getUserLevel());		
 		
 		if (joinRequest.hasRoomId()){
 			String roomId = joinRequest.getRoomId();
 			String roomName = joinRequest.getRoomName();
-			GameSession session = gameManager.allocFriendRoom(roomId, roomName, userId, nickName, avatar, gender,
-					location, snsUser,
-					guessDifficultLevel, channel);
+			GameSession session = gameManager.allocFriendRoom(roomId, roomName, user);
 			if (session == null){
 				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, channel);
 				return;
@@ -72,10 +72,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 				isRobot = joinRequest.getIsRobot();
 			}
 			
-			GameResultCode result = gameManager.directPutUserIntoSession(userId, nickName, avatar, gender, 
-					location, snsUser,
-					guessDifficultLevel,
-					channel, isRobot, gameSessionId);
+			GameResultCode result = gameManager.directPutUserIntoSession(user, gameSessionId);
 			if (result != GameResultCode.SUCCESS){
 				HandlerUtils.sendErrorResponse(request, result, channel);
 				return;
@@ -100,20 +97,21 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 				}
 			}
 			
-			gameSessionId = gameManager.allocGameSessionForUser(userId, nickName, avatar, gender,
-					location, snsUser,
-					guessDifficultLevel, channel, excludeSessionSet);
+			gameSessionId = gameManager.allocGameSessionForUser(user, excludeSessionSet);
 			if (gameSessionId == -1){
 				HandlerUtils.sendErrorResponse(request, GameResultCode.ERROR_NO_SESSION_AVAILABLE, channel);
 				return;
 			}
 		}
 		
-		GameSession gameSession = sessionManager.findGameSessionById(gameSessionId);		
-		sessionManager.addUserIntoSession(userId, nickName, avatar, gender,
-				location, snsUser,
-				guessDifficultLevel, 
-				request.getJoinGameRequest().getIsRobot(), channel, gameSession);
+		GameSession gameSession = sessionManager.findGameSessionById(gameSessionId);	
+		user.setCurrentSessionId(gameSessionId);
+		sessionManager.addUserIntoSession(user, gameSession);
+		
+//		sessionManager.addUserIntoSession(userId, nickName, avatar, gender,
+//				location, snsUser,
+//				guessDifficultLevel, 
+//				request.getJoinGameRequest().getIsRobot(), channel, gameSession);
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
 		// reset start expire timer for current play user
@@ -245,6 +243,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		*/
 	}
 
+	/*
 	public static boolean handleJoinGameRequest(GameEvent gameEvent,
 			GameSession gameSession) {
 
@@ -274,10 +273,15 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		int sessionId = gameSession.getSessionId();
 //		User user = new User(userId, nickName, avatar, gender, gameEvent.getChannel(), sessionId, guessDifficultLevel);
 //		sessionUserManager.addUserIntoSession(user, gameSession);
-		sessionManager.addUserIntoSession(userId, nickName, avatar, gender,
-				location, snsUser,
-				guessDifficultLevel, 
-				request.getJoinGameRequest().getIsRobot(), gameEvent.getChannel(), gameSession);
+		User user = new User(userId, nickName, avatar, gender,
+				location, snsUser, gameEvent.getChannel(), gameSession.getSessionId(), 
+				request.getJoinGameRequest().getIsRobot(), guessDifficultLevel, 0);
+		sessionManager.addUserIntoSession(user, gameSession);
+		
+//		sessionManager.addUserIntoSession(userId, nickName, avatar, gender,
+//				location, snsUser,
+//				guessDifficultLevel, 
+//				request.getJoinGameRequest().getIsRobot(), gameEvent.getChannel(), gameSession);
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
 		
 		// reset start expire timer for current play user
@@ -317,6 +321,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		
 		return true;
 	}
+	*/
 
 	
 

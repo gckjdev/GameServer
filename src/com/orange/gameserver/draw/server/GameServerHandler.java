@@ -1,5 +1,6 @@
 package com.orange.gameserver.draw.server;
 
+import java.nio.channels.ClosedChannelException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -105,7 +106,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 	
 	@Override
 	public void exceptionCaught( ChannelHandlerContext ctx, ExceptionEvent e) {
-		logger.error("<exceptionCaught> catch unexpected exception at " + e.getChannel().toString() + ", cause=", e.getCause());
+		logger.error("<exceptionCaught> catch unexpected exception at " + e.getChannel().toString() + ", cause=" + e.getCause().getMessage(), e.getCause());
 		ChannelUserManager.getInstance().processDisconnectChannel(e.getChannel());
 	}				
 	

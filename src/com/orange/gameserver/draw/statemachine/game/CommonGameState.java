@@ -29,7 +29,7 @@ public class CommonGameState extends State {
 		switch (gameEvent.getMessage().getCommand()){				
 			case JOIN_GAME_REQUEST:
 			case LOCAL_JOIN_GAME:
-				JoinGameRequestHandler.handleJoinGameRequest(gameEvent, session);
+//				JoinGameRequestHandler.handleJoinGameRequest(gameEvent, session);
 				break;
 				
 			case START_GAME_REQUEST:

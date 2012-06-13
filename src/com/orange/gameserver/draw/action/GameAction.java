@@ -12,6 +12,16 @@ import com.orange.network.game.protocol.constants.GameConstantsProtos.GameComple
 
 public class GameAction{
 
+	public static class ClearRobotTimer implements Action {
+
+		@Override
+		public void execute(Object context) {
+			GameSession session = (GameSession)context;
+			session.clearRobotTimer();
+		}
+
+	}
+
 	public static class CalculateDrawUserCoins implements Action {
 
 		@Override

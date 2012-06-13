@@ -255,7 +255,7 @@ public class RobotClient implements Runnable {
 		}
 		
 		User user = new User(newUserId, nickName2, userAvatar2, userGender, 
-				"New York, USA", null, null, sessionId, 1);
+				"New York, USA", null, null, sessionId, 1, 5);
 		userList.put(newUserId, user);
 	}
 
@@ -456,7 +456,7 @@ public class RobotClient implements Runnable {
 			User user = new User(pbUser.getUserId(), pbUser.getNickName(), 
 					pbUser.getAvatar(), pbUser.getGender(),
 					pbUser.getLocation(), pbUser.getSnsUsersList(),
-					null, sessionId, 1);
+					null, sessionId, 1, 5);
 			userList.put(pbUser.getUserId(), user);
 		}
 	}

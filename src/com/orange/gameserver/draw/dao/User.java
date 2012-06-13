@@ -18,13 +18,14 @@ public class User {
 	final int guessDifficultLevel;
 	final String location;
 	final List<PBSNSUser> snsUser;
+	final int userLevel;
 
 	volatile int currentSessionId = -1;		
 	volatile boolean isPlaying = false;
 	
 	public User(String userId, String nickName, String avatar, boolean gender, 
 			String location, List<PBSNSUser> snsUser,
-			Channel channel, int sessionId, int guessLevel) {
+			Channel channel, int sessionId, int guessLevel, int userLevel) {
 		super();
 		this.userId = userId;
 		this.nickName = nickName;
@@ -39,11 +40,13 @@ public class User {
 			this.guessDifficultLevel = 1;
 		else
 			this.guessDifficultLevel = guessLevel;
+		
+		this.userLevel = userLevel;
 	}
 	
 	public User(String userId, String nickName, String avatar, boolean gender,
 			String location, List<PBSNSUser> snsUser,
-			Channel channel, int sessionId, boolean isRobot, int guessLevel) {
+			Channel channel, int sessionId, boolean isRobot, int guessLevel, int userLevel) {
 		super();
 		this.userId = userId;
 		this.nickName = nickName;
@@ -58,6 +61,8 @@ public class User {
 			this.guessDifficultLevel = 1;
 		else
 			this.guessDifficultLevel = guessLevel;
+
+		this.userLevel = userLevel;
 	}		
 
 	public String getLocation() {
@@ -94,6 +99,10 @@ public class User {
 
 	public String getAvatar() {
 		return this.avatar;
+	}	
+	
+	public int getUserLevel() {
+		return userLevel;
 	}
 
 	@Override
