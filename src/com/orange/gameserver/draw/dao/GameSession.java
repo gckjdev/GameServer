@@ -300,7 +300,9 @@ public class GameSession {
 //		}
 	}
 	
-	public synchronized void setCurrentPlayUser(User user){
+	/*
+	@Deprecated
+	private synchronized void setCurrentPlayUser(User user){
 		this.currentPlayUser = user;
 		GameLog.info(sessionId, "current play user is set to "+user);		
 		
@@ -309,6 +311,7 @@ public class GameSession {
 //			scheduleStartExpireTimer(user.getUserId());
 //		}
 	}
+	*/
 
 	public boolean isAllUserGuessWord(List<String> userIdList) {
 		if (currentTurn == null){

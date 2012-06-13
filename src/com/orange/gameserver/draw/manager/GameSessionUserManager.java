@@ -84,7 +84,7 @@ public class GameSessionUserManager {
     		int size = users.size();
         	if (size == 1 || (size > 0 && session.getCurrentPlayUser() == null)){
         		User firstUser = users.get(0);
-        		session.setCurrentPlayUser(firstUser);
+        		session.setCurrentPlayUser(firstUser, 0);
         		GameLog.info(sessionId, "<addUserIntoSession> set first user " + firstUser + " as current user");
         	}
         	
@@ -178,7 +178,9 @@ public class GameSessionUserManager {
 		return (userSet.size() == 0);
 	}
 
-	public void chooseNewPlayUser(GameSession session) {
+	/*
+	@Deprecated
+	private void chooseNewPlayUser(GameSession session) {
 		int sessionId = session.getSessionId();
 		CopyOnWriteArrayList<User> users = sessionUserMap.get(sessionId);
 		if (users == null){
@@ -199,7 +201,7 @@ public class GameSessionUserManager {
 				if (iter.hasNext()){
 					// use next one as current play user				
 					User nextUser = iter.next(); 
-					session.setCurrentPlayUser(nextUser);
+					session.setCurrentPlayUser(nextUser, 0);
 					userSelected = nextUser;
 		    		GameLog.info(sessionId, "<chooseNewPlayUser> choose next user for play, user = " + nextUser);					
 				}
@@ -208,7 +210,7 @@ public class GameSessionUserManager {
 					Iterator<User> newIter = users.iterator();
 					if (newIter != null && newIter.hasNext()){
 						User firstUser = newIter.next();
-						session.setCurrentPlayUser(firstUser);
+						session.setCurrentPlayUser(firstUser, 0);
 						userSelected = firstUser;
 						GameLog.info(sessionId, "<chooseNewPlayUser> set first user for play, user = " + firstUser);					
 					}
@@ -220,12 +222,13 @@ public class GameSessionUserManager {
 			if (users.size() > 0){
 				User firstUser = users.get(0);
 				GameLog.info(sessionId, "<chooseNewPlayUser> set first user for play, user = " + firstUser);					
-				session.setCurrentPlayUser(firstUser);
+				session.setCurrentPlayUser(firstUser, 0);
 			}
 			else{
 				GameLog.info(sessionId, "<chooseNewPlayUser> no user, clear user for play");					
-				session.setCurrentPlayUser(null);
+				session.setCurrentPlayUser(null, 0);
 			}
 		}
 	}
+		*/
 }

@@ -12,6 +12,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.antlr.grammar.v3.ANTLRv3Parser.finallyClause_return;
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 
@@ -64,16 +65,23 @@ public class ChannelUserManager {
     }
     
     public void removeChannel(Channel channel){
-		logger.info("<removeChannel> Channel " + channel.toString());
-		logger.info("<removeChannel> Channel Count = " + channelUserMap.size());
+		logger.info("<removeChannel> Channel " + channel.toString() + ", before remove count = " + channelUserMap.size());
 		clearChannelTimeOut(channel);
     	channelUserMap.remove(channel);    	
     	channelTimeOutFutureMap.remove(channel);
-    	if (channel.isConnected()){
-    		channel.disconnect();
+    	
+    	try{
+	    	if (channel.isConnected()){
+	    		channel.disconnect();
+	    	}
+    	}
+    	catch (Exception e){    	
+    		logger.error("<removeChannel> catch exception = "+e.toString(), e);
+    	}
+    	finally{
+        	channel.close();    		
     	}
 		
-    	channel.close();
     }
     
 	public List<String> findUsersInChannel(Channel channel) {		
