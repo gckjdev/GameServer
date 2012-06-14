@@ -35,6 +35,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		Action playGame = new GameAction.PlayGame();
 		Action prepareRobot = new GameAction.PrepareRobot();
 		Action calculateDrawUserCoins = new GameAction.CalculateDrawUserCoins();
+		Action selectDrawUserIfNone = new GameAction.SelectDrawUserIfNone();
 		
 		Action setOneUserWaitTimer = new GameAction.SetOneUserWaitTimer();
 		Action setStartGameTimer = new GameAction.SetStartGameTimer();
@@ -84,10 +85,12 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 			.addAction(clearRobotTimer);
 		
 		sm.addState(new GameState(GameStateKey.WAIT_FOR_START_GAME))
+			.addAction(selectDrawUserIfNone)
 			.addAction(setStartGameTimer)
 			.addTransition(GameCommandType.LOCAL_DRAW_USER_QUIT, GameStateKey.CHECK_USER_COUNT)
 			.addTransition(GameCommandType.LOCAL_ALL_OTHER_USER_QUIT, GameStateKey.CHECK_USER_COUNT)	
 			.addEmptyTransition(GameCommandType.LOCAL_OTHER_USER_QUIT)
+			.addEmptyTransition(GameCommandType.LOCAL_NEW_USER_JOIN)
 			.addTransition(GameCommandType.LOCAL_START_GAME, GameStateKey.WAIT_PICK_WORD)
 			.addTransition(GameCommandType.LOCAL_TIME_OUT, GameStateKey.KICK_DRAW_USER)	
 			.addTransition(GameCommandType.LOCAL_DRAW_USER_CHAT, GameStateKey.WAIT_FOR_START_GAME)	

@@ -96,6 +96,7 @@ public class ChannelUserManager {
 	
 	static final int DEFAULT_USER_TIMEOUT_SECONDS = 60*5;
 	
+	/*
 	public void resetUserTimeOut(final Channel channel) {
 		
 		clearChannelTimeOut(channel);
@@ -114,6 +115,7 @@ public class ChannelUserManager {
 		
 		channelTimeOutFutureMap.put(channel, newFuture);
 	}
+	*/
 	
 	public void clearChannelTimeOut(Channel channel) {
 		if (channel == null)

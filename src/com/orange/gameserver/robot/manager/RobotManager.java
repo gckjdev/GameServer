@@ -53,6 +53,9 @@ public class RobotManager {
     
     
     public static boolean isRobotUser(String userId){
+    	if (userId == null)
+    		return false;
+    	
     	return userId.contains(ROBOT_USER_ID_PREFIX);
     }
     

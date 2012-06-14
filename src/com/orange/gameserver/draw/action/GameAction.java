@@ -12,6 +12,18 @@ import com.orange.network.game.protocol.constants.GameConstantsProtos.GameComple
 
 public class GameAction{
 
+	public static class SelectDrawUserIfNone implements Action {
+
+		@Override
+		public void execute(Object context) {
+			GameSession session = (GameSession)context;
+			if (session.getCurrentPlayUser() == null){
+				sessionManager.selectCurrentPlayer(session);
+			}
+		}
+
+	}
+
 	public static class ClearRobotTimer implements Action {
 
 		@Override
@@ -36,7 +48,7 @@ public class GameAction{
 	public static final GameSessionManager sessionManager = GameSessionManager.getInstance();
 
 	static final int PICK_WORD_TIMEOUT = 60;
-	static final int START_GAME_TIMEOUT = 60;
+	static final int START_GAME_TIMEOUT = 30;
 	static final int USER_WAIT_TIMEOUT = 60*5;		// 5 minutes
 	static final int DRAW_GUESS_TIMEOUT = 60;
 

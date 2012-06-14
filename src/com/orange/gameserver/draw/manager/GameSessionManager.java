@@ -574,35 +574,76 @@ public class GameSessionManager {
 		return GameCompleteReason.REASON_NOT_COMPLETE;
 	}
 	
+	public void clearCurrentPlay(GameSession session){
+		
+	}
+	
+	private int getCurrentPlayUserIndex(GameSession session, List<User> userList){
+		
+		User user = session.getCurrentPlayUser();
+		if (user == null)
+			return -1;
+		
+		int index = userList.indexOf(user);
+		return index;
+	}
+	
+	public void updateCurrentPlayer(GameSession session){
+		int newIndex = session.getCurrentPlayUserIndex();
+		if (newIndex != -1){
+			session.setCurrentPlayUser(session.getCurrentPlayUser(), newIndex);
+		}
+	}
+	
 	public void selectCurrentPlayer(GameSession session) {
-		List<User> userList = GameSessionUserManager.getInstance().getUserListBySession(session.getSessionId());
+
+
+		List<User> userList = GameSessionUserManager.getInstance().getUserListBySession(session.getSessionId());				
 		int userCount = userList.size();
+		
+		// no user, return
 		if (userList == null || userCount == 0)
 			return;
 		
+		// only one user, then select the first user
 		if (userCount == 1){
-			// select the first user
 			session.setCurrentPlayUser(userList.get(0), 0);
 			return;		
 		}
-		
+
+		// has no current player, select the first user
 		if (session.getCurrentPlayUser() == null){
 			// select the first user
 			session.setCurrentPlayUser(userList.get(0), 0);
 			return;
 		}
 		
-		int index = session.getCurrentPlayUserIndex();
-		if (index >= userCount-1){
+		// at least two user for selection below			
+		
+		int oldIndex = session.getCurrentPlayUserIndex();
+		int newIndex = getCurrentPlayUserIndex(session, userList);
+		int finalIndex = 0;
+		
+		if (newIndex == -1){
+			// current play user not found... keep current position
+			finalIndex = oldIndex;
+		}
+		else{
+			// current play user found, just shift to its next user
+			finalIndex = oldIndex+1;
+		}						
+		
+		if (finalIndex < 0 || finalIndex >= userCount){
 			// last user
 			session.setCurrentPlayUser(userList.get(0), 0);
 			return;						
 		}
 		
-		session.setCurrentPlayUser(userList.get(index+1), index+1);		
+		session.setCurrentPlayUser(userList.get(finalIndex), finalIndex);		
 	}
 	
-	public void selectCurrentPlayer(GameSession session, String quitUserId) {
+	@Deprecated
+	private void selectCurrentPlayer(GameSession session, String quitUserId) {
 		if (quitUserId == null){
 			selectCurrentPlayer(session);
 			return;
@@ -614,11 +655,13 @@ public class GameSessionManager {
 		}
 		
 		boolean found = false;
+		int quitUserIdIndex = 0;
 		for (User user : userList){
 			if (user.getUserId().equals(quitUserId)){
 				found = true;
 				break;
-			}
+			}			
+			quitUserIdIndex++;
 		}
 		
 		if (found){
@@ -725,15 +768,18 @@ public class GameSessionManager {
 			session.setCompleteReason(GameCompleteReason.REASON_DRAW_USER_QUIT);
 			
 			
-			selectCurrentPlayer(session, userId);
-//			adjustCurrentPlayerForUserQuit(session, userId);
+			selectCurrentPlayer(session);
 		}
 		else if (sessionUserManager.getSessionUserCount(sessionId) <= 1){
 			command = GameCommandType.LOCAL_ALL_OTHER_USER_QUIT;			
-			session.setCompleteReason(GameCompleteReason.REASON_ONLY_ONE_USER);
+			session.setCompleteReason(GameCompleteReason.REASON_ONLY_ONE_USER);			
+
+			selectCurrentPlayer(session);
 		}
 		else {
 			command = GameCommandType.LOCAL_OTHER_USER_QUIT;			
+			
+			updateCurrentPlayer(session);
 		}			
 		
 		// remove user session

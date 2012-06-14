@@ -89,7 +89,7 @@ public class GameServerHandler extends SimpleChannelUpstreamHandler {
 //		}
 		
 		// if receive some message, then keep user not time out...
-		ChannelUserManager.getInstance().resetUserTimeOut(e.getChannel());		
+//		ChannelUserManager.getInstance().resetUserTimeOut(e.getChannel());		
 	}
 	
 	public void sendErrorResponse(MessageEvent messageEvent, GameMessage request, GameResultCode resultCode){

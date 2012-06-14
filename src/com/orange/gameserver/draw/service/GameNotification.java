@@ -59,6 +59,7 @@ public class GameNotification {
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.setToUserId(user.getUserId())
 				.setCompleteReason(gameSession.getCompleteReason())
 				.setNotification(notification)			
 				.setRound(gameSession.getCurrentRound())
@@ -99,6 +100,7 @@ public class GameNotification {
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.setToUserId(user.getUserId())				
 				.setCompleteReason(gameSession.getCompleteReason())
 				.setNotification(notification)			
 				.setRound(gameSession.getCurrentRound())
@@ -152,6 +154,7 @@ public class GameNotification {
 				.setNotification(notification)
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.setToUserId(user.getUserId())				
 				.setOnlineUserCount(onlineUserCount)
 				.build();
 			
@@ -184,6 +187,7 @@ public class GameNotification {
 				.setNotification(notification)
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.setToUserId(user.getUserId())				
 				.setOnlineUserCount(onlineUserCount)
 				.build();
 			
@@ -246,6 +250,7 @@ public class GameNotification {
 				.setNotification(notification)
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(user.getUserId())
+				.setToUserId(user.getUserId())				
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
@@ -307,6 +312,7 @@ public class GameNotification {
 				.setNotification(notification)
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(userId)
+				.setToUserId(user.getUserId())
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
@@ -335,6 +341,7 @@ public class GameNotification {
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(userId)
+				.setToUserId(user.getUserId())				
 				.build();
 			
 			HandlerUtils.sendMessage(gameEvent, message, user.getChannel());
@@ -362,6 +369,7 @@ public class GameNotification {
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(gameSession.getSessionId())
 				.setUserId(userId)
+				.setToUserId(user.getUserId())				
 				.build();
 			
 			HandlerUtils.sendMessage(message, user.getChannel());
@@ -406,6 +414,7 @@ public class GameNotification {
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(session.getSessionId())
 				.setUserId(userId)
+				.setToUserId(user.getUserId())				
 				.setNotification(notification)
 				.setRound(message.getRound())
 				.setOnlineUserCount(onlineUserCount)
@@ -452,6 +461,7 @@ public class GameNotification {
 				.setMessageId(GameService.getInstance().generateMessageId())
 				.setSessionId(session.getSessionId())
 				.setUserId(userId)
+				.setToUserId(toUserId)				
 				.setNotification(notification)
 				.setRound(message.getRound())
 				.setOnlineUserCount(onlineUserCount)

@@ -22,7 +22,7 @@ import com.orange.gameserver.draw.utils.GameLog;
 public class DrawStorageService {
 
 	
-	protected static final int MIN_DRAW_DATA_LEN = 1000;
+	protected static final int MIN_DRAW_DATA_LEN = 3000;
 	protected static final int EXECUTOR_POOL_NUM = 5;
 
 	CopyOnWriteArrayList<ExecutorService> executorList = new CopyOnWriteArrayList<ExecutorService>();
