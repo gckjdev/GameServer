@@ -166,8 +166,6 @@ public class GameSession {
 			currentTurn = new GameTurn(sessionId, currentTurn.getRound() + 1, word, level, language, this.currentPlayUser);
 		}		
 		GameLog.info(sessionId, "start new game turn "+currentTurn.getRound(), "word=" + word);
-		
-//		this.clearStartExpireTimer();
 	}
 	
 	public synchronized boolean isGameTurnPlaying(){
