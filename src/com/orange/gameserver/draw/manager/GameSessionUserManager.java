@@ -54,7 +54,7 @@ public class GameSessionUserManager {
     	CopyOnWriteArrayList<User> userList = sessionUserMap.get(sessionId);
     	for (User user : userList){
     		user.setPlaying(true);
-    		GameLog.info(sessionId, "set user "+user.getNickName()+ " PLAYING");
+    		GameLog.debug(sessionId, "set user "+user.getNickName()+ " PLAYING");
     	}
     }
 
@@ -63,7 +63,7 @@ public class GameSessionUserManager {
     	CopyOnWriteArrayList<User> userList = sessionUserMap.get(sessionId);
     	for (User user : userList){
     		user.setPlaying(false);
-    		GameLog.info(sessionId, "set user "+user.getNickName()+ " NOT PLAYING");
+    		GameLog.debug(sessionId, "set user "+user.getNickName()+ " NOT PLAYING");
     	}
     }
     

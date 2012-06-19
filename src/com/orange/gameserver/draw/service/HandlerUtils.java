@@ -22,13 +22,18 @@ public class HandlerUtils {
 		}
 	}
 	
+	public static void logSendMessage(GameMessage message){
+		GameLog.info((int)message.getSessionId(), message.getCommand().toString().concat("==>").concat(
+				message.getToUserId()).concat(" ").concat(message.getResultCode().toString()));
+		
+	}
+	
 	public static void sendMessage(GameMessage message, Channel channel) {
 		if (message == null || channel == null)
 			return;
 		
 		GameLog.debug((int)message.getSessionId(), message.toString());
-		GameLog.info((int)message.getSessionId(), "SEND "+message.getCommand().toString(), 
-				"to user="+message.getToUserId(), "resultCode="+message.getResultCode());
+		logSendMessage(message);
 		safeWrite(channel, message);
 	}
 	
@@ -37,8 +42,7 @@ public class HandlerUtils {
 			return;
 		
 		GameLog.debug((int)message.getSessionId(), message.toString());
-		GameLog.info((int)message.getSessionId(), "SEND "+message.getCommand().toString(), 
-				"to user="+message.getToUserId(), "resultCode="+message.getResultCode());
+		logSendMessage(message);
 		safeWrite(channel, message);
 	}
 	
@@ -47,8 +51,7 @@ public class HandlerUtils {
 			return;
 		
 		GameLog.debug((int)response.getSessionId(), response.toString());
-		GameLog.info((int)response.getSessionId(), "SEND "+response.getCommand().toString(), 
-				"to user="+response.getToUserId(), "resultCode="+response.getResultCode());
+		logSendMessage(response);
 		safeWrite(gameEvent.getChannel(), response);
 
 	}
@@ -86,8 +89,7 @@ public class HandlerUtils {
 			.build();
 
 		GameLog.debug((int)response.getSessionId(), response.toString());
-		GameLog.info((int)response.getSessionId(), "SEND "+response.getCommand().toString(), 
-				"to user="+response.getToUserId(), "resultCode="+response.getResultCode());
+		logSendMessage(response);
 		safeWrite(channel, response);
 	}
 }

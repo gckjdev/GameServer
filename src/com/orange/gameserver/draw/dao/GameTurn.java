@@ -243,8 +243,9 @@ public class GameTurn {
 	
 	public void storeDrawData() {
 		
-
-//		PBDraw drawData = PBDrawAction.newBuilder()
+		if (drawUser == null || drawUserId == null){
+			return;
+		}
 		
 		// step 1: store draw word
 		DrawStorageService.getInstance().storeGuessWord(sessionId, wordText, 
@@ -254,11 +255,7 @@ public class GameTurn {
 			GameLog.info(sessionId, "skip store draw data due to robot draw user");
 			return;
 		}
-		
-		if (drawUser == null){
-			return;
-		}
-						
+								
 		// step 2: store draw data
 		
 		List<PBDrawAction> pbDrawDataList = new ArrayList<PBDrawAction>();

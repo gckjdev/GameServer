@@ -197,12 +197,15 @@ public class RobotClientHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		GameLog.info(robotClient.sessionId, "catch exception, cause="+e.getCause());
+		e.getChannel().disconnect();
 		e.getChannel().close();
 	}
 
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx,
 			ChannelStateEvent e) {
+		e.getChannel().close();
+		
 		GameLog.info(robotClient.sessionId, "<robotClient> channel disonnected");
 		RobotService.getInstance().finishRobot(robotClient);
 	}
