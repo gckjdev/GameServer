@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import org.antlr.grammar.v3.ANTLRv3Parser.finallyClause_return;
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFuture;
 
 import com.orange.gameserver.draw.dao.GameSession;
 import com.orange.gameserver.draw.server.GameService;
@@ -65,21 +66,36 @@ public class ChannelUserManager {
     }
     
     public void removeChannel(Channel channel){
-		logger.info("<removeChannel> Channel " + channel.toString() + ", before remove count = " + channelUserMap.size());
-		clearChannelTimeOut(channel);
-    	channelUserMap.remove(channel);    	
-    	channelTimeOutFutureMap.remove(channel);
     	
     	try{
+    		
+    		logger.info("<removeChannel>- "+channel.toString() + " bound=" + channel.isBound() + " connected="
+                    + channel.isConnected() + " open=" + channel.isOpen());
+    		
+
+    		if (channel.isBound()){
+    			channel.unbind();
+    		}
+    		
 	    	if (channel.isConnected()){
 	    		channel.disconnect();
 	    	}
+	    	
+	    	ChannelFuture closeFuture = channel.close();
+	    	closeFuture.await(1000);
+	    	if (closeFuture.isSuccess()){
+	    		clearChannelTimeOut(channel);
+	        	channelUserMap.remove(channel);    	
+	        	channelTimeOutFutureMap.remove(channel);	    		
+				logger.info("<removeChannel> success! channel=" + channel.toString() + ", before remove count = " + channelUserMap.size());
+	    	}
+	    	else{
+	    		logger.info("<removeChannel> wait close future time out, channel=" + channel.toString());
+	    	}
+	    	
     	}
     	catch (Exception e){    	
-    		logger.error("<removeChannel> catch exception = "+e.toString(), e);
-    	}
-    	finally{
-        	channel.close();    		
+    		logger.error("<removeChannel> channel="+channel.toString() + " catch exception = "+e.toString(), e);
     	}
 		
     }

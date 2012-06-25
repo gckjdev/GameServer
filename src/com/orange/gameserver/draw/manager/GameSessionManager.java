@@ -780,6 +780,14 @@ public class GameSessionManager {
 			command = GameCommandType.LOCAL_OTHER_USER_QUIT;			
 			
 			updateCurrentPlayer(session);
+			
+			// if user quit, then check whether all other users guess word or not 
+			if (isAllUserGuessWord(session)){
+				session.setCompleteReason(GameCompleteReason.REASON_ALL_USER_GUESS);
+				command = GameCommandType.LOCAL_ALL_USER_GUESS;
+				GameService.getInstance().fireAndDispatchEvent(command, sessionId, userId);
+			}				
+			
 		}			
 		
 		// remove user session
@@ -792,6 +800,7 @@ public class GameSessionManager {
 		if (needFireEvent){
 			GameService.getInstance().fireAndDispatchEvent(command, sessionId, userId);
 		}
+		
 	}
 
 
