@@ -40,41 +40,17 @@ public class UserManager {
 	}
 	
 	public void addOnlineUser(User user) {
-		
-//		if (userId == null || channel == null)
-//			return;
-//		
-//		User user = new User(userId, nickName, avatar, gender, location, snsUser, channel, sessionId, guessDifficultLevel);		
+
 		if (user == null)
 			return;
 		
 		String userId = user.getUserId();
-		User userFound = onlineUserMap.putIfAbsent(userId, user);
+		User userFound = onlineUserMap.put(userId, user);
 		if (userFound != null)
 			user = userFound;
 		
-//		user.setCurrentSessionId(sessionId);
 		logger.info("<addOnlineUser> userId= " + userId + ", nick=" + user.getNickName() + " at session " + user.getCurrentSessionId()  + ", user count = " + onlineUserMap.size());
 	}
-
-	
-//	@Deprecated
-//	private void addOnlineUser(String userId, String nickName, String avatar, boolean gender, 
-//			String location, List<PBSNSUser> snsUser,
-//			int guessDifficultLevel, Channel channel,
-//			int sessionId) {
-//		
-//		if (userId == null || channel == null)
-//			return;
-//		
-//		User user = new User(userId, nickName, avatar, gender, location, snsUser, channel, sessionId, guessDifficultLevel);		
-//		User userFound = onlineUserMap.putIfAbsent(userId, user);
-//		if (userFound != null)
-//			user = userFound;
-//		
-//		user.setCurrentSessionId(sessionId);
-//		logger.info("<addOnlineUser> userId= " + userId + ", nick=" + nickName + " at session " + sessionId  + ", user count = " + onlineUserMap.size());
-//	}
 	
 	public int findGameSessionIdByUserId(String userId){
 		User user = findUserById(userId);
@@ -85,7 +61,7 @@ public class UserManager {
 	}
 	
 	public int getOnlineUserCount(){
-		return onlineUserMap.size() + RobotManager.MAX_ROBOT_USER;
+		return onlineUserMap.size() * 2 + RobotManager.MAX_ROBOT_USER;
 	}
 		
 }
