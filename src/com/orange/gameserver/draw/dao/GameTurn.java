@@ -139,9 +139,11 @@ public class GameTurn {
 				break;
 			}
 			
+			/* disable difficult level coins
 			if (guessDifficultLevel > 0){
 				finalCoins = finalCoins * guess.guessDifficultLevel;
 			}
+			*/
 
 			GameLog.info(sessionId, "<userGuessWord> correct, gain coins = " + finalCoins + ", diff level="+guess.guessDifficultLevel);
 		}
@@ -202,7 +204,10 @@ public class GameTurn {
 			this.drawUserCoins = 0;
 		}
 		
-		drawUserCoins *= maxDifficultLevel;		
+		/* disable guessDifficultLevel
+		drawUserCoins *= maxDifficultLevel;
+		*/		
+		
 		userCoins.put(drawUserId, drawUserCoins);
 		GameLog.info(sessionId, "drawUserCoins set to "+drawUserCoins);
 	}

@@ -678,37 +678,7 @@ public class GameSessionManager {
 	}
 
 	
-	public void adjustCurrentPlayerForUserQuit(GameSession session, String quitUserId) {
-		// TODO add log here
-//		List<User> userList = GameSessionUserManager.getInstance().getUserListBySession(session.getSessionId());
-//		int index = 0;
-//		boolean userFound = false;
-//		for (User user : userList){
-//			if (user.getUserId().equals(quitUserId)){
-//				userFound = true;
-//				if (index >= 1){
-//					// has previous user
-//					session.setCurrentPlayUser(userList.get(index - 1));
-//				}
-//				else {
-//					// user is the first user
-//					int size = userList.size();
-//					if (size <= 1){
-//						session.setCurrentPlayUser(null);
-//					}
-//					else{
-//						session.setCurrentPlayUser(userList.get(index+1));
-//					}
-//				}
-//				break;
-//			}
-//			index ++;
-//		}
-//		
-//		if (!userFound && userList.size() > 0){
-//			session.setCurrentPlayUser(userList.get(0));			
-//		}
-		
+	public void adjustCurrentPlayerForUserQuit(GameSession session, String quitUserId) {		
 		selectCurrentPlayer(session);
 	}
 
@@ -767,14 +737,15 @@ public class GameSessionManager {
 			command = GameCommandType.LOCAL_DRAW_USER_QUIT;			
 			session.setCompleteReason(GameCompleteReason.REASON_DRAW_USER_QUIT);
 			
-			
-			selectCurrentPlayer(session);
+			// rem by Benson 2012.7.23
+			// selectCurrentPlayer(session);
 		}
-		else if (sessionUserManager.getSessionUserCount(sessionId) <= 1){
+		else if (sessionUserManager.getSessionUserCount(sessionId) <= 2){
 			command = GameCommandType.LOCAL_ALL_OTHER_USER_QUIT;			
 			session.setCompleteReason(GameCompleteReason.REASON_ONLY_ONE_USER);			
 
-			selectCurrentPlayer(session);
+			// rem by Benson 2012.7.23
+			// selectCurrentPlayer(session);
 		}
 		else {
 			command = GameCommandType.LOCAL_OTHER_USER_QUIT;			

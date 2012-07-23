@@ -90,6 +90,8 @@ public class ChannelUserManager {
 				logger.info("<removeChannel> success! channel=" + channel.toString() + ", before remove count = " + channelUserMap.size());
 	    	}
 	    	else{
+	        	channelUserMap.remove(channel);    	
+	        	channelTimeOutFutureMap.remove(channel);	    		
 	    		logger.info("<removeChannel> wait close future time out, channel=" + channel.toString());
 	    	}
 	    	

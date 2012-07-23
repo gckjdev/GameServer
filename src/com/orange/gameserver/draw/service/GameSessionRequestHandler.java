@@ -191,7 +191,11 @@ public class GameSessionRequestHandler extends AbstractRequestHandler {
 		GameLog.info(sessionId, "user "+userId+" quit");
 		
 		if (session.isCurrentPlayUser(userId)){
-			sessionManager.adjustCurrentPlayerForUserQuit(session, userId);
+			
+			
+			// rem by Benson 2012.7.23
+			// sessionManager.adjustCurrentPlayerForUserQuit(session, userId);
+			
 			completeGameTurn = true;
 			reason = GameCompleteReason.REASON_DRAW_USER_QUIT;
 		}

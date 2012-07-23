@@ -111,6 +111,32 @@ public class GameNotification {
 		}
 	}
 
+	public static void broadcastDrawUserChangeNotification(GameSession gameSession) {
+		
+		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
+		
+		List<User> list = sessionUserManager.getUserListBySession(gameSession.getSessionId());
+		for (User user : list){
+			
+			// send notification for the user
+			GameMessageProtos.GeneralNotification notification = GameMessageProtos.GeneralNotification.newBuilder()		
+				.setCurrentPlayUserId(gameSession.getCurrentPlayUserId())
+				.setNextPlayUserId("")
+				.build();
+			
+			GameMessageProtos.GameMessage response = GameMessageProtos.GameMessage.newBuilder()
+				.setCommand(GameCommandType.USER_JOIN_NOTIFICATION_REQUEST)
+				.setMessageId(GameService.getInstance().generateMessageId())
+				.setNotification(notification)
+				.setSessionId(gameSession.getSessionId())
+				.setUserId(user.getUserId())
+				.setToUserId(user.getUserId())				
+				.setOnlineUserCount(onlineUserCount)
+				.build();
+			
+			HandlerUtils.sendMessage(response, user.getChannel());
+		}
+	}
 	
 	public static void broadcastUserJoinNotification(GameSession gameSession,
 			String newUserId, GameEvent gameEvent) {

@@ -108,17 +108,7 @@ public class JoinGameRequestHandler extends AbstractRequestHandler {
 		user.setCurrentSessionId(gameSessionId);
 		sessionManager.addUserIntoSession(user, gameSession);
 		
-//		sessionManager.addUserIntoSession(userId, nickName, avatar, gender,
-//				location, snsUser,
-//				guessDifficultLevel, 
-//				request.getJoinGameRequest().getIsRobot(), channel, gameSession);
 		int onlineUserCount = UserManager.getInstance().getOnlineUserCount();
-		
-		// reset start expire timer for current play user
-//		gameSession.startStartExpireTimerIfNeeded();
-		
-		// schedule robot timer if needed
-//		GameSessionManager.getInstance().prepareRobotTimer(gameSession);
 		
 		// send back response
 		List<GameBasicProtos.PBGameUser> pbGameUserList = sessionUserManager.usersToPBUsers(gameSessionId);	

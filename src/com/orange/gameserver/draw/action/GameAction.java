@@ -12,6 +12,16 @@ import com.orange.network.game.protocol.constants.GameConstantsProtos.GameComple
 
 public class GameAction{
 
+	public static class BroadcastDrawUserChange implements Action {
+
+		@Override
+		public void execute(Object context) {
+			GameSession session = (GameSession)context;
+			GameNotification.broadcastDrawUserChangeNotification(session);
+		}
+
+	}
+
 	public static class SelectDrawUserIfNone implements Action {
 
 		@Override

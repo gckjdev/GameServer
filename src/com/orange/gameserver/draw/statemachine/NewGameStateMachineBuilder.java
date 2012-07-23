@@ -43,6 +43,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		Action setDrawGuessTimer = new GameAction.SetDrawGuessTimer();
 		Action clearTimer = new GameAction.ClearTimer();
 		Action clearRobotTimer = new GameAction.ClearRobotTimer();
+		Action broadcastDrawUserChange = new GameAction.BroadcastDrawUserChange();
 
 		Condition checkUserCount = new GameCondition.CheckUserCount();
 		
@@ -54,7 +55,8 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 			.addEmptyTransition(GameCommandType.LOCAL_OTHER_USER_QUIT)			
 			.addEmptyTransition(GameCommandType.LOCAL_TIME_OUT)			
 			.addTransition(GameCommandType.LOCAL_NEW_USER_JOIN, GameStateKey.CHECK_USER_COUNT)
-			.addAction(selectDrawUser);				
+			.addAction(selectDrawUser)
+			.addAction(broadcastDrawUserChange);
 		
 		sm.addState(new GameState(GameStateKey.CHECK_USER_COUNT))
 			.setDecisionPoint(new DecisionPoint(checkUserCount){
@@ -85,9 +87,8 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 			.addAction(clearRobotTimer);
 		
 		sm.addState(new GameState(GameStateKey.WAIT_FOR_START_GAME))
-			.addAction(selectDrawUserIfNone)
 			.addAction(setStartGameTimer)
-			.addTransition(GameCommandType.LOCAL_DRAW_USER_QUIT, GameStateKey.CHECK_USER_COUNT)
+			.addTransition(GameCommandType.LOCAL_DRAW_USER_QUIT, GameStateKey.DRAW_USER_QUIT)
 			.addTransition(GameCommandType.LOCAL_ALL_OTHER_USER_QUIT, GameStateKey.CHECK_USER_COUNT)	
 			.addEmptyTransition(GameCommandType.LOCAL_OTHER_USER_QUIT)
 			.addEmptyTransition(GameCommandType.LOCAL_NEW_USER_JOIN)
@@ -98,6 +99,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		
 		sm.addState(new GameState(GameStateKey.DRAW_USER_QUIT))	
 			.addAction(selectDrawUser)
+			.addAction(broadcastDrawUserChange)			
 			.setDecisionPoint(new DecisionPoint(null){
 				@Override
 				public Object decideNextState(Object context){
@@ -108,6 +110,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		sm.addState(new GameState(GameStateKey.KICK_DRAW_USER))
 			.addAction(kickDrawUser)
 			.addAction(selectDrawUser)
+			.addAction(broadcastDrawUserChange)
 			.setDecisionPoint(new DecisionPoint(null){
 				@Override
 				public Object decideNextState(Object context){
@@ -139,6 +142,7 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		sm.addState(new GameState(GameStateKey.COMPLETE_GAME))
 			.addAction(calculateDrawUserCoins)
 			.addAction(selectDrawUser)
+			.addAction(broadcastDrawUserChange)
 			.addAction(completeGame)
 //			.addAction(sendGameCompleteNotification)			
 			.setDecisionPoint(new DecisionPoint(null){

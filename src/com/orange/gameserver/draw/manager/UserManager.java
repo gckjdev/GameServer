@@ -45,6 +45,14 @@ public class UserManager {
 			return;
 		
 		String userId = user.getUserId();
+		
+		// remove old user channel if needed
+		User oldUser = onlineUserMap.get(userId);
+		if (oldUser != null){
+			ChannelUserManager.getInstance().removeChannel(user.getChannel());
+		}
+		
+		// add new user
 		User userFound = onlineUserMap.put(userId, user);
 		if (userFound != null)
 			user = userFound;
