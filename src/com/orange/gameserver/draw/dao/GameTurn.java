@@ -22,7 +22,7 @@ import com.orange.gameserver.db.service.DrawStorageService;
 import com.orange.gameserver.draw.utils.GameLog;
 import com.orange.gameserver.robot.manager.RobotManager;
 import com.orange.network.game.protocol.constants.GameConstantsProtos.GameCompleteReason;
-import com.orange.network.game.protocol.model.GameBasicProtos.PBDraw;
+import com.orange.network.game.protocol.model.DrawProtos.PBDraw;
 import com.orange.network.game.protocol.model.GameBasicProtos.PBDrawAction;
 
 public class GameTurn {

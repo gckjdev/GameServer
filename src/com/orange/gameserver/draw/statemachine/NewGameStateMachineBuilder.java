@@ -142,66 +142,13 @@ public class NewGameStateMachineBuilder extends StateMachineBuilder {
 		sm.addState(new GameState(GameStateKey.COMPLETE_GAME))
 			.addAction(calculateDrawUserCoins)
 			.addAction(selectDrawUser)
-			.addAction(broadcastDrawUserChange)
 			.addAction(completeGame)
-//			.addAction(sendGameCompleteNotification)			
 			.setDecisionPoint(new DecisionPoint(null){
 				@Override
 				public Object decideNextState(Object context){
 					return GameStateKey.CHECK_USER_COUNT;	// goto check user count state directly
 				}
 			});
-			
-		
-		/*
-			// make transition
-			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING)
-			.addTransition(GameCommandType.LOCAL_JOIN_GAME, GameStateKey.WAITING)
-			
-			// no change on state
-			.addTransition(GameCommandType.LOCAL_USER_TIME_OUT, GameStateKey.CREATE)
-			.addTransition(GameCommandType.LOCAL_CHANNEL_DISCONNECT, GameStateKey.CREATE)
-			.addTransition(GameCommandType.CHAT_REQUEST, GameStateKey.CREATE)
-			.addTransition(GameCommandType.QUIT_GAME_REQUEST, GameStateKey.CREATE)
-			.addTransition(GameCommandType.LOCAL_GAME_TURN_COMPLETE, GameStateKey.CREATE)
-			.addTransition(GameCommandType.LOCAL_FINISH_GAME, GameStateKey.CREATE);
-
-
-		sm.addState(new GameWaitingState(GameStateKey.WAITING))
-			// no change on state
-			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.WAITING)
-			.addTransition(GameCommandType.LOCAL_JOIN_GAME, GameStateKey.WAITING)
-			.addTransition(GameCommandType.LOCAL_CHANNEL_DISCONNECT, GameStateKey.WAITING)
-			.addTransition(GameCommandType.QUIT_GAME_REQUEST, GameStateKey.WAITING)
-			.addTransition(GameCommandType.CHAT_REQUEST, GameStateKey.WAITING)
-			.addTransition(GameCommandType.LOCAL_USER_TIME_OUT, GameStateKey.WAITING)
-
-			// make transition
-			.addTransition(GameCommandType.LOCAL_GAME_TURN_COMPLETE, GameStateKey.WAITING)
-			.addTransition(GameCommandType.START_GAME_REQUEST, GameStateKey.PLAYING)
-			.addTransition(GameCommandType.LOCAL_FINISH_GAME, GameStateKey.CREATE);
-		
-		sm.addState(new GamePlayingState(GameStateKey.PLAYING))
-			// no change on state
-			.addTransition(GameCommandType.JOIN_GAME_REQUEST, GameStateKey.PLAYING)		
-			.addTransition(GameCommandType.QUIT_GAME_REQUEST, GameStateKey.PLAYING)
-			.addTransition(GameCommandType.LOCAL_JOIN_GAME, GameStateKey.PLAYING)
-			.addTransition(GameCommandType.CHAT_REQUEST, GameStateKey.PLAYING)
-			.addTransition(GameCommandType.LOCAL_USER_TIME_OUT, GameStateKey.PLAYING)
-			
-
-			.addTransition(GameCommandType.SEND_DRAW_DATA_REQUEST, GameStateKey.PLAYING)
-			.addTransition(GameCommandType.CLEAN_DRAW_REQUEST, GameStateKey.PLAYING)
-			.addTransition(GameCommandType.LOCAL_CHANNEL_DISCONNECT, GameStateKey.PLAYING)
-			
-			// make transition
-			.addTransition(GameCommandType.LOCAL_GAME_TURN_COMPLETE, GameStateKey.WAITING)
-			.addTransition(GameCommandType.LOCAL_FINISH_GAME, GameStateKey.CREATE);
-		
-		sm.addState(GameFinishState.defaultState);
-		
-		sm.setStartAndFinalState(GameStateKey.CREATE, GameStateKey.FINISH);
-		*/
 		
 		sm.printStateMachine();		
 		return sm;
