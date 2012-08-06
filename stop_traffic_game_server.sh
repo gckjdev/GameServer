@@ -2,7 +2,7 @@
 
 # If you want to use this script to kill other 
 # app, just modify the APPNAME to that app, and
-# rename this scprit to a self-explaialbe name.
+# rename this scprit to a self-explainable name.
 APPNAME="GameTrafficServer"
 
 # An auxiliary function
@@ -25,11 +25,14 @@ COUNT=$(echo $PID_TO_BE_KILLED | wc -w)
 if [  $COUNT > 1 ]; then
 	 print_pid_list
 	 echo -e "\n"
-	 echo "choose which one to to kill, input q to do nothing"	
+	 echo "choose which one to  kill, input q to do nothing"	
 	 read input
 	 if [ "$input" == "q" ]; then
 		exit 0
-	 else 
+	 else if [ $input > $COUNT ]; then
+		 echo " No kidding me, dude -.- "
+		 exit 2
+	 else
 		for i in $(echo $PID_TO_BE_KILLED); do
 			let "input=$input-1"
 			[ $input == 0 ] && \
