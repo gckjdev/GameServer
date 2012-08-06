@@ -26,20 +26,23 @@ if [  $COUNT > 1 ]; then
 	 print_pid_list
 	 echo -e "\n"
 	 echo "choose which one to  kill, input q to do nothing"	
-	 read input
-	 if [ "$input" == "q" ]; then
-		exit 0
-	 else if [ $input > $COUNT ]; then
-		 echo " No kidding me, dude -.- "
-		 exit 2
-	 else
-		for i in $(echo $PID_TO_BE_KILLED); do
-			let "input=$input-1"
-			[ $input == 0 ] && \
-			(echo "$APPNAME's pid is $i,now killing it..."
-			kill -9 $i) && break;
-		done
-	fi
+	 while read input  
+	 do
+		 if [ "$input" == "q" ]; then
+			exit 0
+		 elif [ $input -gt $COUNT ] ; then
+			echo "No kidding me, dude -.- Out of range! Reinput:"
+			continue
+		 else
+			for i in $(echo $PID_TO_BE_KILLED); do
+				let "input=$input-1"
+				[ $input == 0 ] && \
+				(echo "$APPNAME's pid is $i,now killing it...";
+				kill -9 $i) && break;
+			done
+			exit 0
+		fi
+	done	
 fi
 
 		 
