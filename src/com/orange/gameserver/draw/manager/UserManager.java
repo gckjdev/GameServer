@@ -49,7 +49,7 @@ public class UserManager {
 		// remove old user channel if needed
 		User oldUser = onlineUserMap.get(userId);
 		if (oldUser != null){
-			ChannelUserManager.getInstance().removeChannel(user.getChannel());
+			ChannelUserManager.getInstance().removeChannel(oldUser.getChannel());
 		}
 		
 		// add new user
