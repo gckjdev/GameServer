@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
+import com.orange.game.traffic.server.ServerMonitor;
+
 public class DrawGameServer {
 
 	
@@ -49,6 +51,10 @@ public class DrawGameServer {
 		
 		bootstrap.bind(new InetSocketAddress(getPort()));
 		logger.info("Start Traffic Server At Port "+getPort());
+		
+		// This code is to initiate the listener.
+		ServerMonitor.getInstance().start();
+    }
+
 	}
 
-}
